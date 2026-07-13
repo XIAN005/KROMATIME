@@ -214,11 +214,6 @@ autorisation écrite préalable.
   .swatch-display{display:flex;gap:14px;justify-content:center;margin-bottom:22px;flex-wrap:wrap;}
   .swatch-display .chip{
     width:clamp(64px,20vw,88px);height:clamp(64px,20vw,88px);border-radius:var(--radius);border:1px solid var(--line);
-    display:flex;align-items:flex-end;justify-content:center;padding-bottom:7px;
-  }
-  .swatch-display .chip span{
-    font-family:'JetBrains Mono',monospace;font-size:11.5px;background:rgba(0,0,0,.5);
-    padding:2px 6px;border-radius:2px;color:#fff;letter-spacing:0.04em;
   }
 
   .options{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;}
@@ -467,7 +462,6 @@ autorisation écrite préalable.
     .edu-tab{padding:8px 12px;font-size:11px;}
     .options{grid-template-columns:1fr;}
     .hex-compare{gap:14px;}
-    .swatch-display .chip span{font-size:10px;}
     .next-row{flex-direction:column;align-items:stretch;gap:12px;}
     .progress-bar{max-width:none;margin-right:0;}
     table.lb{min-width:0;font-size:11.5px;}
@@ -1673,7 +1667,7 @@ function renderQuestion(){
     trackPaletteHexes([baseHex, hslToHex(q.correct,qs,ql)]);
     body = `
       <div class="question">Quelle couleur est la <span>complémentaire</span> de celle-ci ?</div>
-      <div class="swatch-display"><div class="chip" style="background:${baseHex}"><span>BASE</span></div></div>
+      <div class="swatch-display"><div class="chip" style="background:${baseHex}"></div></div>
       <div class="options" id="optWrap">
         ${q.options.map(h=>`<button class="opt-btn" data-val="${h}"><span class="opt-swatch" style="background:${hslToHex(h,qs,ql)}"></span>${Math.round(h)}°</button>`).join('')}
       </div>`;
@@ -1684,8 +1678,8 @@ function renderQuestion(){
     body = `
       <div class="question">Quelle couleur complète ce <span>trio triadique</span> (120° entre chaque teinte) ?</div>
       <div class="swatch-display">
-        <div class="chip" style="background:${baseHex}"><span>1</span></div>
-        <div class="chip" style="background:${secondHex}"><span>2</span></div>
+        <div class="chip" style="background:${baseHex}"></div>
+        <div class="chip" style="background:${secondHex}"></div>
       </div>
       <div class="options" id="optWrap">
         ${q.options.map(h=>`<button class="opt-btn" data-val="${h}"><span class="opt-swatch" style="background:${hslToHex(h,qs,ql)}"></span>${Math.round(h)}°</button>`).join('')}
