@@ -1,9 +1,30 @@
+<!--
+KROMATIME — Module d'entraînement couleur
+Copyright (C) 2026 Xian (NCT)
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+AVIS D'OPT-OUT — FOUILLE DE TEXTES ET DE DONNÉES / ENTRAÎNEMENT IA :
+Conformément à l'article 4 de la directive (UE) 2019/790 et aux réserves
+équivalentes reconnues internationalement, l'auteur s'oppose expressément
+à toute utilisation de ce code source, de son contenu pédagogique ou de
+ses données par des systèmes de fouille de textes et de données (TDM)
+ou pour l'entraînement de modèles d'intelligence artificielle, sans
+autorisation écrite préalable.
+-->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <title>KROMATIME — Entraînement chronométré aux couleurs</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noai, noimageai">
+<meta name="TDM-reservation" content="1">
+<meta name="TDM-policy" content="https://github.com/XIAN005">
+<!-- Opt-out d'exploration/entraînement IA (art. 4 directive UE 2019/790) : ce contenu ne peut être utilisé pour l'entraînement de modèles d'IA ou l'extraction de texte et de données sans autorisation écrite de l'auteur. -->
+<link rel="license" href="https://www.gnu.org/licenses/gpl-3.0.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Archivo:wght@500;600;700;800&family=Archivo+Expanded:wght@700&display=swap" rel="stylesheet">
 <style>
@@ -17,12 +38,14 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
   body{
     background:var(--bg);
     color:var(--ink); font-family:'Archivo', sans-serif;
-    min-height:100vh; padding:32px 20px 70px;
+    min-height:100vh; padding:clamp(16px,4vw,32px) clamp(12px,4vw,20px) 60px;
     -webkit-font-smoothing:antialiased;
     user-select:none;
+    overflow-x:hidden;
   }
   input, .allow-select{user-select:text;}
   .wrap{max-width:820px;margin:0 auto;}
@@ -35,26 +58,26 @@
   .brand-mark{display:flex;align-items:center;gap:12px;cursor:pointer;}
   .brand-mark .logo-slot{width:34px;height:34px;display:block;flex-shrink:0;}
   .brand-mark .logo-slot svg{width:100%;height:100%;display:block;}
-  h1{font-family:'Archivo Expanded',sans-serif;font-size:19px;letter-spacing:0.04em;margin:0;text-transform:uppercase;}
-  .subtitle{color:var(--ink-dim);font-size:11px;margin-top:2px;font-family:'JetBrains Mono',monospace;letter-spacing:0.01em;}
+  h1{font-family:'Archivo Expanded',sans-serif;font-size:clamp(17px,4.2vw,22px);letter-spacing:0.04em;margin:0;text-transform:uppercase;}
+  .subtitle{color:var(--ink-dim);font-size:12.5px;margin-top:2px;font-family:'JetBrains Mono',monospace;letter-spacing:0.01em;}
 
-  .hud{display:flex;gap:8px;align-items:center;}
+  .hud{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
   .hud-card{
     background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);
-    padding:8px 15px;text-align:center;min-width:66px;
+    padding:8px 15px;text-align:center;min-width:60px;flex:1 1 auto;
   }
-  .hud-card .label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--ink-faint);text-transform:uppercase;}
-  .hud-card .value{font-family:'Archivo Expanded',sans-serif;font-size:17px;margin-top:2px;color:var(--ink);}
+  .hud-card .label{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:var(--ink-faint);text-transform:uppercase;}
+  .hud-card .value{font-family:'Archivo Expanded',sans-serif;font-size:19.5px;margin-top:2px;color:var(--ink);}
   .hud-card.streak.hot{border-color:var(--ink);}
   .menu-btn{
-    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;font-weight:600;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.06em;font-weight:600;
     background:var(--panel-3);border:1px solid var(--line);color:var(--ink-dim);
     padding:9px 14px;cursor:pointer;border-radius:var(--radius);
   }
   .menu-btn:hover{color:var(--ink);border-color:var(--ink-faint);}
   .sound-btn{
     background:var(--panel-2);border:1px solid var(--line);color:var(--ink-dim);
-    width:36px;height:36px;border-radius:var(--radius);cursor:pointer;font-size:15px;
+    width:36px;height:36px;border-radius:var(--radius);cursor:pointer;font-size:17px;
     display:flex;align-items:center;justify-content:center;transition:border-color .12s;
   }
   .sound-btn:hover{border-color:var(--ink-faint);}
@@ -62,50 +85,50 @@
 
   /* HERO / NAME GATE */
   .hero{
-    text-align:center;padding:44px 20px 28px;
+    text-align:center;padding:clamp(28px,7vw,44px) 16px 28px;
     background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
     margin-bottom:24px;
   }
   .hero-logo{width:56px;height:56px;margin:0 auto 18px;display:block;}
   .hero-logo svg{width:100%;height:100%;display:block;}
   .hero-eyebrow{
-    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;
     color:var(--ink-faint);text-transform:uppercase;margin-bottom:14px;
   }
   .hero h2{
-    font-family:'Archivo Expanded',sans-serif;font-size:36px;letter-spacing:0.03em;
+    font-family:'Archivo Expanded',sans-serif;font-size:clamp(26px,8vw,41.5px);letter-spacing:0.03em;
     margin:0 0 10px;text-transform:uppercase;color:var(--ink);
   }
-  .hero p{color:var(--ink-dim);font-size:13px;max-width:44ch;margin:0 auto 24px;line-height:1.55;}
-  .name-form{display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .hero p{color:var(--ink-dim);font-size:15px;max-width:44ch;margin:0 auto 24px;line-height:1.55;}
+  .name-form{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;}
   .name-form input{
-    font-family:'Archivo',sans-serif;font-size:14px;text-align:center;
+    font-family:'Archivo',sans-serif;font-size:16px;text-align:center;
     background:var(--panel-3);border:1px solid var(--line);color:var(--ink);
-    padding:12px 18px;border-radius:var(--radius);width:240px;max-width:80%;
+    padding:12px 18px;border-radius:var(--radius);width:240px;max-width:90%;
   }
   .name-form input:focus{outline:none;border-color:var(--ink);}
   .play-btn{
-    font-family:'Archivo Expanded',sans-serif;font-size:14px;letter-spacing:0.06em;font-weight:700;
+    font-family:'Archivo Expanded',sans-serif;font-size:16px;letter-spacing:0.06em;font-weight:700;
     background:var(--ink);border:1px solid var(--ink);color:var(--black);
     padding:14px 42px;cursor:pointer;border-radius:var(--radius);text-transform:uppercase;
-    transition:opacity .12s;
+    transition:opacity .12s;width:100%;max-width:280px;
   }
   .play-btn:hover{opacity:0.85;}
   .play-btn:disabled{opacity:0.25;cursor:not-allowed;}
-  .hero-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .hero-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%;}
   .edu-btn{
-    font-family:'Archivo Expanded',sans-serif;font-size:14px;letter-spacing:0.06em;font-weight:700;
+    font-family:'Archivo Expanded',sans-serif;font-size:16px;letter-spacing:0.06em;font-weight:700;
     background:transparent;border:1px solid var(--line);color:var(--ink);
     padding:14px 30px;cursor:pointer;border-radius:var(--radius);text-transform:uppercase;
-    transition:border-color .12s;
+    transition:border-color .12s;flex:1 1 auto;max-width:280px;
   }
   .edu-btn:hover{border-color:var(--ink-faint);}
   .hero-tags{display:flex;justify-content:center;gap:8px;margin-top:20px;flex-wrap:wrap;}
   .hero-tag{
-    font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.06em;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.06em;
     color:var(--ink-faint);border:1px solid var(--line);padding:5px 10px;border-radius:2px;
   }
-  .greeting{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-dim);margin-bottom:6px;letter-spacing:0.04em;}
+  .greeting{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-dim);margin-bottom:6px;letter-spacing:0.04em;}
 
   /* XP BAR */
   .xp-panel{
@@ -113,20 +136,20 @@
     padding:18px 22px;margin-bottom:18px;
   }
   .xp-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
-  .xp-top .lvl-name{font-family:'Archivo Expanded',sans-serif;font-size:13px;color:var(--ink);}
-  .xp-top .xp-count{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-dim);}
+  .xp-top .lvl-name{font-family:'Archivo Expanded',sans-serif;font-size:15px;color:var(--ink);}
+  .xp-top .xp-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-dim);}
   .xp-track{height:5px;background:var(--line-soft);border-radius:0;overflow:hidden;}
   .xp-fill{height:100%;background:var(--ink);transition:width .4s;}
-  .xp-next{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--ink-faint);margin-top:6px;}
+  .xp-next{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);margin-top:6px;}
 
   .achievements{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
   .badge{
-    font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.03em;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.03em;
     border:1px solid var(--line);border-radius:2px;padding:6px 10px;color:var(--ink-faint);
     display:flex;align-items:center;gap:6px;
   }
   .badge.unlocked{border-color:var(--ink);color:var(--ink);}
-  .badge .ic{font-size:10px;}
+  .badge .ic{font-size:11.5px;}
 
   /* LEADERBOARD */
   .leaderboard{
@@ -134,13 +157,14 @@
     padding:20px 22px 6px;margin-bottom:24px;
   }
   .leaderboard h3{
-    font-family:'Archivo Expanded',sans-serif;font-size:12.5px;text-transform:uppercase;letter-spacing:0.04em;
+    font-family:'Archivo Expanded',sans-serif;font-size:14.5px;text-transform:uppercase;letter-spacing:0.04em;
     margin:0 0 4px;
   }
-  .leaderboard .sub{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--ink-faint);margin-bottom:14px;}
-  table.lb{width:100%;border-collapse:collapse;font-size:11.5px;}
+  .leaderboard .sub{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);margin-bottom:14px;}
+  .lb-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table.lb{width:100%;min-width:420px;border-collapse:collapse;font-size:13px;}
   table.lb th{
-    text-align:left;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.06em;
+    text-align:left;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.06em;
     color:var(--ink-faint);text-transform:uppercase;padding:0 10px 8px;border-bottom:1px solid var(--line-soft);
   }
   table.lb td{padding:9px 10px;border-bottom:1px solid var(--line-soft);color:var(--ink-dim);}
@@ -148,11 +172,11 @@
   table.lb td.rank{font-family:'JetBrains Mono',monospace;color:var(--ink-faint);width:22px;}
   table.lb td.rank.gold{color:var(--ink);font-weight:700;}
   table.lb td.score{font-family:'Archivo Expanded',sans-serif;color:var(--ink);font-weight:700;}
-  .lb-empty{padding:20px 0;text-align:center;color:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:10.5px;}
+  .lb-empty{padding:20px 0;text-align:center;color:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:12px;}
 
   /* LEVEL SELECT */
   .screen-title{
-    font-family:'Archivo Expanded',sans-serif;font-size:13px;text-transform:uppercase;
+    font-family:'Archivo Expanded',sans-serif;font-size:15px;text-transform:uppercase;
     letter-spacing:0.04em;color:var(--ink-dim);margin-bottom:14px;
   }
   .levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(146px,1fr));gap:9px;margin-bottom:22px;}
@@ -162,10 +186,10 @@
   }
   .level-card:hover{border-color:var(--ink-faint);}
   .level-card.active{border-color:var(--ink);background:var(--panel-3);}
-  .level-card .num{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-faint);letter-spacing:0.08em;}
-  .level-card h3{font-size:12.5px;margin:5px 0 4px;font-weight:700;}
-  .level-card p{font-size:10px;color:var(--ink-dim);margin:0;line-height:1.35;}
-  .level-card .best{float:right;font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--ink-dim);}
+  .level-card .num{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);letter-spacing:0.08em;}
+  .level-card h3{font-size:14.5px;margin:5px 0 4px;font-weight:700;}
+  .level-card p{font-size:11.5px;color:var(--ink-dim);margin:0;line-height:1.35;}
+  .level-card .best{float:right;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-dim);}
 
   /* GAME PANEL */
   .game-panel{
@@ -175,7 +199,7 @@
   .panel-top{
     display:flex;justify-content:space-between;align-items:center;
     padding:13px 22px;border-bottom:1px solid var(--line-soft);
-    font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.08em;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
     color:var(--ink-dim);text-transform:uppercase;background:var(--panel-2);
   }
   .timer-track{height:2px;width:100%;background:var(--line-soft);position:relative;overflow:hidden;}
@@ -183,23 +207,23 @@
   .timer-fill.warn{background:var(--ink-dim);}
   .timer-fill.danger{background:var(--ink-faint);}
 
-  .panel-body{padding:26px 24px 22px;}
-  .question{font-size:15.5px;font-weight:600;margin-bottom:20px;line-height:1.45;letter-spacing:-0.01em;}
+  .panel-body{padding:clamp(16px,4vw,26px) clamp(14px,4vw,24px) 22px;}
+  .question{font-size:clamp(15.5px,4vw,18px);font-weight:600;margin-bottom:20px;line-height:1.45;letter-spacing:-0.01em;}
   .question span{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line);}
 
   .swatch-display{display:flex;gap:14px;justify-content:center;margin-bottom:22px;flex-wrap:wrap;}
   .swatch-display .chip{
-    width:88px;height:88px;border-radius:var(--radius);border:1px solid var(--line);
+    width:clamp(64px,20vw,88px);height:clamp(64px,20vw,88px);border-radius:var(--radius);border:1px solid var(--line);
     display:flex;align-items:flex-end;justify-content:center;padding-bottom:7px;
   }
   .swatch-display .chip span{
-    font-family:'JetBrains Mono',monospace;font-size:9px;background:rgba(0,0,0,.5);
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;background:rgba(0,0,0,.5);
     padding:2px 6px;border-radius:2px;color:#fff;letter-spacing:0.04em;
   }
 
   .options{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;}
   .opt-btn{
-    font-family:'Archivo',sans-serif;font-size:13px;font-weight:600;
+    font-family:'Archivo',sans-serif;font-size:15px;font-weight:600;
     background:var(--panel-3);border:1px solid var(--line);color:var(--ink);
     padding:13px 12px;cursor:pointer;border-radius:var(--radius);transition:border-color .12s;
     display:flex;align-items:center;gap:10px;text-align:left;
@@ -213,13 +237,13 @@
 
   .hexguess{display:flex;flex-direction:column;align-items:center;gap:14px;}
   .hexguess input{
-    font-family:'JetBrains Mono',monospace;font-size:16px;text-align:center;
+    font-family:'JetBrains Mono',monospace;font-size:18.5px;text-align:center;
     background:var(--panel-3);border:1px solid var(--line);color:var(--ink);
-    padding:11px 16px;border-radius:var(--radius);width:170px;letter-spacing:0.06em;
+    padding:11px 16px;border-radius:var(--radius);width:170px;max-width:80%;letter-spacing:0.06em;
   }
   .hexguess input:focus{outline:none;border-color:var(--ink);}
   .submit-btn{
-    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;font-weight:600;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.06em;font-weight:600;
     background:var(--ink);border:1px solid var(--ink);color:var(--black);
     padding:11px 22px;cursor:pointer;border-radius:var(--radius);transition:opacity .12s;
   }
@@ -228,12 +252,12 @@
   .hex-compare.show{display:flex;}
   .hex-compare .hc-item{text-align:center;}
   .hex-compare .hc-item .chip{width:70px;height:70px;border-radius:var(--radius);border:1px solid var(--line);margin:0 auto 8px;}
-  .hex-compare .hc-item .hc-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:4px;}
-  .hex-compare .hc-item .hc-code{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink);}
-  .hex-compare .hc-arrow{align-self:center;color:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:14px;margin-top:20px;}
+  .hex-compare .hc-item .hc-label{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:4px;}
+  .hex-compare .hc-item .hc-code{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--ink);}
+  .hex-compare .hc-arrow{align-self:center;color:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:16px;margin-top:20px;}
 
   .feedback{
-    margin-top:18px;padding:12px 15px;border-radius:var(--radius);font-size:12px;
+    margin-top:18px;padding:12px 15px;border-radius:var(--radius);font-size:14px;
     font-family:'JetBrains Mono',monospace;line-height:1.55;display:none;border:1px solid var(--line);
   }
   .feedback.show{display:block;}
@@ -246,53 +270,69 @@
     padding-top:16px;border-top:1px solid var(--line-soft);
   }
   .next-btn{
-    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;font-weight:600;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.06em;font-weight:600;
     background:var(--panel-3);border:1px solid var(--line);color:var(--ink-dim);
     padding:10px 20px;cursor:pointer;border-radius:var(--radius);transition:.12s;
   }
   .next-btn:hover{color:var(--ink);border-color:var(--ink-faint);}
   .progress-bar{flex:1;max-width:220px;height:3px;background:var(--line-soft);margin-right:16px;overflow:hidden;}
   .progress-bar-fill{height:100%;background:var(--ink);transition:width .3s;}
-  .lives-row{display:flex;gap:6px;align-items:center;font-size:13px;letter-spacing:2px;color:var(--ink);}
+  .lives-row{display:flex;gap:6px;align-items:center;font-size:15px;letter-spacing:2px;color:var(--ink);}
 
   /* RESULT SCREEN */
-  .result-screen{text-align:center;padding:44px 20px 40px;}
-  .result-screen .eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--ink-faint);text-transform:uppercase;}
-  .result-screen .big-score{font-family:'Archivo Expanded',sans-serif;font-size:48px;color:var(--ink);margin:10px 0 2px;}
+  .result-screen{text-align:center;padding:clamp(28px,7vw,44px) 16px 40px;}
+  .result-screen .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:var(--ink-faint);text-transform:uppercase;}
+  .result-screen .big-score{font-family:'Archivo Expanded',sans-serif;font-size:clamp(34px,12vw,55px);color:var(--ink);margin:10px 0 2px;}
   .result-screen .stat-row{
-    display:flex;justify-content:center;gap:28px;margin:18px 0 14px;
-    font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-dim);
+    display:flex;justify-content:center;gap:clamp(14px,5vw,28px);margin:18px 0 14px;flex-wrap:wrap;
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-dim);
   }
-  .result-screen .stat-row b{display:block;font-size:16px;color:var(--ink);font-family:'Archivo Expanded',sans-serif;margin-top:2px;}
-  .result-screen p.msg{color:var(--ink-dim);font-size:12.5px;margin:0 0 6px;}
-  .result-screen p.newbest{color:var(--ink);font-size:11px;font-family:'JetBrains Mono',monospace;margin:0 0 6px;}
-  .result-screen p.xpgain{color:var(--ink-dim);font-size:11px;font-family:'JetBrains Mono',monospace;margin:0 0 6px;}
+  .result-screen .stat-row b{display:block;font-size:18.5px;color:var(--ink);font-family:'Archivo Expanded',sans-serif;margin-top:2px;}
+  .result-screen p.msg{color:var(--ink-dim);font-size:14.5px;margin:0 0 6px;}
+  .result-screen p.newbest{color:var(--ink);font-size:12.5px;font-family:'JetBrains Mono',monospace;margin:0 0 6px;}
+  .result-screen p.xpgain{color:var(--ink-dim);font-size:12.5px;font-family:'JetBrains Mono',monospace;margin:0 0 6px;}
   .unlock-toast{
     display:inline-block;margin:10px 0 18px;padding:8px 16px;border-radius:2px;
     background:var(--panel-3);border:1px solid var(--ink);color:var(--ink);
-    font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;
   }
   .result-actions{display:flex;gap:10px;justify-content:center;margin-top:16px;}
   .retry-btn{
-    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;font-weight:600;
+    font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.06em;font-weight:600;
     background:var(--ink);border:1px solid var(--ink);color:var(--black);
     padding:13px 26px;cursor:pointer;border-radius:var(--radius);transition:opacity .12s;
   }
   .retry-btn:hover{opacity:0.85;}
   .home-btn{
-    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;font-weight:600;
+    font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.06em;font-weight:600;
     background:var(--panel-3);border:1px solid var(--line);color:var(--ink-dim);
     padding:13px 22px;cursor:pointer;border-radius:var(--radius);transition:.12s;
   }
   .home-btn:hover{color:var(--ink);border-color:var(--ink-faint);}
 
-  .ticket-trigger{
-    margin-top:14px;
-    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;font-weight:600;
-    background:transparent;border:none;color:var(--ink-faint);
-    cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+  .result-exports{
+    margin-top:22px;padding-top:18px;border-top:1px solid var(--line-soft);
   }
-  .ticket-trigger:hover{color:var(--ink);}
+  .result-exports-title{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;
+    color:var(--ink-faint);text-transform:uppercase;margin-bottom:10px;
+  }
+  .result-exports-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .ticket-trigger{
+    font-family:'Archivo Expanded',sans-serif;font-size:14.5px;letter-spacing:.05em;font-weight:700;
+    background:var(--ink);border:1px solid var(--ink);color:var(--black);
+    padding:13px 24px;cursor:pointer;border-radius:var(--radius);text-transform:uppercase;
+    transition:opacity .12s,transform .12s;
+  }
+  .ticket-trigger:hover{opacity:0.85;transform:translateY(-1px);}
+  .palette-trigger{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.05em;font-weight:600;
+    background:var(--panel-3);border:1px solid var(--line);color:var(--ink-dim);
+    padding:13px 20px;cursor:pointer;border-radius:var(--radius);text-transform:uppercase;
+    transition:.12s;
+  }
+  .palette-trigger:hover{color:var(--ink);border-color:var(--ink-faint);}
+  .palette-trigger:disabled{opacity:0.35;cursor:not-allowed;}
 
   .ticket-overlay{
     display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;
@@ -302,27 +342,27 @@
   .ticket-paper{
     background:#f7f5ef;color:#111;width:280px;max-width:100%;
     padding:22px 20px 34px;
-    font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.6;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6;
     clip-path:polygon(0% 0%,100% 0%,100% 97%,95% 100%,90% 97%,85% 100%,80% 97%,75% 100%,70% 97%,65% 100%,60% 97%,55% 100%,50% 97%,45% 100%,40% 97%,35% 100%,30% 97%,25% 100%,20% 97%,15% 100%,10% 97%,5% 100%,0% 97%);
   }
   .ticket-paper .t-center{text-align:center;}
-  .ticket-paper .t-brand{font-family:'Archivo Expanded',sans-serif;font-size:16px;letter-spacing:0.06em;margin-bottom:2px;}
-  .ticket-paper .t-sub{font-size:9px;letter-spacing:0.1em;color:#555;margin-bottom:14px;}
+  .ticket-paper .t-brand{font-family:'Archivo Expanded',sans-serif;font-size:18.5px;letter-spacing:0.06em;margin-bottom:2px;}
+  .ticket-paper .t-sub{font-size:11.5px;letter-spacing:0.1em;color:#555;margin-bottom:14px;}
   .ticket-paper hr{border:none;border-top:1px dashed #999;margin:10px 0;}
   .ticket-paper .t-row{display:flex;justify-content:space-between;gap:10px;}
-  .ticket-paper .t-row.big{font-weight:700;font-size:13px;margin-top:2px;}
+  .ticket-paper .t-row.big{font-weight:700;font-size:15px;margin-top:2px;}
   .ticket-paper .t-barcode{
     margin:16px 0 4px;height:34px;
     display:flex;align-items:center;justify-content:center;
   }
   .ticket-paper .t-barcode svg{display:block;}
-  .ticket-paper .t-footer{font-size:9px;color:#555;margin-top:10px;letter-spacing:0.04em;}
-  .ticket-paper .t-code-label{font-size:8.5px;letter-spacing:0.1em;color:#555;margin-top:6px;}
-  .ticket-paper .t-code{font-size:14px;font-weight:700;letter-spacing:0.08em;margin-top:3px;}
+  .ticket-paper .t-footer{font-size:11.5px;color:#555;margin-top:10px;letter-spacing:0.04em;}
+  .ticket-paper .t-code-label{font-size:11.5px;letter-spacing:0.1em;color:#555;margin-top:6px;}
+  .ticket-paper .t-code{font-size:16px;font-weight:700;letter-spacing:0.08em;margin-top:3px;}
 
   .ticket-actions{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap;}
   .ticket-actions button{
-    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;font-weight:600;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.06em;font-weight:600;
     padding:11px 18px;cursor:pointer;border-radius:var(--radius);
   }
   #ticketDownloadBtn{background:var(--ink);border:1px solid var(--ink);color:#000;}
@@ -339,17 +379,29 @@
     background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
     padding:26px 30px;max-width:380px;
   }
-  .pause-note h4{margin:0 0 8px;font-size:13px;color:var(--ink);font-family:'Archivo Expanded',sans-serif;text-transform:uppercase;}
-  .pause-note p{font-size:12px;color:var(--ink-dim);line-height:1.5;margin:0 0 16px;}
+  .pause-note h4{margin:0 0 8px;font-size:15px;color:var(--ink);font-family:'Archivo Expanded',sans-serif;text-transform:uppercase;}
+  .pause-note p{font-size:14px;color:var(--ink-dim);line-height:1.5;margin:0 0 16px;}
 
-  footer{margin-top:28px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-faint);letter-spacing:0.08em;}
+  footer{margin-top:28px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);letter-spacing:0.08em;}
   .hidden{display:none !important;}
+
+  .about-section{
+    margin-top:32px;padding-top:20px;border-top:1px solid var(--line-soft);
+    display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  }
+  .about-link{
+    display:inline-flex;align-items:center;gap:7px;color:var(--ink-dim);
+    text-decoration:none;border:1px solid var(--line);border-radius:var(--radius);
+    padding:6px 12px;transition:border-color .12s,color .12s;
+  }
+  .about-link:hover{color:var(--ink);border-color:var(--ink-faint);}
 
   /* EDU SCREEN */
   .edu-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
   .edu-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
   .edu-tab{
-    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.05em;font-weight:600;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.05em;font-weight:600;
     background:var(--panel-2);border:1px solid var(--line);color:var(--ink-dim);
     padding:9px 15px;cursor:pointer;border-radius:var(--radius);text-transform:uppercase;
   }
@@ -357,37 +409,79 @@
   .edu-tab.active{background:var(--panel-3);border-color:var(--ink);color:var(--ink);}
   .edu-panel{
     background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-    padding:26px 26px 28px;
+    padding:clamp(16px,4vw,26px) clamp(14px,4vw,26px) 28px;
   }
-  .edu-panel h2{font-family:'Archivo Expanded',sans-serif;font-size:18px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.02em;}
-  .edu-panel .lead{color:var(--ink-dim);font-size:12.5px;line-height:1.6;margin:0 0 22px;max-width:64ch;}
+  .edu-panel h2{font-family:'Archivo Expanded',sans-serif;font-size:20.5px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.02em;}
+  .edu-panel .lead{color:var(--ink-dim);font-size:14.5px;line-height:1.6;margin:0 0 22px;max-width:64ch;}
   .edu-block{margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid var(--line-soft);}
   .edu-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-  .edu-block h3{font-size:14px;margin:0 0 6px;font-weight:700;}
-  .edu-block .def{color:var(--ink-dim);font-size:12.5px;line-height:1.6;margin:0 0 14px;max-width:66ch;}
+  .edu-block h3{font-size:16px;margin:0 0 6px;font-weight:700;}
+  .edu-block .def{color:var(--ink-dim);font-size:14.5px;line-height:1.6;margin:0 0 14px;max-width:66ch;}
   .edu-swatches{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
   .edu-swatches .sw{width:44px;height:44px;border-radius:2px;border:1px solid var(--line);flex-shrink:0;}
-  .edu-usage{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-faint);}
+  .edu-wheel-wrap{
+    display:flex;gap:26px;align-items:center;justify-content:center;flex-wrap:wrap;
+    margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid var(--line-soft);
+  }
+  .edu-wheel-wrap .wheel-svg{flex-shrink:0;width:min(246px,80vw);height:auto;}
+  .edu-wheel-legend{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-dim);line-height:2;min-width:180px;flex:1 1 180px;max-width:280px;}
+  .edu-wheel-legend .lg-row{display:flex;align-items:center;gap:8px;}
+  .edu-wheel-legend .lg-dot{width:10px;height:10px;border-radius:50%;border:1px solid var(--line);flex-shrink:0;}
+  .edu-wheel-legend .lg-deg{color:var(--ink-faint);margin-left:auto;}
+  .edu-wheel-note{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);width:100%;margin-top:2px;}
+  .edu-usage{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-faint);}
   .edu-usage b{color:var(--ink-dim);font-weight:600;}
   .edu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;}
   .edu-vibe-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line-soft);}
   .edu-vibe-item .dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:3px;border:1px solid var(--line);}
-  .edu-vibe-item h4{font-size:12.5px;margin:0 0 3px;}
-  .edu-vibe-item p{font-size:11px;color:var(--ink-dim);margin:0;line-height:1.45;}
+  .edu-vibe-item h4{font-size:14.5px;margin:0 0 3px;}
+  .edu-vibe-item p{font-size:12.5px;color:var(--ink-dim);margin:0;line-height:1.45;}
   .edu-vibe-item .use{color:var(--ink-faint);}
 
   #verifyFileInput:focus{outline:none;border-color:var(--ink-faint);}
   #verifyResult{margin-top:18px;}
   .verify-status{
     display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:var(--radius);
-    font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;margin-bottom:14px;
+    font-family:'JetBrains Mono',monospace;font-size:14.5px;font-weight:600;margin-bottom:14px;
   }
   .verify-status.ok{border:1px solid var(--ink);color:var(--ink);}
   .verify-status.fail{border:1px solid var(--ink-faint);color:var(--ink-dim);}
-  .verify-fields{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-dim);}
+  .verify-fields{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-dim);}
   .verify-fields div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line-soft);}
   .verify-fields div span:first-child{color:var(--ink-faint);}
   .verify-fields div span:last-child{color:var(--ink);}
+
+  /* RESPONSIVE — petits écrans / mobile */
+  @media (max-width:640px){
+    header{gap:12px;padding-bottom:14px;margin-bottom:20px;}
+    header > div[style]{width:100%;justify-content:space-between;}
+    .hud{width:100%;justify-content:flex-start;}
+    .hud-card{min-width:0;padding:7px 10px;}
+    .menu-btn{padding:9px 11px;}
+    .result-exports-row{flex-direction:column;align-items:stretch;}
+    .ticket-trigger,.palette-trigger{width:100%;}
+    .result-actions{flex-direction:column;align-items:stretch;}
+    .retry-btn,.home-btn{width:100%;}
+    .edu-header{flex-direction:column;align-items:flex-start;gap:10px;}
+    .edu-tabs{gap:6px;}
+    .edu-tab{padding:8px 12px;font-size:11px;}
+    .options{grid-template-columns:1fr;}
+    .hex-compare{gap:14px;}
+    .swatch-display .chip span{font-size:10px;}
+    .next-row{flex-direction:column;align-items:stretch;gap:12px;}
+    .progress-bar{max-width:none;margin-right:0;}
+    table.lb{min-width:0;font-size:11.5px;}
+    table.lb td,table.lb th{padding:8px 6px;}
+    .pause-note .box{padding:22px 20px;}
+    .ticket-actions button{flex:1 1 auto;}
+  }
+  @media (max-width:420px){
+    .hero-actions{flex-direction:column;}
+    .edu-btn,.play-btn{max-width:none;}
+    .hud-card .value{font-size:16px;}
+    .hud-card .label{font-size:10px;}
+    .result-screen .stat-row{gap:14px 20px;}
+  }
 </style>
 </head>
 <body oncontextmenu="return false;">
@@ -417,7 +511,7 @@
       <h1>Kromatime</h1>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <button class="sound-btn" id="soundBtn" title="Activer/couper le son">🔊</button>
+      <button class="sound-btn" id="soundBtn" title="Activer/couper le son"></button>
       <div class="hud hidden" id="hudBar">
         <div class="hud-card score"><div class="label">Score</div><div class="value" id="hudScore">0</div></div>
         <div class="hud-card streak" id="streakCard"><div class="label">Série</div><div class="value" id="hudStreak">0</div></div>
@@ -453,11 +547,6 @@
         <button class="edu-btn" id="eduBtn">Apprendre la théorie</button>
         <button class="edu-btn" id="statsBtn">XP & classement</button>
       </div>
-      <div class="hero-tags">
-        <span class="hero-tag">6 modes</span>
-        <span class="hero-tag">Mode sans fin</span>
-        <span class="hero-tag">Système XP</span>
-      </div>
     </div>
   </div>
 
@@ -490,7 +579,7 @@
     </div>
     <div class="edu-panel">
       <p class="lead">Dépose ici le fichier PNG du ticket, tel que téléchargé depuis le bouton « TÉLÉCHARGER (PNG) ». Les données du ticket sont embarquées directement dans le fichier image ; elles seront extraites, puis le code d'authenticité sera recalculé et comparé.</p>
-      <input type="file" id="verifyFileInput" class="allow-select" accept="image/png,.png" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-dim);background:var(--panel-3);border:1px solid var(--line);border-radius:var(--radius);padding:14px;">
+      <input type="file" id="verifyFileInput" class="allow-select" accept="image/png,.png" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-dim);background:var(--panel-3);border:1px solid var(--line);border-radius:var(--radius);padding:14px;">
       <button class="submit-btn" id="verifyBtn" style="margin-top:14px;">VÉRIFIER</button>
       <div id="verifyResult"></div>
       <div class="edu-block" style="margin-top:26px;">
@@ -522,10 +611,34 @@
     <div class="game-panel" id="gamePanel"></div>
   </div>
 
+  <div class="about-section">
+    <a class="about-link" href="https://github.com/XIAN005" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+      github.com/XIAN005
+    </a>
+    <a class="about-link" href="https://www.instagram.com/kromatime.colors/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 1.44c2.14 0 2.39.01 3.24.05.78.03 1.2.16 1.48.27.37.14.64.31.92.59.28.28.45.55.59.92.11.28.24.7.27 1.48.04.85.05 1.1.05 3.24s-.01 2.39-.05 3.24c-.03.78-.16 1.2-.27 1.48-.14.37-.31.64-.59.92-.28.28-.55.45-.92.59-.28.11-.7.24-1.48.27-.85.04-1.1.05-3.24.05s-2.39-.01-3.24-.05c-.78-.03-1.2-.16-1.48-.27-.37-.14-.64-.31-.92-.59-.28-.28-.45-.55-.59-.92-.11-.28-.24-.7-.27-1.48-.04-.85-.05-1.1-.05-3.24s.01-2.39.05-3.24c.03-.78.16-1.2.27-1.48.14-.37.31-.64.59-.92.28-.28.55-.45.92-.59.28-.11.7-.24 1.48-.27.85-.04 1.1-.05 3.24-.05M8 0C5.82 0 5.55.01 4.7.05c-.85.04-1.43.17-1.94.37-.53.2-.97.48-1.42.92-.44.45-.72.89-.92 1.42-.2.51-.33 1.09-.37 1.94C.01 5.55 0 5.82 0 8s.01 2.45.05 3.3c.04.85.17 1.43.37 1.94.2.53.48.97.92 1.42.45.44.89.72 1.42.92.51.2 1.09.33 1.94.37.85.04 1.12.05 3.3.05s2.45-.01 3.3-.05c.85-.04 1.43-.17 1.94-.37.53-.2.97-.48 1.42-.92.44-.45.72-.89.92-1.42.2-.51.33-1.09.37-1.94.04-.85.05-1.12.05-3.3s-.01-2.45-.05-3.3c-.04-.85-.17-1.43-.37-1.94-.2-.53-.48-.97-.92-1.42-.45-.44-.89-.72-1.42-.92-.51-.2-1.09-.33-1.94-.37C10.45.01 10.18 0 8 0Zm0 3.89A4.11 4.11 0 1 0 8 12.1 4.11 4.11 0 0 0 8 3.89Zm0 6.78a2.67 2.67 0 1 1 0-5.34 2.67 2.67 0 0 1 0 5.34Zm5.23-6.94a.96.96 0 1 1-1.92 0 .96.96 0 0 1 1.92 0Z"/></svg>
+      instagram.com/kromatime.colors
+    </a>
+  </div>
+
   <footer>KROMATIME — MODULE D'ENTRAÎNEMENT COULEUR — PAR XIAN005</footer>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
+/*
+KROMATIME — Module d'entraînement couleur
+Copyright (C) 2026 Xian (NCT)
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Opt-out TDM/IA : utilisation de ce code pour l'entraînement de modèles
+d'IA ou la fouille de textes et de données interdite sans autorisation
+écrite de l'auteur (art. 4, directive UE 2019/790).
+*/
 (function(){
 "use strict";
 
@@ -582,6 +695,7 @@ document.querySelectorAll('[data-logo]').forEach(el=>{
 
 const LEVELS = Object.freeze([
   Object.freeze({key:'complement', title:'Complémentaires', desc:'Trouve la couleur opposée sur la roue', rounds:10, time:15}),
+  Object.freeze({key:'triadic', title:'Triadiques', desc:'Trouve la 3e couleur du trio équilatéral', rounds:10, time:16}),
   Object.freeze({key:'scheme', title:'Reconnaître le schéma', desc:"Identifie le type d'harmonie affiché", rounds:10, time:16}),
   Object.freeze({key:'hexguess', title:'Œil à HEX', desc:"Estime le code hexadécimal d'une couleur", rounds:10, time:22}),
   Object.freeze({key:'family', title:'Familles & usage', desc:'Associe la couleur à son usage branding', rounds:10, time:16}),
@@ -600,14 +714,17 @@ const ACHIEVEMENTS = Object.freeze([
 
 /* ---------- contenu pédagogique (mode EDU) ---------- */
 const EDU_VIBES = [
-  {h:5,   name:"Rouge",         vibe:"Urgence, passion, appétit. Capte l'œil en premier — à utiliser avec parcimonie.", use:"CTA, promos, alimentaire, sport"},
-  {h:28,  name:"Orange",        vibe:"Chaleur, énergie accessible, créativité décomplexée.", use:"Startups, jeunesse, artisanat"},
-  {h:52,  name:"Jaune / Ambre", vibe:"Optimisme, clarté, attention immédiate. Difficile à lire en grande surface.", use:"Alertes, enfance, énergie solaire"},
-  {h:120, name:"Vert",          vibe:"Croissance, équilibre, confiance calme. Associé universellement au « oui ».", use:"Santé, bio, environnement"},
-  {h:172, name:"Sarcelle/Teal", vibe:"Clarté professionnelle, sophistication apaisée.", use:"Wellness, santé mentale, SaaS premium"},
-  {h:220, name:"Bleu",          vibe:"Confiance, stabilité, autorité posée. Couleur la plus « sûre » du branding.", use:"Finance, tech B2B, institutions"},
-  {h:265, name:"Violet",        vibe:"Créativité, spiritualité, luxe imaginatif. Rare dans la nature.", use:"Beauté, luxe, spiritualité"},
-  {h:320, name:"Magenta / Rose",vibe:"Audace, désinvolture premium, énergie non conventionnelle.", use:"Mode, lifestyle, marques disruptives"}
+  {h:5,   name:"Rouge",         vibe:"Urgence, passion, appétit. Capte l'œil en premier — à utiliser avec parcimonie. C'est la teinte à plus grande longueur d'onde visible, ce qui la rend physiologiquement la plus « avancée » dans le champ visuel.", use:"CTA, promos, alimentaire, sport, signalétique d'urgence"},
+  {h:28,  name:"Orange",        vibe:"Chaleur, énergie accessible, créativité décomplexée. Mélange le dynamisme du rouge et la bonne humeur du jaune, sans l'agressivité du premier.", use:"Startups, jeunesse, artisanat, CTA secondaires"},
+  {h:52,  name:"Jaune / Ambre", vibe:"Optimisme, clarté, attention immédiate. Couleur la plus réfléchissante pour l'œil humain — difficile à lire en grande surface ou en texte fin.", use:"Alertes, enfance, énergie solaire, avertissements"},
+  {h:90,  name:"Vert-jaune",    vibe:"Fraîcheur acide, nouveauté, rupture avec les codes classiques. Mal dosé, peut évoquer une sensation « toxique ».", use:"Marques tech disruptives, sport, innovation"},
+  {h:120, name:"Vert",          vibe:"Croissance, équilibre, confiance calme. Associé quasi universellement au « oui », à la nature et à l'argent dans les cultures occidentales.", use:"Santé, bio, environnement, finance positive"},
+  {h:172, name:"Sarcelle/Teal", vibe:"Clarté professionnelle, sophistication apaisée. À mi-chemin entre le bleu (confiance) et le vert (croissance).", use:"Wellness, santé mentale, SaaS premium"},
+  {h:190, name:"Cyan",          vibe:"Fraîcheur technologique, légèreté, clarté numérique. Très saturé, il devient vite « criard » en grande surface.", use:"Interfaces tech, eau, accents digitaux"},
+  {h:220, name:"Bleu",          vibe:"Confiance, stabilité, autorité posée. Couleur la plus « sûre » du branding, et la préférée dans la majorité des enquêtes internationales.", use:"Finance, tech B2B, institutions, santé"},
+  {h:245, name:"Indigo",        vibe:"Profondeur, introspection, fiabilité premium. Plus sombre et mystérieux qu'un bleu classique.", use:"Édition, spiritualité, produits haut de gamme"},
+  {h:265, name:"Violet",        vibe:"Créativité, spiritualité, luxe imaginatif. Rare dans la nature, ce qui a longtemps réservé sa version pourpre à la royauté.", use:"Beauté, luxe, spiritualité, IA/tech créative"},
+  {h:320, name:"Magenta / Rose",vibe:"Audace, désinvolture premium, énergie non conventionnelle. Ni chaude ni froide sur la roue, elle « flotte » entre les deux registres.", use:"Mode, lifestyle, marques disruptives, Gen Z"}
 ];
 
 const EDU_TOPICS = [
@@ -616,26 +733,49 @@ const EDU_TOPICS = [
     label:'Les bases',
     title:'Les bases du modèle colorimétrique',
     lead:"Avant de composer une harmonie, il faut savoir lire une couleur. Trois systèmes reviennent constamment en design : HEX, RGB et HSL.",
+    wheel:true,
     blocks:[
       {
         h:'La roue chromatique',
         def:"Les couleurs sont organisées en cercle de 0° à 360°. Rouge = 0°, jaune = 60°, vert = 120°, cyan = 180°, bleu = 240°, magenta = 300°. La position sur ce cercle s'appelle la teinte (hue) — c'est la base de toutes les harmonies.",
-        usage:"Une roue à 6 couleurs (primaires + secondaires) suffit pour raisonner ; les outils comme Chromascope l'affichent en continu sur 360°."
+        usage:"Une roue à 6 couleurs (primaires + secondaires) suffit pour raisonner ; les outils comme Chromascope l'affichent en continu sur 360°.",
+        swatches:[{h:0,label:'0° Rouge'},{h:60,label:'60° Jaune'},{h:120,label:'120° Vert'},{h:180,label:'180° Cyan'},{h:240,label:'240° Bleu'},{h:300,label:'300° Magenta'}]
       },
       {
         h:'HEX, RGB, HSL — trois façons de coder la même couleur',
         def:"HEX (#4A7FE8) encode rouge/vert/bleu en hexadécimal, format standard du web. RGB (74, 127, 232) donne les mêmes valeurs en base 10. HSL (Teinte, Saturation, Luminosité) est plus intuitif pour un designer : on choisit d'abord la teinte, puis on ajuste sa vivacité (saturation) et sa clarté (luminosité).",
-        usage:"En pratique : on choisit une teinte en HSL, puis on exporte en HEX pour le développement."
+        usage:"En pratique : on choisit une teinte en HSL, puis on exporte en HEX pour le développement.",
+        swatches:[{h:220,s:70,l:56,label:'#4A7FE8'}]
       },
       {
         h:'Primaires, secondaires, tertiaires',
         def:"Primaires (rouge, jaune, bleu en pigment / rouge, vert, bleu en lumière) ne se fabriquent à partir d'aucune autre couleur. Secondaires (orange, vert, violet) naissent du mélange de deux primaires adjacentes. Tertiaires (rouge-orangé, jaune-vert…) mélangent une primaire et une secondaire voisine.",
-        usage:"Ce vocabulaire sert à nommer précisément une teinte dans un brief ou une charte graphique."
+        usage:"Ce vocabulaire sert à nommer précisément une teinte dans un brief ou une charte graphique.",
+        swatches:[{h:0,label:'Primaire — Rouge'},{h:60,label:'Primaire — Jaune'},{h:240,label:'Primaire — Bleu'},{h:30,label:'Secondaire — Orange'},{h:120,label:'Secondaire — Vert'},{h:270,label:'Secondaire — Violet'},{h:15,label:'Tertiaire — Rouge-orangé'},{h:90,label:'Tertiaire — Jaune-vert'}]
       },
       {
         h:'Saturation et luminosité',
         def:"La saturation mesure l'intensité d'une couleur (0% = gris, 100% = couleur pure). La luminosité mesure sa clarté (0% = noir, 100% = blanc). Deux couleurs de même teinte peuvent donc être très différentes selon ces deux réglages.",
-        usage:"Baisser la saturation crée des palettes « désaturées » perçues comme plus sobres, plus premium ; l'augmenter crée du dynamisme, parfois de l'agressivité visuelle."
+        usage:"Baisser la saturation crée des palettes « désaturées » perçues comme plus sobres, plus premium ; l'augmenter crée du dynamisme, parfois de l'agressivité visuelle.",
+        swatches:[{h:220,s:100,l:50,label:'S100 L50'},{h:220,s:60,l:50,label:'S60 L50'},{h:220,s:20,l:50,label:'S20 L50'},{h:220,s:70,l:80,label:'S70 L80'},{h:220,s:70,l:50,label:'S70 L50'},{h:220,s:70,l:20,label:'S70 L20'}]
+      },
+      {
+        h:'Couleurs chaudes et couleurs froides',
+        def:"La roue se divise grossièrement en deux hémisphères : rouge-orange-jaune (chaud, associé au feu, à l'énergie, à la proximité) et vert-bleu-violet (froid, associé à l'eau, au calme, à la distance). Cette perception n'est pas qu'une métaphore : des expériences montrent que des pièces peintes dans des teintes chaudes sont perçues comme physiquement plus proches et légèrement plus chaudes qu'elles ne le sont.",
+        usage:"Mélanger une dominante froide avec un accent chaud (ou l'inverse) crée un contraste de température qui fait ressortir un élément sans recourir à un contraste de teinte complet.",
+        swatches:[{h:0,label:'Chaud'},{h:30,label:'Chaud'},{h:50,label:'Chaud'},{h:160,label:'Froid'},{h:220,label:'Froid'},{h:270,label:'Froid'}]
+      },
+      {
+        h:'Le contraste simultané',
+        def:"Une couleur n'est jamais perçue isolément : l'œil interprète chaque teinte relativement à celles qui l'entourent. Un même gris paraît plus foncé sur un fond blanc et plus clair sur un fond noir ; un orange semble plus vif à côté de son complémentaire bleu qu'à côté d'un rouge voisin. Ce phénomène s'appelle le contraste simultané.",
+        usage:"Ne jamais valider une couleur « dans le vide » : toujours la tester directement sur le fond et à côté des couleurs avec lesquelles elle cohabitera réellement dans l'interface ou le support imprimé.",
+        swatches:[{h:30,s:80,l:55,label:'Orange'},{h:220,s:80,l:55,label:'Bleu (complémentaire)'},{h:0,s:70,l:50,label:'Rouge (voisin)'}]
+      },
+      {
+        h:'Espaces colorimétriques perceptuels (LAB, OKLCH)',
+        def:"HSL a un défaut : deux teintes de même luminosité déclarée (ex. jaune et bleu à L=50%) ne paraissent pas aussi lumineuses à l'œil humain, car HSL ne modélise pas la sensibilité réelle de l'œil. Des espaces plus récents comme LAB ou OKLCH corrigent cela en calculant une luminosité perceptuellement uniforme : deux couleurs de même « L » y semblent réellement aussi claires l'une que l'autre.",
+        usage:"Pour des dégradés ou des palettes générées automatiquement, préférer un espace comme OKLCH évite les « bosses » de luminosité perçue que HSL produit souvent, en particulier autour du jaune.",
+        swatches:[{h:60,s:90,l:50,label:'Jaune L50 (HSL)'},{h:240,s:90,l:50,label:'Bleu L50 (HSL)'}]
       }
     ]
   },
@@ -643,14 +783,83 @@ const EDU_TOPICS = [
     key:'harmonies',
     label:'Harmonies',
     title:"Les six harmonies chromatiques",
-    lead:"Une harmonie est une règle géométrique appliquée à la roue chromatique pour choisir plusieurs teintes qui fonctionnent ensemble.",
+    lead:"Une harmonie est une règle géométrique appliquée à la roue chromatique pour choisir plusieurs teintes qui fonctionnent ensemble. Le principe commun à toutes : fixer l'écart angulaire entre les teintes plutôt que les teintes elles-mêmes, ce qui permet de générer une palette cohérente à partir de n'importe quelle couleur de départ.",
+    blocks:[
+      {
+        h:'Comment choisir son harmonie',
+        def:"Le choix dépend du message recherché, pas seulement du goût. Plus l'écart angulaire entre les teintes est grand, plus le contraste (et donc la tension visuelle et l'énergie perçue) est fort. Une harmonie analogue ou monochromatique convient à un message apaisant et cohérent ; une harmonie complémentaire ou triadique convient à un message qui doit capter l'attention rapidement.",
+        usage:"Règle simple : si le message est « calme, digne de confiance, discret », resserrer les angles. Si le message est « dynamique, jeune, qui doit se voir de loin », les écarter."
+      },
+      {
+        h:'Une teinte dominante, les autres en soutien',
+        def:"Même dans une harmonie à 3 ou 4 couleurs, il est rare qu'elles soient utilisées à parts égales. Une teinte doit rester dominante (souvent la plus désaturée ou la plus proche du neutre) tandis que les autres jouent un rôle d'accent, sans quoi la composition devient illisible et « chacune se bat pour l'attention ».",
+        usage:"Voir le bloc 60-30-10 dans l'onglet Branding pour la répartition concrète des surfaces."
+      }
+    ],
     harmonies:[
-      {name:'Complémentaire', angles:[0,180], def:"Deux teintes opposées à 180°. Contraste maximal, forte tension visuelle.", use:"Un accent qui doit sauter aux yeux sans multiplier les couleurs (CTA, logo bicolore)."},
-      {name:'Analogue', angles:[-30,0,30], def:"Trois teintes voisines (±30°). Harmonie douce, sans tension.", use:"Univers de marque unifié et apaisant (nature, bien-être)."},
-      {name:'Triadique', angles:[0,120,240], def:"Trois teintes équidistantes (120°). Équilibre vif et énergique.", use:"Identités ludiques ou éducatives qui doivent rester lisibles."},
-      {name:'Complémentaire divisée', angles:[0,150,210], def:"La base + les deux voisines de son complémentaire. Même tension, mais plus nuancée.", use:"Alternative au complémentaire pur, moins agressive à l'œil."},
-      {name:'Tétradique', angles:[0,60,180,240], def:"Quatre teintes en deux paires complémentaires. Palette riche mais exigeante.", use:"Nécessite une teinte dominante claire et les 3 autres en accents secondaires."},
-      {name:'Monochromatique', angles:[0,0,0,0], mono:true, def:"Une seule teinte déclinée en luminosité/saturation. Cohérence absolue.", use:"Le choix le plus sûr pour un branding minimal et élégant."}
+      {name:'Complémentaire', angles:[0,180], def:"Deux teintes opposées à 180°. Contraste maximal, forte tension visuelle — c'est l'harmonie qui produit l'écart de teinte le plus élevé possible sur la roue.", use:"Un accent qui doit sauter aux yeux sans multiplier les couleurs (CTA, logo bicolore)."},
+      {name:'Analogue', angles:[-30,0,30], def:"Trois teintes voisines (±30°). Harmonie douce, sans tension, car l'œil perçoit ces teintes comme appartenant à la même « famille ».", use:"Univers de marque unifié et apaisant (nature, bien-être, éditorial)."},
+      {name:'Triadique', angles:[0,120,240], def:"Trois teintes équidistantes (120°), correspondant historiquement aux trois couleurs primaires ou secondaires. Équilibre vif et énergique.", use:"Identités ludiques ou éducatives qui doivent rester lisibles et enjouées."},
+      {name:'Complémentaire divisée', angles:[0,150,210], def:"La base + les deux voisines de son complémentaire (±30° autour de l'opposé). Même tension que le complémentaire pur, mais plus nuancée et moins « brute ».", use:"Alternative au complémentaire pur, moins agressive à l'œil, plus facile à équilibrer."},
+      {name:'Tétradique', angles:[0,60,180,240], def:"Quatre teintes en deux paires complémentaires (aussi appelée « rectangle »). Palette riche mais exigeante à équilibrer.", use:"Nécessite une teinte dominante claire et les 3 autres en accents secondaires, sinon la composition devient chaotique."},
+      {name:'Carré', angles:[0,90,180,270], def:"Variante du tétradique avec quatre teintes parfaitement équidistantes (90°). Contraste maximal sur les quatre axes, encore plus exigeant à doser.", use:"Palettes éditoriales ou artistiques riches, rarement utilisées telles quelles en branding."},
+      {name:'Monochromatique', angles:[0,0,0,0], mono:true, def:"Une seule teinte déclinée en luminosité/saturation. Cohérence absolue, aucun risque de dissonance de teinte.", use:"Le choix le plus sûr pour un branding minimal et élégant, ou pour une interface qui doit rester discrète."}
+    ]
+  },
+  {
+    key:'perception',
+    label:'Perception',
+    title:'Comment l\'œil et le cerveau construisent la couleur',
+    lead:"La couleur n'existe pas « dans » la lumière — elle est reconstruite par le cerveau à partir de signaux électriques. Comprendre ce mécanisme explique pourquoi deux personnes, ou une même personne dans deux contextes, ne voient jamais tout à fait la même chose.",
+    blocks:[
+      {
+        h:'Trois types de cônes, un espace à trois dimensions',
+        def:"La rétine humaine contient trois types de cônes, sensibles respectivement aux courtes (bleu), moyennes (vert) et longues (rouge) longueurs d'onde. Toute couleur perçue est une combinaison de l'activation relative de ces trois cônes — c'est pourquoi trois nombres (RGB, ou teinte/saturation/luminosité) suffisent à décrire n'importe quelle couleur visible par un humain.",
+        usage:"C'est aussi ce qui explique le daltonisme : quand un type de cône fonctionne mal ou est absent, l'espace des couleurs distinguables se réduit fortement (voir l'onglet Accessibilité)."
+      },
+      {
+        h:'La théorie des processus antagonistes',
+        def:"Après les cônes, le cerveau recode l'information en trois paires opposées : rouge-vert, bleu-jaune, et noir-blanc (luminosité). C'est pourquoi il n'existe pas de couleur perçue comme « rouge-verdâtre » ou « bleu-jaunâtre » : ces paires s'annulent plutôt que de se mélanger. C'est aussi ce mécanisme qui produit les images rémanentes : fixer un carré rouge puis regarder une surface blanche fait apparaître un carré cyan.",
+        usage:"Cette théorie explique pourquoi le complémentaire (opposé à 180° sur la roue) produit la tension visuelle la plus forte : les deux teintes activent les extrêmes opposés du même canal neuronal."
+      },
+      {
+        h:'La constance chromatique',
+        def:"Le cerveau ajuste en permanence sa perception des couleurs selon l'éclairage ambiant, pour qu'un objet garde une couleur « stable » qu'il soit vu en plein soleil ou sous une lumière artificielle jaune. C'est ce mécanisme qui a rendu célèbre l'illusion de « la robe » (bleu/noir ou blanc/or selon les personnes) : le cerveau fait des hypothèses différentes sur la source de lumière.",
+        usage:"En design d'écran, ce phénomène impose de toujours vérifier une palette sous plusieurs conditions réelles (écran calibré, luminosité ambiante forte, mode sombre) plutôt que dans un seul environnement contrôlé."
+      },
+      {
+        h:'Adaptation et fatigue visuelle',
+        def:"Une exposition prolongée à une couleur dominante désensibilise progressivement les cônes correspondants, ce qui fausse la perception des couleurs environnantes. C'est pourquoi comparer deux couleurs presque identiques nécessite de reposer l'œil sur un gris neutre entre chaque observation.",
+        usage:"Lors du choix final d'une palette, faire une pause ou regarder un gris neutre avant de trancher entre deux nuances proches évite un biais de fatigue visuelle."
+      }
+    ]
+  },
+  {
+    key:'accessibilite',
+    label:'Accessibilité',
+    title:'Concevoir pour tous les types de vision',
+    lead:"Environ 1 homme sur 12 et 1 femme sur 200 présentent une forme de daltonisme. Une palette « harmonieuse » sur la roue chromatique peut devenir totalement illisible pour une partie du public si l'information repose uniquement sur la couleur.",
+    blocks:[
+      {
+        h:'Les trois familles de daltonisme',
+        def:"La protanopie et la deutéranopie (les plus fréquentes) réduisent ou suppriment la distinction entre rouge et vert — la paire de couleurs la plus utilisée dans les interfaces pour signaler « erreur » et « succès ». La tritanopie, beaucoup plus rare, affecte l'axe bleu-jaune.",
+        usage:"Ne jamais utiliser un simple duo rouge/vert comme seul signal d'état (erreur/validé) : y ajouter systématiquement une icône, un texte ou une forme distincte."
+      },
+      {
+        h:'Le ratio de contraste WCAG',
+        def:"Le standard d'accessibilité web (WCAG) définit un ratio de contraste minimal entre texte et fond : 4.5:1 pour le texte courant, 3:1 pour le texte large (≥18px gras) et les éléments d'interface. Ce ratio se calcule à partir de la luminance relative des deux couleurs, pas de leur simple différence de teinte.",
+        usage:"Deux couleurs peuvent sembler très différentes sur la roue chromatique (donc « harmonieuses ») tout en ayant une luminosité quasi identique — et donc échouer complètement le test de contraste. Toujours vérifier avec un outil dédié, jamais à l'œil seul."
+      },
+      {
+        h:'Ne jamais coder l\'information par la couleur seule',
+        def:"Un graphique, un statut ou un bouton qui ne se distingue que par sa teinte exclut les daltoniens et devient inutilisable en niveaux de gris (impression, certains modes d'accessibilité). La couleur doit toujours être un renfort, jamais l'unique vecteur d'une information.",
+        usage:"Doubler chaque code couleur d'un second signal : forme, motif (hachures, pointillés), position, icône, ou libellé texte."
+      },
+      {
+        h:'Simuler la vision daltonienne',
+        def:"Des outils de simulation permettent de visualiser une palette telle qu'elle apparaît à une personne protanope, deutéranope ou tritanope, en reproduisant la perte de distinction entre certains canaux de couleur.",
+        usage:"Tester systématiquement une palette de marque ou d'interface finale à travers un simulateur de daltonisme avant validation, au même titre qu'un test de contraste."
+      }
     ]
   },
   {
@@ -658,6 +867,18 @@ const EDU_TOPICS = [
     label:'Psychologie',
     title:'Psychologie et usages des couleurs',
     lead:"Chaque famille de teinte porte des associations culturelles fortes. Elles ne sont pas universelles à 100%, mais elles orientent la perception dans la plupart des contextes occidentaux du branding.",
+    blocks:[
+      {
+        h:'Associations culturelles vs. réactions biologiques',
+        def:"Certaines réactions à la couleur sont quasi universelles et biologiques : le rouge augmente la vigilance et le rythme cardiaque chez la plupart des humains, indépendamment de la culture. D'autres sont purement conventionnelles : le blanc évoque le mariage et la pureté en Occident, mais le deuil dans plusieurs cultures d'Asie de l'Est ; le rouge symbolise le danger en Occident mais la chance et la prospérité en Chine.",
+        usage:"Pour une marque internationale, toujours vérifier les connotations locales de la couleur dominante avant un déploiement global — un test qui semble anodin en France peut être un contresens ailleurs."
+      },
+      {
+        h:'Le contexte prime sur la teinte isolée',
+        def:"La même couleur change de sens selon le secteur et le voisinage visuel : un vert vif signifie « validé » dans une interface, « bio » sur un emballage alimentaire, et « toxique » à côté d'un pictogramme de danger. La psychologie des couleurs s'interprète toujours en contexte, jamais en absolu.",
+        usage:"Avant de choisir une teinte pour son message symbolique seul, vérifier comment les concurrents directs du même secteur l'utilisent déjà — s'en démarquer ou s'y conformer est un choix stratégique, pas un accident."
+      }
+    ],
     vibes:true
   },
   {
@@ -685,6 +906,21 @@ const EDU_TOPICS = [
         h:'Limiter la palette',
         def:"Une charte graphique solide tient généralement en 1 couleur dominante, 1-2 couleurs secondaires, 1 couleur d'accent, et une gamme de neutres (blancs, gris, noir). Trop de couleurs diluent la reconnaissance de marque.",
         usage:"Si une palette dépasse 5-6 couleurs actives, c'est souvent le signe qu'il faut arbitrer plutôt qu'additionner."
+      },
+      {
+        h:'Concevoir pour le mode clair et le mode sombre',
+        def:"Une couleur d'accent qui fonctionne sur fond blanc peut perdre tout son impact — ou échouer le contraste — sur fond noir. Le mode sombre n'est pas une simple inversion : les couleurs saturées doivent généralement être légèrement désaturées et éclaircies pour rester confortables sur un fond sombre, sous peine de « vibrer » désagréablement à l'œil.",
+        usage:"Prévoir dès la conception deux variantes de chaque couleur de la charte (une pour fond clair, une pour fond sombre) plutôt que d'improviser une conversion automatique tardive."
+      },
+      {
+        h:'Tester en conditions réelles',
+        def:"Une palette validée sur un écran calibré, en plein contrôle de la luminosité ambiante, peut se révéler illisible en plein soleil sur un smartphone, ou différente sur des écrans mal calibrés. De même, une couleur d'écran (RGB, lumière additive) ne rend jamais exactement la même chose imprimée (CMJN, pigment soustractif).",
+        usage:"Toujours valider une palette finale sur plusieurs supports et conditions réels avant impression ou déploiement en production, jamais uniquement sur la maquette d'origine."
+      },
+      {
+        h:'Itérer plutôt que figer',
+        def:"Une identité de couleur n'est jamais figée définitivement : elle s'affine avec les retours d'usage réel (tests utilisateurs, taux de clic sur un CTA, retours d'accessibilité). Les grandes marques révisent régulièrement leur palette de quelques pourcents sans changer leur identité perçue.",
+        usage:"Documenter chaque décision de palette (pourquoi cette teinte, cette harmonie) permet de savoir quoi ajuster précisément plutôt que de tout reconstruire à chaque itération."
       }
     ]
   }
@@ -706,15 +942,88 @@ function renderEduTabs(){
   });
 }
 
+function buildColorWheelSVG(size){
+  const r = size/2;
+  const cx = r, cy = r;
+  const innerR = r*0.42;
+  const outerR = r*0.92;
+  let wedges = '';
+  for(let deg=0; deg<360; deg++){
+    const a0 = (deg-0.6) * Math.PI/180;
+    const a1 = (deg+0.6) * Math.PI/180;
+    const x0 = cx + outerR*Math.cos(a0), y0 = cy + outerR*Math.sin(a0);
+    const x1 = cx + outerR*Math.cos(a1), y1 = cy + outerR*Math.sin(a1);
+    const xi0 = cx + innerR*Math.cos(a0), yi0 = cy + innerR*Math.sin(a0);
+    const xi1 = cx + innerR*Math.cos(a1), yi1 = cy + innerR*Math.sin(a1);
+    wedges += `<path d="M${xi0},${yi0} L${x0},${y0} A${outerR},${outerR} 0 0,1 ${x1},${y1} L${xi1},${yi1} A${innerR},${innerR} 0 0,0 ${xi0},${yi0} Z" fill="${eduHsl(deg,72,52)}"/>`;
+  }
+  const landmarks = [
+    {deg:0,label:'0° · Rouge'},{deg:30,label:'30° · Orangé'},{deg:60,label:'60° · Jaune'},
+    {deg:90,label:'90° · Vert-jaune'},{deg:120,label:'120° · Vert'},{deg:150,label:'150° · Vert-sarcelle'},
+    {deg:180,label:'180° · Cyan'},{deg:210,label:'210° · Azur'},{deg:240,label:'240° · Bleu'},
+    {deg:270,label:'270° · Violet'},{deg:300,label:'300° · Magenta'},{deg:330,label:'330° · Rose'}
+  ];
+  let ticks = '';
+  let labels = '';
+  landmarks.forEach(lm=>{
+    const a = lm.deg * Math.PI/180;
+    const tx0 = cx + outerR*Math.cos(a), ty0 = cy + outerR*Math.sin(a);
+    const tx1 = cx + (outerR+7)*Math.cos(a), ty1 = cy + (outerR+7)*Math.sin(a);
+    ticks += `<line x1="${tx0}" y1="${ty0}" x2="${tx1}" y2="${ty1}" stroke="#8a8a8a" stroke-width="1"/>`;
+    const lx = cx + (outerR+22)*Math.cos(a), ly = cy + (outerR+22)*Math.sin(a);
+    const anchor = Math.cos(a) > 0.3 ? 'start' : (Math.cos(a) < -0.3 ? 'end' : 'middle');
+    labels += `<text x="${lx}" y="${ly}" fill="#8a8a8a" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="${anchor}" dominant-baseline="middle">${lm.deg}°</text>`;
+  });
+  const viewSize = size + 56;
+  const off = 28;
+  return `<svg class="wheel-svg" width="${viewSize}" height="${viewSize}" viewBox="0 0 ${viewSize} ${viewSize}">
+    <g transform="translate(${off},${off})">
+      ${wedges}
+      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="var(--panel)" stroke="#2b2b2b" stroke-width="1"/>
+      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="#2b2b2b" stroke-width="1"/>
+      ${ticks}
+      ${labels}
+      <text x="${cx}" y="${cy}" fill="#ffffff" font-family="Archivo Expanded, sans-serif" font-size="11" text-anchor="middle" dominant-baseline="middle">TEINTE</text>
+    </g>
+  </svg>`;
+}
+
+function renderColorWheelBlock(){
+  const legendItems = [
+    {deg:0,name:'Rouge'},{deg:60,name:'Jaune'},{deg:120,name:'Vert'},
+    {deg:180,name:'Cyan'},{deg:240,name:'Bleu'},{deg:300,name:'Magenta'}
+  ];
+  const legend = legendItems.map(it=>`
+    <div class="lg-row">
+      <span class="lg-dot" style="background:${eduHsl(it.deg,72,52)}"></span>
+      <span>${it.name}</span>
+      <span class="lg-deg">${it.deg}°</span>
+    </div>`).join('');
+  return `
+  <div class="edu-wheel-wrap">
+    ${buildColorWheelSVG(190)}
+    <div class="edu-wheel-legend">
+      <div style="color:var(--ink);font-weight:600;margin-bottom:4px;">Repères sur 360°</div>
+      ${legend}
+      <div class="edu-wheel-note">La teinte (hue) se lit comme un angle : 0° et 360° désignent le même rouge. Les harmonies (onglet suivant) ne sont que des écarts fixes appliqués à cet angle.</div>
+    </div>
+  </div>`;
+}
+
 function renderEduPanel(key){
   const topic = EDU_TOPICS.find(t=>t.key===key);
   const panel = document.getElementById('eduPanel');
   let html = `<h2>${topic.title}</h2><p class="lead">${topic.lead}</p>`;
 
+  if(topic.wheel){
+    html += renderColorWheelBlock();
+  }
+
   if(topic.blocks){
     html += topic.blocks.map(b=>`
       <div class="edu-block">
         <h3>${b.h}</h3>
+        ${b.swatches ? `<div class="edu-swatches">${b.swatches.map(sw=>`<div class="sw" style="background:${eduHsl(sw.h,sw.s!=null?sw.s:70,sw.l!=null?sw.l:50)}" title="${sw.label||''}"></div>`).join('')}</div>` : ''}
         <p class="def">${b.def}</p>
         <div class="edu-usage"><b>En pratique —</b> ${b.usage}</div>
       </div>`).join('');
@@ -759,6 +1068,16 @@ let profile = {name:'', xp:0};
 
 const LB_KEY = 'kromatime:leaderboard';
 
+/* ---------- leaderboard global (Supabase) ---------- */
+const SUPABASE_URL = 'https://opcznpxcpjteskbqelgy.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_0AZjtx1xZ4UIT_Y5pc3lcQ_AIPMYrkx';
+let supabaseClient = null;
+try{
+  if(window.supabase && typeof window.supabase.createClient === 'function'){
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+}catch(err){ supabaseClient = null; }
+
 /* ---------- son & vibration ---------- */
 let soundOn = true;
 let audioCtx = null;
@@ -792,6 +1111,7 @@ function sfxTick(){ beep(1200,0.04,'square',0.05); }
 function sfxUnlock(){ beep(523,0.1,'sine',0.1); beep(659,0.1,'sine',0.1,0.09); beep(784,0.16,'sine',0.11,0.18); }
 function sfxClick(){ beep(400,0.04,'sine',0.06); }
 
+
 function vibrate(pattern){
   if(!soundOn) return; // même interrupteur : "retours sensoriels" on/off
   if(navigator.vibrate){ try{ navigator.vibrate(pattern); }catch(err){} }
@@ -807,10 +1127,12 @@ async function loadSoundPref(){
 async function saveSoundPref(){
   try{ await window.storage.set('kromatime:sound', soundOn ? 'on' : 'off', false); }catch(err){}
 }
+const ICON_SOUND_ON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,9 8,9 13,4 13,20 8,15 4,15" fill="currentColor" stroke="none"/><path d="M17 8a5 5 0 0 1 0 8"/><path d="M19.5 5.5a9 9 0 0 1 0 13"/></svg>';
+const ICON_SOUND_OFF = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,9 8,9 13,4 13,20 8,15 4,15" fill="currentColor" stroke="none"/><path d="M17 9l5 6"/><path d="M22 9l-5 6"/></svg>';
 function updateSoundBtn(){
   const btn = document.getElementById('soundBtn');
   if(!btn) return;
-  btn.textContent = soundOn ? '🔊' : '🔇';
+  btn.innerHTML = soundOn ? ICON_SOUND_ON : ICON_SOUND_OFF;
   btn.classList.toggle('muted', !soundOn);
 }
 document.getElementById('soundBtn').addEventListener('click', ()=>{
@@ -848,6 +1170,15 @@ function genComplementQuestion(){
   const distractors = shuffle([(base+150)%360,(base+90)%360,(base+30)%360,(base+210)%360]).slice(0,3);
   const options = shuffle([correct, ...distractors]);
   return {type:'complement', base, correct, options, s, l};
+}
+function genTriadicQuestion(){
+  const base = pickVariedHue();
+  const second = (base+120)%360;
+  const correct = (base+240)%360;
+  const s = pickVariedSat(), l = pickVariedLight();
+  const distractors = shuffle([(base+60)%360,(base+90)%360,(base+270)%360,(base+300)%360]).slice(0,3);
+  const options = shuffle([correct, ...distractors]);
+  return {type:'triadic', base, second, correct, options, s, l};
 }
 function genSchemeQuestion(){
   const schemeDefs = {
@@ -898,11 +1229,11 @@ function genFamilyQuestion(){
   return {type:'family', hex, options, correct};
 }
 function genMixQuestion(){
-  const gens=[genComplementQuestion, genSchemeQuestion, genHexQuestion, genFamilyQuestion];
+  const gens=[genComplementQuestion, genTriadicQuestion, genSchemeQuestion, genHexQuestion, genFamilyQuestion];
   return pick(gens)();
 }
 const GENERATORS = {
-  complement: genComplementQuestion, scheme: genSchemeQuestion,
+  complement: genComplementQuestion, triadic: genTriadicQuestion, scheme: genSchemeQuestion,
   hexguess: genHexQuestion, family: genFamilyQuestion, mix: genMixQuestion, endless: genMixQuestion
 };
 
@@ -915,19 +1246,71 @@ async function loadProfile(){
 async function saveProfile(){
   try{ await window.storage.set(PROFILE_KEY, JSON.stringify(profile), false); }catch(err){}
 }
-async function loadLeaderboard(){
+async function loadLocalLeaderboard(){
   try{
     const res = await window.storage.get(LB_KEY, false);
     return res && res.value ? JSON.parse(res.value) : [];
   }catch(err){ return []; }
 }
-async function saveLeaderboardEntry(entry){
+async function saveLocalLeaderboardEntry(entry){
   try{
-    const list = await loadLeaderboard();
+    const list = await loadLocalLeaderboard();
     list.push(entry);
     list.sort((a,b)=>b.score-a.score);
     await window.storage.set(LB_KEY, JSON.stringify(list.slice(0,15)), false);
   }catch(err){}
+}
+async function loadLeaderboard(){
+  if(supabaseClient){
+    try{
+      const { data, error } = await supabaseClient
+        .from('leaderboard')
+        .select('player_name, level_key, level_title, score, accuracy, max_streak, created_at')
+        .order('score', { ascending:false })
+        .limit(15);
+      if(error) throw error;
+      return (data||[]).map(r=>({
+        playerName:r.player_name, level:r.level_key, levelTitle:r.level_title,
+        score:r.score, accuracy:r.accuracy, maxStreak:r.max_streak, date:r.created_at
+      }));
+    }catch(err){
+      // hors-ligne / erreur réseau : on retombe sur le classement local de l'appareil
+      return loadLocalLeaderboard();
+    }
+  }
+  return loadLocalLeaderboard();
+}
+const SUBMIT_SCORE_URL = SUPABASE_URL + '/functions/v1/submit-score';
+async function submitScoreSecure(entry){
+  const res = await fetch(SUBMIT_SCORE_URL, {
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'apikey': SUPABASE_KEY
+    },
+    body: JSON.stringify({
+      playerName: entry.playerName,
+      level: entry.level,
+      mode: entry.mode,
+      log: entry.log
+    })
+  });
+  const data = await res.json().catch(()=>({}));
+  if(!res.ok || data.error) throw new Error(data.error || 'échec de validation du score');
+  return data;
+}
+async function saveLeaderboardEntry(entry){
+  if(supabaseClient){
+    try{
+      await submitScoreSecure(entry);
+      return;
+    }catch(err){
+      // hors-ligne / erreur réseau / score rejeté : on garde quand même la partie localement
+      await saveLocalLeaderboardEntry(entry);
+      return;
+    }
+  }
+  await saveLocalLeaderboardEntry(entry);
 }
 async function renderLeaderboard(){
   const wrap = document.getElementById('lbWrap');
@@ -947,10 +1330,10 @@ async function renderLeaderboard(){
       <td>${e.maxStreak!==undefined?e.maxStreak:'—'}</td>
     </tr>`).join('');
   wrap.innerHTML = `
-    <table class="lb">
+    <div class="lb-scroll"><table class="lb">
       <thead><tr><th>#</th><th>Joueur · Mode</th><th>Score</th><th>Précision</th><th>Série max</th></tr></thead>
       <tbody>${rows}</tbody>
-    </table>`;
+    </table></div>`;
 }
 
 function xpForNextLevel(xp){
@@ -1141,7 +1524,7 @@ function startLevel(idx){
   if(lvl.endless){ startEndless(); return; }
   const rounds = [];
   for(let i=0;i<lvl.rounds;i++) rounds.push(GENERATORS[lvl.key]());
-  session = {mode:'fixed', rounds, idx:0, score:0, streak:0, maxStreak:0, correctCount:0, answered:false, started:true, log:[]};
+  session = {mode:'fixed', rounds, idx:0, score:0, streak:0, maxStreak:0, correctCount:0, answered:false, started:true, log:[], paletteHexes:[]};
   renderLevelSelect();
   renderQuestion();
   updateHud();
@@ -1150,7 +1533,7 @@ function startLevel(idx){
 function startEndless(){
   currentLevelIdx = LEVELS.findIndex(l=>l.endless);
   session = {mode:'endless', rounds:[GENERATORS.endless()], idx:0, score:0, streak:0, maxStreak:0,
-    correctCount:0, answered:false, started:true, log:[], lives:3};
+    correctCount:0, answered:false, started:true, log:[], lives:3, paletteHexes:[]};
   renderLevelSelect();
   renderQuestion();
   updateHud();
@@ -1261,11 +1644,15 @@ function onTimeout(){
   const fb = document.getElementById('feedback');
   if(fb){
     fb.classList.add('show','bad');
-    fb.innerHTML = `Temps écoulé. Bonne réponse : <b>${q.hex ? q.hex.toUpperCase() : (q.type==='complement'? Math.round(q.correct)+'°' : q.correct)}</b>`;
+    fb.innerHTML = `Temps écoulé. Bonne réponse : <b>${q.hex ? q.hex.toUpperCase() : ((q.type==='complement'||q.type==='triadic')? Math.round(q.correct)+'°' : q.correct)}</b>`;
   }
   document.getElementById('nextBtn').style.display='inline-block';
 }
 
+function trackPaletteHexes(hexes){
+  if(!session || !session.paletteHexes) return;
+  hexes.forEach(h=>{ if(h && !session.paletteHexes.includes(h)) session.paletteHexes.push(h); });
+}
 function renderQuestion(){
   const panel = document.getElementById('gamePanel');
 
@@ -1283,13 +1670,28 @@ function renderQuestion(){
   if(q.type==='complement'){
     const qs = q.s!==undefined ? q.s : 68, ql = q.l!==undefined ? q.l : 50;
     const baseHex = hslToHex(q.base,qs,ql);
+    trackPaletteHexes([baseHex, hslToHex(q.correct,qs,ql)]);
     body = `
       <div class="question">Quelle couleur est la <span>complémentaire</span> de celle-ci ?</div>
       <div class="swatch-display"><div class="chip" style="background:${baseHex}"><span>BASE</span></div></div>
       <div class="options" id="optWrap">
         ${q.options.map(h=>`<button class="opt-btn" data-val="${h}"><span class="opt-swatch" style="background:${hslToHex(h,qs,ql)}"></span>${Math.round(h)}°</button>`).join('')}
       </div>`;
+  } else if(q.type==='triadic'){
+    const qs = q.s!==undefined ? q.s : 68, ql = q.l!==undefined ? q.l : 50;
+    const baseHex = hslToHex(q.base,qs,ql), secondHex = hslToHex(q.second,qs,ql);
+    trackPaletteHexes([baseHex, secondHex, hslToHex(q.correct,qs,ql)]);
+    body = `
+      <div class="question">Quelle couleur complète ce <span>trio triadique</span> (120° entre chaque teinte) ?</div>
+      <div class="swatch-display">
+        <div class="chip" style="background:${baseHex}"><span>1</span></div>
+        <div class="chip" style="background:${secondHex}"><span>2</span></div>
+      </div>
+      <div class="options" id="optWrap">
+        ${q.options.map(h=>`<button class="opt-btn" data-val="${h}"><span class="opt-swatch" style="background:${hslToHex(h,qs,ql)}"></span>${Math.round(h)}°</button>`).join('')}
+      </div>`;
   } else if(q.type==='scheme'){
+    trackPaletteHexes(q.colors);
     body = `
       <div class="question">Quel type d'<span>harmonie chromatique</span> ces couleurs forment-elles ?</div>
       <div class="swatch-display">${q.colors.map(c=>`<div class="chip" style="background:${c}"></div>`).join('')}</div>
@@ -1297,6 +1699,7 @@ function renderQuestion(){
         ${q.options.map(o=>`<button class="opt-btn" data-val="${o}">${o}</button>`).join('')}
       </div>`;
   } else if(q.type==='hexguess'){
+    trackPaletteHexes([q.hex]);
     body = `
       <div class="question">Estime le code <span>HEX</span> de cette couleur (tolérance ±20 par canal RGB)</div>
       <div class="swatch-display"><div class="chip" style="background:${q.hex}"></div></div>
@@ -1306,6 +1709,7 @@ function renderQuestion(){
       </div>
       <div class="hex-compare" id="hexCompare"></div>`;
   } else if(q.type==='family'){
+    trackPaletteHexes([q.hex]);
     body = `
       <div class="question">Pour quel <span>usage branding</span> cette couleur est-elle la plus adaptée ?</div>
       <div class="swatch-display"><div class="chip" style="background:${q.hex}"></div></div>
@@ -1361,7 +1765,7 @@ function markAnswer(isCorrect){
   session.answered = true;
   clearTimer();
   if(isCorrect){
-    session.score += 10 + session.streak*2;
+    session.score += 10 + Math.min(session.streak,8)*2;
     session.streak++;
     session.maxStreak = Math.max(session.maxStreak, session.streak);
     session.correctCount++;
@@ -1391,7 +1795,7 @@ function submitOption(btn, q){
   });
   const fb = document.getElementById('feedback');
   fb.classList.add('show', correct?'good':'bad');
-  fb.innerHTML = correct ? 'Exact.' : `La bonne réponse était : <b>${correctVal}${q.type==='complement'?'°':''}</b>`;
+  fb.innerHTML = correct ? 'Exact.' : `La bonne réponse était : <b>${correctVal}${(q.type==='complement'||q.type==='triadic')?'°':''}</b>`;
   markAnswer(correct);
 }
 
@@ -1442,7 +1846,7 @@ function submitHex(q){
 function verifiedScore(sess){
   let score=0, streak=0;
   sess.log.forEach(e=>{
-    if(e.result==='correct'){ score += 10 + streak*2; streak++; }
+    if(e.result==='correct'){ score += 10 + Math.min(streak,8)*2; streak++; }
     else { streak=0; }
   });
   return score;
@@ -1465,7 +1869,7 @@ async function renderResult(){
   else if(pct>=70) msg = "Très solide, presque expert.";
   else if(pct>=50) msg = "Bonne base, encore un peu de pratique.";
 
-  const xpGained = finalScore;
+  const xpGained = Math.round(finalScore * (0.6 + (pct/100)*0.4));
   const prevXp = profile.xp||0;
   const newXp = prevXp + xpGained;
   const newlyUnlocked = ACHIEVEMENTS.filter(a=>prevXp<a.threshold && newXp>=a.threshold);
@@ -1489,14 +1893,29 @@ async function renderResult(){
       <p class="xpgain">+${xpGained} XP → total ${newXp} XP</p>
       ${isNewBest ? '<p class="newbest">Nouveau record personnel pour ce mode</p>' : ''}
       ${newlyUnlocked.map(a=>`<div class="unlock-toast">${a.icon} Réussite débloquée — ${a.label}</div>`).join('')}
+
       <div class="result-actions">
-        <button class="retry-btn" id="retryBtn">REJOUER (nouvelles couleurs) ↻</button>
+        <button class="retry-btn" id="retryBtn">REJOUER</button>
         <button class="home-btn" id="homeBtn2">CHANGER DE MODE</button>
       </div>
-      <button class="ticket-trigger" id="shareTicketBtn">PARTAGER LE TICKET</button>
+
+      <div class="result-exports">
+        <div class="result-exports-title">Conserver cette session</div>
+        <div class="result-exports-row">
+          <button class="ticket-trigger" id="shareTicketBtn">PARTAGER LE TICKET</button>
+          <button class="palette-trigger" id="downloadPaletteBtn" ${session.paletteHexes.length?'':'disabled'}>TÉLÉCHARGER LA PALETTE (${session.paletteHexes.length})</button>
+        </div>
+      </div>
     </div>`;
   document.getElementById('retryBtn').addEventListener('click', ()=> startLevel(currentLevelIdx));
   document.getElementById('homeBtn2').addEventListener('click', goToModeSelect);
+  document.getElementById('downloadPaletteBtn').addEventListener('click', (e)=>{
+    const now = new Date();
+    downloadPaletteImage(session.paletteHexes, {
+      playerName: profile.name, levelTitle: lvl.title, levelKey: lvl.key, date: now,
+      dateStr: now.toLocaleDateString('fr-FR') + ' ' + now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})
+    }, e.currentTarget);
+  });
   document.getElementById('shareTicketBtn').addEventListener('click', async ()=>{
     const now = new Date();
     const d = {
@@ -1504,7 +1923,7 @@ async function renderResult(){
       levelTitle: lvl.title,
       total, correctCount: session.correctCount, pct,
       maxStreak: session.maxStreak, finalScore, xpGained,
-      mode: session.mode,
+      mode: session.mode, date: now,
       ref: now.getTime().toString(36).toUpperCase(),
       dateStr: now.toLocaleDateString('fr-FR') + ' ' + now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})
     };
@@ -1517,6 +1936,8 @@ async function renderResult(){
     playerName: profile.name,
     level: lvl.key,
     levelTitle: lvl.title,
+    mode: session.mode,
+    log: session.log.map(e=>e.result),
     score: finalScore,
     accuracy: pct,
     maxStreak: session.maxStreak,
@@ -1561,6 +1982,11 @@ async function computeTicketCode(d){
   return raw.match(/.{1,4}/g).join('-');
 }
 
+function fileTimestamp(date){
+  const d = date || new Date();
+  const pad = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+}
 function padRow(label, value){
   return `<div class="t-row"><span>${label}</span><span>${value}</span></div>`;
 }
@@ -1605,6 +2031,80 @@ function buildBarcodeSVG(dataStr, width, height){
   const bars = computeBarcodeBars(dataStr, width);
   const rects = bars.map(b => `<rect x="${b.x.toFixed(2)}" y="0" width="${b.w}" height="${height}" fill="#111111"/>`).join('');
   return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">${rects}</svg>`;
+}
+/* ---------- export de la palette de couleurs rencontrées pendant la partie ---------- */
+async function buildPaletteCanvas(hexes, meta){
+  if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
+  const cols = 4;
+  const swW = 150, swH = 110;
+  const padX = 20, padTop = 78, padBottom = 46;
+  const rows = Math.max(1, Math.ceil(hexes.length/cols));
+  const W = padX*2 + cols*swW;
+  const H = padTop + rows*swH + padBottom;
+  const canvas = document.createElement('canvas');
+  const scale = 2;
+  canvas.width = W*scale; canvas.height = H*scale;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(scale, scale);
+
+  ctx.fillStyle = '#f7f5ef';
+  ctx.fillRect(0,0,W,H);
+
+  ctx.fillStyle = '#111111';
+  ctx.textAlign = 'left';
+  ctx.font = '700 15px "Archivo Expanded", sans-serif';
+  ctx.fillText('KROMATIME — PALETTE', padX, 30);
+  ctx.font = '400 10px "JetBrains Mono", monospace';
+  ctx.fillStyle = '#555555';
+  ctx.fillText(`${meta.levelTitle.toUpperCase()} · ${meta.playerName||'JOUEUR'} · ${meta.dateStr}`, padX, 48);
+  ctx.strokeStyle = '#cfcac0';
+  ctx.beginPath(); ctx.moveTo(padX, 58); ctx.lineTo(W-padX, 58); ctx.stroke();
+
+  hexes.forEach((hex,i)=>{
+    const col = i % cols, row = Math.floor(i/cols);
+    const x = padX + col*swW, y = padTop + row*swH;
+    ctx.fillStyle = hex;
+    ctx.fillRect(x, y, swW-10, swH-26);
+    ctx.strokeStyle = '#00000022';
+    ctx.strokeRect(x, y, swW-10, swH-26);
+    ctx.fillStyle = '#111111';
+    ctx.font = '600 10.5px "JetBrains Mono", monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText(hex.toUpperCase(), x, y+swH-10);
+  });
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#555555';
+  ctx.font = '400 9px "JetBrains Mono", monospace';
+  ctx.fillText('KROMATIME — PAR XIAN005', W/2, H-16);
+
+  return canvas;
+}
+async function downloadPaletteImage(hexes, meta, btn){
+  if(!hexes || !hexes.length) return;
+  const orig = btn.textContent;
+  btn.textContent = 'GÉNÉRATION…';
+  btn.disabled = true;
+  try{
+    const canvas = await buildPaletteCanvas(hexes, meta);
+    canvas.toBlob((blob)=>{
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const safeName = (meta.playerName||'joueur').toLowerCase().replace(/[^a-z0-9]+/g,'-');
+      const safeLevel = (meta.levelKey||'partie').toLowerCase().replace(/[^a-z0-9]+/g,'-');
+      a.download = `kromatime-palette-${safeName}-${safeLevel}-${fileTimestamp(meta.date)}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(()=>URL.revokeObjectURL(url), 2000);
+      btn.textContent = 'TÉLÉCHARGÉ ✓';
+      setTimeout(()=>{ btn.textContent = orig; btn.disabled = false; }, 1400);
+    }, 'image/png');
+  }catch(err){
+    btn.textContent = 'ÉCHEC — RÉESSAIE';
+    setTimeout(()=>{ btn.textContent = orig; btn.disabled = false; }, 1600);
+  }
 }
 async function buildTicketCanvas(d){
   if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
@@ -1784,7 +2284,7 @@ async function downloadTicketImage(d, btn){
         const a = document.createElement('a');
         a.href = url;
         const safeName = (d.playerName||'joueur').toLowerCase().replace(/[^a-z0-9]+/g,'-');
-        a.download = `kromatime-ticket-${safeName}.png`;
+        a.download = `kromatime-ticket-${safeName}-${fileTimestamp(d.date)}-${(d.ref||'').toLowerCase()}.png`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
