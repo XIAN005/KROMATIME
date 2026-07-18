@@ -15,7 +15,7 @@ ou pour l'entraînement de modèles d'intelligence artificielle, sans
 autorisation écrite préalable.
 -->
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>KROMATIME — Entraînement chronométré aux couleurs</title>
@@ -174,6 +174,14 @@ autorisation écrite préalable.
     margin:0 0 4px;
   }
   .leaderboard .sub{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);margin-bottom:14px;}
+  .lb-filter-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .lb-filter-btn{
+    background:var(--panel-2);border:1px solid var(--line);color:var(--ink-faint);
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.03em;
+    padding:6px 10px;border-radius:999px;cursor:pointer;transition:border-color .12s,color .12s;
+  }
+  .lb-filter-btn:hover{color:var(--ink-dim);border-color:var(--ink-faint);}
+  .lb-filter-btn.active{color:var(--ink);border-color:var(--ink);font-weight:700;}
   .lb-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
   table.lb{width:100%;min-width:420px;border-collapse:collapse;font-size:13px;}
   table.lb th{
@@ -182,6 +190,9 @@ autorisation écrite préalable.
   }
   table.lb td{padding:9px 10px;border-bottom:1px solid var(--line-soft);color:var(--ink-dim);}
   table.lb tr:last-child td{border-bottom:none;}
+  table.lb tr.lb-me td{color:var(--ink);background:var(--panel-2);}
+  table.lb tr.lb-me td:first-child{border-radius:var(--radius) 0 0 var(--radius);}
+  table.lb tr.lb-me td:last-child{border-radius:0 var(--radius) var(--radius) 0;}
   table.lb td.rank{font-family:'JetBrains Mono',monospace;color:var(--ink-faint);width:22px;}
   table.lb td.rank.gold{color:var(--ink);font-weight:700;}
   table.lb td.score{font-family:'Archivo Expanded',sans-serif;color:var(--ink);font-weight:700;}
@@ -519,9 +530,9 @@ autorisation écrite préalable.
 
 <div class="pause-note" id="pauseNote">
   <div class="box">
-    <h4>Manche interrompue</h4>
-    <p id="pauseMsg">Cette question n'a pas pu être validée. Reprends quand tu es prêt.</p>
-    <button class="menu-btn" id="pauseOk">CONTINUER</button>
+    <h4 data-i18n="pauseTitle">Manche interrompue</h4>
+    <p id="pauseMsg" data-i18n="pauseMsg">Cette question n'a pas pu être validée. Reprends quand tu es prêt.</p>
+    <button class="menu-btn" id="pauseOk" data-i18n="continue">CONTINUER</button>
   </div>
 </div>
 
@@ -529,8 +540,8 @@ autorisation écrite préalable.
   <div>
     <div class="ticket-paper" id="ticketPaper"></div>
     <div class="ticket-actions">
-      <button id="ticketDownloadBtn">TÉLÉCHARGER (PNG)</button>
-      <button id="ticketCloseBtn">FERMER</button>
+      <button id="ticketDownloadBtn" data-i18n="download">TÉLÉCHARGER (PNG)</button>
+      <button id="ticketCloseBtn" data-i18n="close">FERMER</button>
     </div>
   </div>
 </div>
@@ -543,12 +554,13 @@ autorisation écrite préalable.
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
       <button class="sound-btn" id="soundBtn" title="Activer/couper le son"></button>
+      <button class="sound-btn" id="langBtn" title="Français / English / Kreyòl Ayisyen" style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;">FR</button>
       <div class="hud hidden" id="hudBar">
-        <div class="hud-card score"><div class="label">Score</div><div class="value" id="hudScore">0</div></div>
-        <div class="hud-card streak" id="streakCard"><div class="label">Série</div><div class="value" id="hudStreak">0</div></div>
-        <div class="hud-card" id="hudQCard"><div class="label">Question</div><div class="value" id="hudQ">1/10</div></div>
-        <button class="menu-btn hidden" id="changeModeBtn">MODES</button>
-        <button class="menu-btn" id="menuBtn">MENU</button>
+        <div class="hud-card score"><div class="label" data-i18n="score">Score</div><div class="value" id="hudScore">0</div></div>
+        <div class="hud-card streak" id="streakCard"><div class="label" data-i18n="streak">Série</div><div class="value" id="hudStreak">0</div></div>
+        <div class="hud-card" id="hudQCard"><div class="label" data-i18n="question">Question</div><div class="value" id="hudQ">1/10</div></div>
+        <button class="menu-btn hidden" id="changeModeBtn" data-i18n="modes">MODES</button>
+        <button class="menu-btn" id="menuBtn" data-i18n="menu">MENU</button>
       </div>
     </div>
   </header>
@@ -560,10 +572,10 @@ autorisation écrite préalable.
     <div class="hero" id="nameGate">
       <span class="hero-logo" data-logo></span>
       <h2>Kromatime</h2>
-      <p>Comment dois-je t'appeler ? Ton nom apparaîtra dans le classement.</p>
+      <p data-i18n="nameGateP">Comment dois-je t'appeler ? Ton nom apparaîtra dans le classement.</p>
       <div class="name-form">
-        <input type="text" id="nameInput" class="allow-select" maxlength="20" placeholder="Ton prénom">
-        <button class="play-btn" id="nameSubmit" disabled>Continuer</button>
+        <input type="text" id="nameInput" class="allow-select" maxlength="20" placeholder="Ton prénom" data-i18n-ph="namePlaceholder">
+        <button class="play-btn" id="nameSubmit" disabled data-i18n="continue2">Continuer</button>
         <div class="name-error" id="nameError"></div>
       </div>
     </div>
@@ -573,11 +585,11 @@ autorisation écrite préalable.
       <span class="hero-logo" data-logo></span>
       <div class="greeting" id="greetingText"></div>
       <h2>Kromatime</h2>
-      <p>Complémentaires, harmonies, codes HEX et usages branding — face au chrono.</p>
+      <p data-i18n="mainHeroP">Complémentaires, harmonies, codes HEX et usages branding — face au chrono.</p>
       <div class="hero-actions">
-        <button class="play-btn" id="playBtn">▶ Jouer</button>
-        <button class="edu-btn" id="eduBtn">Apprendre la théorie</button>
-        <button class="edu-btn" id="statsBtn">XP & classement</button>
+        <button class="play-btn" id="playBtn" data-i18n="play">▶ Jouer</button>
+        <button class="edu-btn" id="eduBtn" data-i18n="learnTheory">Apprendre la théorie</button>
+        <button class="edu-btn" id="statsBtn" data-i18n="xpBoard">XP & classement</button>
       </div>
     </div>
   </div>
@@ -585,8 +597,8 @@ autorisation écrite préalable.
   <!-- STATS SCREEN -->
   <div id="statsScreen" class="hidden">
     <div class="edu-header">
-      <div class="screen-title" style="margin:0;">XP & classement</div>
-      <button class="menu-btn" id="statsHomeBtn">← ACCUEIL</button>
+      <div class="screen-title" style="margin:0;" data-i18n="xpBoard">XP & classement</div>
+      <button class="menu-btn" id="statsHomeBtn" data-i18n="home">← ACCUEIL</button>
     </div>
 
     <div class="xp-panel" id="xpPanel">
@@ -597,8 +609,9 @@ autorisation écrite préalable.
     </div>
 
     <div class="leaderboard" id="leaderboardWrap">
-      <h3>Meilleures performances</h3>
-      <div class="sub">Scores enregistrés sur cet appareil, par mode</div>
+      <h3 data-i18n="bestScores">Meilleures performances</h3>
+      <div class="sub" data-i18n="scoresSub">Scores enregistrés sur cet appareil, par mode</div>
+      <div class="lb-filter-wrap" id="lbFilterWrap"></div>
       <div id="lbWrap"><div class="lb-empty">CHARGEMENT DU CLASSEMENT…</div></div>
     </div>
   </div>
@@ -606,34 +619,34 @@ autorisation écrite préalable.
   <!-- VERIFY SCREEN -->
   <div id="verifyScreen" class="hidden">
     <div class="edu-header">
-      <div class="screen-title" style="margin:0;">Vérifier un ticket</div>
-      <button class="menu-btn" id="verifyHomeBtn">← ACCUEIL</button>
+      <div class="screen-title" style="margin:0;" data-i18n="verifyTicket">Vérifier un ticket</div>
+      <button class="menu-btn" id="verifyHomeBtn" data-i18n="home">← ACCUEIL</button>
     </div>
     <div class="edu-panel">
-      <p class="lead">Dépose ici le fichier PNG du ticket, tel que téléchargé depuis le bouton « TÉLÉCHARGER (PNG) ». Les données du ticket sont embarquées directement dans le fichier image ; elles seront extraites, puis le code d'authenticité sera recalculé et comparé.</p>
+      <p class="lead" data-i18n="verifyLead">Dépose ici le fichier PNG du ticket, tel que téléchargé depuis le bouton « TÉLÉCHARGER (PNG) ». Les données du ticket sont embarquées directement dans le fichier image ; elles seront extraites, puis le code d'authenticité sera recalculé et comparé.</p>
       <input type="file" id="verifyFileInput" class="allow-select" accept="image/png,.png" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-dim);background:var(--panel-3);border:1px solid var(--line);border-radius:var(--radius);padding:14px;">
-      <button class="submit-btn" id="verifyBtn" style="margin-top:14px;">VÉRIFIER</button>
+      <button class="submit-btn" id="verifyBtn" style="margin-top:14px;" data-i18n="verify">VÉRIFIER</button>
       <div id="verifyResult"></div>
       <div class="edu-block" style="margin-top:26px;">
-        <h3>Comment ça marche</h3>
-        <p class="def">Chaque ticket contient un code calculé à partir de ses données (joueur, mode, score, précision, série, référence temporelle) via une fonction de hachage, et ces mêmes données sont embarquées dans le fichier PNG lors du téléchargement. Déposer le fichier ici relit ces données directement dans l'image, recalcule le code localement et le compare à celui embarqué : s'ils correspondent, les chiffres affichés sont bien ceux générés par le jeu et n'ont pas été modifiés après coup.</p>
-        <div class="edu-usage"><b>Limite honnête —</b> ce mécanisme tourne entièrement dans ton navigateur, sans serveur ni clé secrète cachée. Il protège contre une modification accidentelle ou une retouche rapide d'un score (image éditée, valeurs changées), mais quelqu'un qui lirait le code source de cette page pourrait en théorie fabriquer un ticket avec un code valide. Ce n'est donc pas une preuve cryptographique inviolable — plutôt un sceau d'intégrité qui décourage la triche occasionnelle. Notez aussi que certains outils de partage (réseaux sociaux, messageries) recompressent les images et peuvent effacer les métadonnées embarquées : dans ce cas la vérification échouera même si le ticket est authentique — utilisez le fichier téléchargé directement.</div>
+        <h3 data-i18n="howItWorks">Comment ça marche</h3>
+        <p class="def" data-i18n="verifyHow">Chaque ticket contient un code calculé à partir de ses données (joueur, mode, score, précision, série, référence temporelle) via une fonction de hachage, et ces mêmes données sont embarquées dans le fichier PNG lors du téléchargement. Déposer le fichier ici relit ces données directement dans l'image, recalcule le code localement et le compare à celui embarqué : s'ils correspondent, les chiffres affichés sont bien ceux générés par le jeu et n'ont pas été modifiés après coup.</p>
+        <div class="edu-usage" data-i18n="verifyLimit"><b>Limite honnête —</b> ce mécanisme tourne entièrement dans ton navigateur, sans serveur ni clé secrète cachée. Il protège contre une modification accidentelle ou une retouche rapide d'un score (image éditée, valeurs changées), mais quelqu'un qui lirait le code source de cette page pourrait en théorie fabriquer un ticket avec un code valide. Ce n'est donc pas une preuve cryptographique inviolable — plutôt un sceau d'intégrité qui décourage la triche occasionnelle. Notez aussi que certains outils de partage (réseaux sociaux, messageries) recompressent les images et peuvent effacer les métadonnées embarquées : dans ce cas la vérification échouera même si le ticket est authentique — utilisez le fichier téléchargé directement.</div>
       </div>
     </div>
   </div>
 
   <!-- MODE SELECT SCREEN -->
   <div id="modeSelectScreen" class="hidden">
-    <div class="screen-title" style="margin-bottom:4px;">Choisis un mode</div>
-    <div class="leaderboard-sub-like" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);margin-bottom:16px;">Chaque mode entraîne un réflexe couleur différent — chrono, précision ou survie</div>
+    <div class="screen-title" style="margin-bottom:4px;" data-i18n="chooseMode">Choisis un mode</div>
+    <div class="leaderboard-sub-like" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);margin-bottom:16px;" data-i18n="chooseModeSub">Chaque mode entraîne un réflexe couleur différent — chrono, précision ou survie</div>
     <div class="levels" id="levelSelect"></div>
   </div>
 
   <!-- EDU SCREEN -->
   <div id="eduScreen" class="hidden">
     <div class="edu-header">
-      <div class="screen-title" style="margin:0;">Théorie des couleurs</div>
-      <button class="menu-btn" id="eduHomeBtn">← ACCUEIL</button>
+      <div class="screen-title" style="margin:0;" data-i18n="colorTheory">Théorie des couleurs</div>
+      <button class="menu-btn" id="eduHomeBtn" data-i18n="home">← ACCUEIL</button>
     </div>
     <div class="edu-tabs" id="eduTabs"></div>
     <div class="edu-panel" id="eduPanel"></div>
@@ -655,7 +668,7 @@ autorisation écrite préalable.
     </a>
   </div>
 
-  <footer>KROMATIME — MODULE D'ENTRAÎNEMENT COULEUR — PAR XIAN005</footer>
+  <footer data-i18n="footer">KROMATIME — MODULE D'ENTRAÎNEMENT COULEUR — PAR XIAN005</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -675,6 +688,119 @@ d'IA ou la fouille de textes et de données interdite sans autorisation
 (function(){
 "use strict";
 
+/* ---------- i18n ---------- */
+let LANG = 'en';
+try{ const saved = localStorage.getItem('kt_lang'); if(saved==='en'||saved==='fr'||saved==='ht') LANG = saved; }catch(e){}
+function T3(en,fr,ht){ return LANG==='en' ? en : LANG==='ht' ? ht : fr; }
+
+const I18N = {
+  fr:{
+    pauseTitle:"Manche interrompue", pauseMsg:"Cette question n'a pas pu être validée. Reprends quand tu es prêt.",
+    continue:"CONTINUER", download:"TÉLÉCHARGER (PNG)", close:"FERMER",
+    score:"Score", streak:"Série", question:"Question", modes:"MODES", menu:"MENU",
+    nameGateP:"Comment dois-je t'appeler ? Ton nom apparaîtra dans le classement.",
+    namePlaceholder:"Ton prénom", continue2:"Continuer",
+    mainHeroP:"Complémentaires, harmonies, codes HEX et usages branding — face au chrono.",
+    play:"▶ Jouer", learnTheory:"Apprendre la théorie", xpBoard:"XP & classement",
+    home:"← ACCUEIL", bestScores:"Classement", scoresSub:"Meilleur score de chaque joueur, par mode",
+    verifyTicket:"Vérifier un ticket",
+    verifyLead:"Dépose ici le fichier PNG du ticket, tel que téléchargé depuis le bouton « TÉLÉCHARGER (PNG) ». Les données du ticket sont embarquées directement dans le fichier image ; elles seront extraites, puis le code d'authenticité sera recalculé et comparé.",
+    verify:"VÉRIFIER", howItWorks:"Comment ça marche",
+    verifyHow:"Chaque ticket contient un code calculé à partir de ses données (joueur, mode, score, précision, série, référence temporelle) via une fonction de hachage, et ces mêmes données sont embarquées dans le fichier PNG lors du téléchargement. Déposer le fichier ici relit ces données directement dans l'image, recalcule le code localement et le compare à celui embarqué : s'ils correspondent, les chiffres affichés sont bien ceux générés par le jeu et n'ont pas été modifiés après coup.",
+    verifyLimit:"<b>Limite honnête —</b> ce mécanisme tourne entièrement dans ton navigateur, sans serveur ni clé secrète cachée. Il protège contre une modification accidentelle ou une retouche rapide d'un score (image éditée, valeurs changées), mais quelqu'un qui lirait le code source de cette page pourrait en théorie fabriquer un ticket avec un code valide. Ce n'est donc pas une preuve cryptographique inviolable — plutôt un sceau d'intégrité qui décourage la triche occasionnelle. Notez aussi que certains outils de partage (réseaux sociaux, messageries) recompressent les images et peuvent effacer les métadonnées embarquées : dans ce cas la vérification échouera même si le ticket est authentique — utilisez le fichier téléchargé directement.",
+    chooseMode:"Choisis un mode", chooseModeSub:"Chaque mode entraîne un réflexe couleur différent — chrono, précision ou survie",
+    colorTheory:"Théorie des couleurs",
+    footer:"KROMATIME — MODULE D'ENTRAÎNEMENT COULEUR — PAR XIAN005",
+    best:"MEILLEUR", mode:"MODE", finished:"TERMINÉ", lives:"VIES", perQuestion:"/QUESTION",
+    exact:"Exact.", timeUp:"Temps écoulé. Bonne réponse :", correctAnswerWas:"La bonne réponse était :",
+    round:"MANCHE", roundsLabel:"MANCHES", correctAns:"BONNES RÉP.", failRetry:"ÉCHEC — RÉESSAIE", downloaded:"TÉLÉCHARGÉ ✓", generating:"GÉNÉRATION…",
+    beginnerTitle:"Débutant curieux", achUnlocked:"Réussite débloquée —",
+    qComplement:"Quelle couleur est la <span>complémentaire</span> de celle-ci ?",
+    qTriadic:"Quelle couleur complète ce <span>trio triadique</span> (120° entre chaque teinte) ?",
+    qScheme:"Quel type d'<span>harmonie chromatique</span> ces couleurs forment-elles ?",
+    qHexguess:"Estime le code <span>HEX</span> de cette couleur (tolérance ±20 par canal RGB)",
+    qFamily:"Pour quel <span>usage branding</span> cette couleur est-elle la plus adaptée ?",
+    validate:"VALIDER", next:"SUIVANT →",
+    sessionResult:"Résultat de session", bestStreak:"MEILLEURE SÉRIE", accuracy:"PRÉCISION",
+    newBest:"Nouveau record personnel pour ce mode", keepSession:"Conserver cette session",
+    replay:"REJOUER", changeMode:"CHANGER DE MODE", shareTicket:"PARTAGER LE TICKET",
+    downloadPalette:"TÉLÉCHARGER LA PALETTE"
+  },
+  ht:{
+    pauseTitle:"Manch kanpe", pauseMsg:"Nou pa t kapab valide kesyon sa a. Kontinye lè w pare.",
+    continue:"KONTINYE", download:"TELECHAJE (PNG)", close:"FÈMEN",
+    score:"Eskò", streak:"Seri", question:"Kesyon", modes:"MOD", menu:"MENI",
+    nameGateP:"Kijan pou m rele w? Non w ap parèt sou tablo klasman an.",
+    namePlaceholder:"Non ou", continue2:"Kontinye",
+    mainHeroP:"Koulè konplemantè, amoni, kòd HEX ak fason yo itilize nan branding — kont tan.",
+    play:"▶ Jwe", learnTheory:"Aprann teyori a", xpBoard:"XP & klasman",
+    home:"← AKÈY", bestScores:"Klasman", scoresSub:"Pi bon eskò chak jwè, pou chak mod",
+    verifyTicket:"Verifye yon tikè",
+    verifyLead:"Depoze fichye PNG tikè a la a, jan ou te telechaje l lè w klike sou bouton « TELECHAJE (PNG) » la. Enfòmasyon tikè a chita dirèkteman nan fichye imaj la; n ap retire yo, epi n ap rekalkile kòd otantifikasyon an pou konpare l.",
+    verify:"VERIFYE", howItWorks:"Kijan sa fonksyone",
+    verifyHow:"Chak tikè gen yon kòd yo kalkile ak enfòmasyon li yo (jwè a, mod la, eskò a, presizyon an, seri a, ak lè jwèt la te fèt) atravè yon fonksyon hachage, epi menm enfòmasyon sa yo antre nan fichye PNG a lè w telechaje l. Lè w depoze fichye a la a, aplikasyon an li enfòmasyon sa yo dirèkteman nan imaj la, li rekalkile kòd la sou aparèy ou, epi li konpare l ak kòd ki te antre nan fichye a: si yo menm jan, chif ki afiche yo se vre chif jwèt la te bay, epi pèsonn pa t chanje yo apre kou.",
+    verifyLimit:"<b>Limit ki onèt —</b> mekanis sa a travay antyèman nan navigatè ou, san sèvè, san kle sekrè kache. Li anpeche yon moun aksidantèlman chanje yon eskò oswa fè yon ti manipilasyon rapid (imaj modifye, chif chanje), men yon moun ki li kòd sous paj sa a ta ka, an teyori, fabrike yon tikè ak yon kòd ki valab. Se poutèt sa se pa yon prèv enfayib — se pito yon sele entegrite ki dekouraje moun ki ta vle triche san reflechi. Remake tou : kèk aplikasyon pou pataje (rezo sosyal, aplikasyon mesaje) konprese imaj yo ankò epi yo ka efase enfòmasyon ki te antre nan yo. Nan ka sa a, verifikasyon an ap echwe menm si tikè a otantik — pito itilize fichye w te telechaje a dirèkteman.",
+    chooseMode:"Chwazi yon mod", chooseModeSub:"Chak mod antrene yon reflèks koulè diferan — vitès, presizyon oswa siviv",
+    colorTheory:"Teyori koulè",
+    footer:"KROMATIME — MODIL ANTRENMAN KOULÈ — PA XIAN005",
+    best:"MEYÈ", mode:"MOD", finished:"FINI", lives:"VI", perQuestion:"/KESYON",
+    exact:"Kòrèk.", timeUp:"Tan an fini. Bon repons lan se :", correctAnswerWas:"Bon repons lan te :",
+    round:"MANCH", roundsLabel:"MANCH", correctAns:"BON REP.", failRetry:"SA PA MACHE — REESEYE", downloaded:"TELECHAJE ✓", generating:"AP JENERE…",
+    beginnerTitle:"Kòmansan ki kirye", achUnlocked:"Nouvo reyisit —",
+    qComplement:"Ki koulè ki <span>konplemantè</span> ak sa a?",
+    qTriadic:"Ki koulè ki konplete <span>trio triyadik</span> sa a (120° ant chak tenn)?",
+    qScheme:"Ki tip <span>amoni koulè</span> koulè sa yo fòme?",
+    qHexguess:"Estime kòd <span>HEX</span> koulè sa a (tolerans ±20 pou chak kanal RGB)",
+    qFamily:"Pou ki <span>itilizasyon nan branding</span> koulè sa a pi byen adapte?",
+    validate:"VALIDE", next:"SWIVAN →",
+    sessionResult:"Rezilta sesyon an", bestStreak:"PI BON SERI", accuracy:"PRESIZYON",
+    newBest:"Se pi bon eskò w janm fè nan mod sa a", keepSession:"Konsève sesyon sa a",
+    replay:"REJWE", changeMode:"CHANJE MOD", shareTicket:"PATAJE TIKÈ A",
+    downloadPalette:"TELECHAJE PALÈT LA"
+  },
+  en:{
+    pauseTitle:"Round interrupted", pauseMsg:"This question couldn't be validated. Resume whenever you're ready.",
+    continue:"CONTINUE", download:"DOWNLOAD (PNG)", close:"CLOSE",
+    score:"Score", streak:"Streak", question:"Question", modes:"MODES", menu:"MENU",
+    nameGateP:"What should I call you? Your name will appear on the leaderboard.",
+    namePlaceholder:"Your first name", continue2:"Continue",
+    mainHeroP:"Complementary colors, harmonies, HEX codes and branding uses — against the clock.",
+    play:"▶ Play", learnTheory:"Learn the theory", xpBoard:"XP & leaderboard",
+    home:"← HOME", bestScores:"Leaderboard", scoresSub:"Best score per player, by mode",
+    verifyTicket:"Verify a ticket",
+    verifyLead:"Drop the ticket's PNG file here, as downloaded from the \"DOWNLOAD (PNG)\" button. The ticket's data is embedded directly in the image file; it will be extracted, then the authenticity code will be recalculated and compared.",
+    verify:"VERIFY", howItWorks:"How it works",
+    verifyHow:"Each ticket contains a code computed from its data (player, mode, score, accuracy, streak, timestamp reference) via a hash function, and that same data is embedded in the PNG file on download. Dropping the file here reads that data directly from the image, recomputes the code locally and compares it to the embedded one: if they match, the displayed numbers were indeed generated by the game and haven't been altered afterward.",
+    verifyLimit:"<b>Honest limitation —</b> this mechanism runs entirely in your browser, with no server or hidden secret key. It protects against an accidental edit or a quick score touch-up (edited image, changed values), but someone reading this page's source code could in theory forge a ticket with a valid code. So it isn't tamper-proof cryptographic proof — more of an integrity seal that discourages casual cheating. Also note that some sharing tools (social networks, messaging apps) recompress images and can strip embedded metadata: in that case verification will fail even for an authentic ticket — use the downloaded file directly.",
+    chooseMode:"Choose a mode", chooseModeSub:"Each mode trains a different color reflex — speed, accuracy or survival",
+    colorTheory:"Color theory",
+    footer:"KROMATIME — COLOR TRAINING MODULE — BY XIAN005",
+    best:"BEST", mode:"MODE", finished:"FINISHED", lives:"LIVES", perQuestion:"/QUESTION",
+    exact:"Correct.", timeUp:"Time's up. Correct answer:", correctAnswerWas:"The correct answer was:",
+    round:"ROUND", roundsLabel:"ROUNDS", correctAns:"CORRECT ANS.", failRetry:"FAILED — RETRY", downloaded:"DOWNLOADED ✓", generating:"GENERATING…",
+    beginnerTitle:"Curious beginner", achUnlocked:"Achievement unlocked —",
+    qComplement:"Which color is the <span>complementary</span> of this one?",
+    qTriadic:"Which color completes this <span>triadic trio</span> (120° between each hue)?",
+    qScheme:"What type of <span>color harmony</span> do these colors form?",
+    qHexguess:"Estimate the <span>HEX</span> code of this color (tolerance ±20 per RGB channel)",
+    qFamily:"Which <span>branding use</span> best suits this color?",
+    validate:"VALIDATE", next:"NEXT →",
+    sessionResult:"Session result", bestStreak:"BEST STREAK", accuracy:"ACCURACY",
+    newBest:"New personal best for this mode", keepSession:"Keep this session",
+    replay:"REPLAY", changeMode:"CHANGE MODE", shareTicket:"SHARE TICKET",
+    downloadPalette:"DOWNLOAD PALETTE"
+  }
+};
+function t(key){ return (I18N[LANG] && I18N[LANG][key]) || I18N.fr[key] || key; }
+function applyStaticI18n(){
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ el.innerHTML = t(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder = t(el.getAttribute('data-i18n-ph')); });
+  const lb = document.getElementById('langBtn'); if(lb) lb.textContent = LANG==='fr' ? 'FR' : LANG==='ht' ? 'HT' : 'EN';
+}
+document.addEventListener('DOMContentLoaded', applyStaticI18n);
+applyStaticI18n();
+
 document.addEventListener('contextmenu', e=>e.preventDefault());
 document.addEventListener('keydown', function(e){
   const blocked = (e.key==='F12') ||
@@ -693,6 +819,26 @@ window.addEventListener('blur', flagInterrupt);
 function showPauseNote(){ document.getElementById('pauseNote').classList.add('show'); }
 document.getElementById('pauseOk').addEventListener('click', ()=>{
   document.getElementById('pauseNote').classList.remove('show');
+});
+
+document.getElementById('langBtn').addEventListener('click', ()=>{
+  LANG = LANG==='fr' ? 'en' : LANG==='en' ? 'ht' : 'fr';
+  try{ localStorage.setItem('kt_lang', LANG); }catch(e){}
+  applyStaticI18n();
+  if(typeof renderLevelSelect==='function' && !document.getElementById('modeSelectScreen').classList.contains('hidden')) renderLevelSelect();
+  if(typeof renderXpPanel==='function' && !document.getElementById('statsScreen').classList.contains('hidden')) renderXpPanel();
+  if(typeof renderLeaderboard==='function' && !document.getElementById('statsScreen').classList.contains('hidden')) renderLeaderboard();
+  if(!document.getElementById('eduScreen').classList.contains('hidden')){
+    const activeTab = document.querySelector('#eduTabs .edu-tab.active');
+    const key = activeTab ? activeTab.dataset.key : EDU_TOPICS[0].key;
+    renderEduTabs();
+    const newActive = document.querySelector(`#eduTabs .edu-tab[data-key="${key}"]`);
+    if(newActive){ document.querySelectorAll('#eduTabs .edu-tab').forEach(b=>b.classList.remove('active')); newActive.classList.add('active'); }
+    renderEduPanel(key);
+  }
+  if(!document.getElementById('gameScreen').classList.contains('hidden')){
+    document.querySelectorAll('#gamePanel [data-i18n-key]').forEach(el=>{ el.innerHTML = t(el.getAttribute('data-i18n-key')); });
+  }
 });
 
 function hslToHex(h,s,l){
@@ -727,233 +873,352 @@ document.querySelectorAll('[data-logo]').forEach(el=>{
 });
 
 const LEVELS = Object.freeze([
-  Object.freeze({key:'complement', title:'Complémentaires', desc:'Trouve la couleur opposée sur la roue', rounds:10, time:15}),
-  Object.freeze({key:'triadic', title:'Triadiques', desc:'Trouve la 3e couleur du trio équilatéral', rounds:10, time:16}),
-  Object.freeze({key:'scheme', title:'Reconnaître le schéma', desc:"Identifie le type d'harmonie affiché", rounds:10, time:16}),
-  Object.freeze({key:'hexguess', title:'Œil à HEX', desc:"Estime le code hexadécimal d'une couleur", rounds:10, time:22}),
-  Object.freeze({key:'family', title:'Familles & usage', desc:'Associe la couleur à son usage branding', rounds:10, time:16}),
-  Object.freeze({key:'mix', title:'Mode expert', desc:'Questions mixtes, cadence rapide', rounds:14, time:12}),
-  Object.freeze({key:'endless', title:'Mode sans fin', desc:'3 vies, difficulté croissante, aucune limite de manches', rounds:0, time:14, endless:true})
+  Object.freeze({key:'complement', title:'Complémentaires', title_en:'Complementary', title_ht:'Koulè konplemantè', desc:'Trouve la couleur opposée sur la roue', desc_en:'Find the opposite color on the wheel', desc_ht:'Jwenn koulè ki opoze a sou wou a', rounds:10, time:15}),
+  Object.freeze({key:'triadic', title:'Triadiques', title_en:'Triadic', title_ht:'Triyadik', desc:'Trouve la 3e couleur du trio équilatéral', desc_en:'Find the 3rd color of the equilateral trio', desc_ht:'Jwenn 3yèm koulè nan gwoup twa koulè ekilateral la', rounds:10, time:16}),
+  Object.freeze({key:'scheme', title:'Reconnaître le schéma', title_en:'Recognize the scheme', title_ht:'Rekonèt amoni an', desc:"Identifie le type d'harmonie affiché", desc_en:'Identify the type of harmony shown', desc_ht:'Idantifye ki tip amoni ki afiche a', rounds:10, time:16}),
+  Object.freeze({key:'hexguess', title:'Œil à HEX', title_en:'Eye to HEX', title_ht:'Je pou kòd HEX', desc:"Estime le code hexadécimal d'une couleur", desc_en:'Estimate the hex code of a color', desc_ht:'Devine kòd egzadesimal yon koulè', rounds:10, time:22}),
+  Object.freeze({key:'family', title:'Familles & usage', title_en:'Families & usage', title_ht:'Fanmi koulè & itilizasyon', desc:'Associe la couleur à son usage branding', desc_en:'Match the color to its branding use', desc_ht:'Mete koulè a ansanm ak itilizasyon li nan branding', rounds:10, time:16}),
+  Object.freeze({key:'mix', title:'Mode expert', title_en:'Expert mode', title_ht:'Mod ekspè', desc:'Questions mixtes, cadence rapide', desc_en:'Mixed questions, fast pace', desc_ht:'Kesyon melanje, rit rapid', rounds:14, time:12}),
+  Object.freeze({key:'endless', title:'Mode sans fin', title_en:'Endless mode', title_ht:'Mod san fen', desc:'3 vies, difficulté croissante, aucune limite de manches', desc_en:'3 lives, increasing difficulty, no round limit', desc_ht:'3 vi, difikilte k ap ogmante, pa gen limit manch', rounds:0, time:14, endless:true})
 ]);
+function lvlTitle(lvl){ return T3(lvl.title_en||lvl.title, lvl.title, lvl.title_ht||lvl.title); }
+function lvlDesc(lvl){ return T3(lvl.desc_en||lvl.desc, lvl.desc, lvl.desc_ht||lvl.desc); }
 
 const ACHIEVEMENTS = Object.freeze([
-  {id:'a1', threshold:50,   icon:'●', label:'Premiers pigments'},
-  {id:'a2', threshold:200,  icon:'◆', label:"Œil qui s'affine"},
-  {id:'a3', threshold:500,  icon:'▲', label:'Bon sens chromatique'},
-  {id:'a4', threshold:1000, icon:'★', label:'Directeur artistique junior'},
-  {id:'a5', threshold:2500, icon:'✦', label:'Maître des harmonies'},
-  {id:'a6', threshold:5000, icon:'♛', label:'Légende du nuancier'}
+  {id:'a1', threshold:50,   icon:'●', label:'Premiers pigments', label_en:'First pigments', label_ht:'Premye pigman yo'},
+  {id:'a2', threshold:200,  icon:'◆', label:"Œil qui s'affine", label_en:'A sharpening eye', label_ht:'Je k ap vin pi file'},
+  {id:'a3', threshold:500,  icon:'▲', label:'Bon sens chromatique', label_en:'Chromatic sense', label_ht:'Bon santiman pou koulè'},
+  {id:'a4', threshold:1000, icon:'★', label:'Directeur artistique junior', label_en:'Junior art director', label_ht:'Ti direktè atistik'},
+  {id:'a5', threshold:2500, icon:'✦', label:'Maître des harmonies', label_en:'Master of harmonies', label_ht:'Mèt nan amoni yo'},
+  {id:'a6', threshold:5000, icon:'♛', label:'Légende du nuancier', label_en:'Swatch legend', label_ht:'Lejann nyans koulè yo'}
 ]);
+function achLabel(a){ return T3(a.label_en||a.label, a.label, a.label_ht||a.label); }
 
 /* ---------- contenu pédagogique (mode EDU) ---------- */
 const EDU_VIBES = [
-  {h:5,   name:"Rouge",         vibe:"Urgence, passion, appétit. Capte l'œil en premier — à utiliser avec parcimonie. C'est la teinte à plus grande longueur d'onde visible, ce qui la rend physiologiquement la plus « avancée » dans le champ visuel.", use:"CTA, promos, alimentaire, sport, signalétique d'urgence"},
-  {h:28,  name:"Orange",        vibe:"Chaleur, énergie accessible, créativité décomplexée. Mélange le dynamisme du rouge et la bonne humeur du jaune, sans l'agressivité du premier.", use:"Startups, jeunesse, artisanat, CTA secondaires"},
-  {h:52,  name:"Jaune / Ambre", vibe:"Optimisme, clarté, attention immédiate. Couleur la plus réfléchissante pour l'œil humain — difficile à lire en grande surface ou en texte fin.", use:"Alertes, enfance, énergie solaire, avertissements"},
-  {h:90,  name:"Vert-jaune",    vibe:"Fraîcheur acide, nouveauté, rupture avec les codes classiques. Mal dosé, peut évoquer une sensation « toxique ».", use:"Marques tech disruptives, sport, innovation"},
-  {h:120, name:"Vert",          vibe:"Croissance, équilibre, confiance calme. Associé quasi universellement au « oui », à la nature et à l'argent dans les cultures occidentales.", use:"Santé, bio, environnement, finance positive"},
-  {h:172, name:"Sarcelle/Teal", vibe:"Clarté professionnelle, sophistication apaisée. À mi-chemin entre le bleu (confiance) et le vert (croissance).", use:"Wellness, santé mentale, SaaS premium"},
-  {h:190, name:"Cyan",          vibe:"Fraîcheur technologique, légèreté, clarté numérique. Très saturé, il devient vite « criard » en grande surface.", use:"Interfaces tech, eau, accents digitaux"},
-  {h:220, name:"Bleu",          vibe:"Confiance, stabilité, autorité posée. Couleur la plus « sûre » du branding, et la préférée dans la majorité des enquêtes internationales.", use:"Finance, tech B2B, institutions, santé"},
-  {h:245, name:"Indigo",        vibe:"Profondeur, introspection, fiabilité premium. Plus sombre et mystérieux qu'un bleu classique.", use:"Édition, spiritualité, produits haut de gamme"},
-  {h:265, name:"Violet",        vibe:"Créativité, spiritualité, luxe imaginatif. Rare dans la nature, ce qui a longtemps réservé sa version pourpre à la royauté.", use:"Beauté, luxe, spiritualité, IA/tech créative"},
-  {h:320, name:"Magenta / Rose",vibe:"Audace, désinvolture premium, énergie non conventionnelle. Ni chaude ni froide sur la roue, elle « flotte » entre les deux registres.", use:"Mode, lifestyle, marques disruptives, Gen Z"}
+  {h:5,   name:"Rouge",         name_en:"Red",           name_ht:"Wouj",          vibe:"Urgence, passion, appétit. Capte l'œil en premier — à utiliser avec parcimonie. C'est la teinte à plus grande longueur d'onde visible, ce qui la rend physiologiquement la plus « avancée » dans le champ visuel.", vibe_en:"Urgency, passion, appetite. Catches the eye first — use sparingly. It's the visible hue with the longest wavelength, which makes it physiologically the most \u201cadvancing\u201d color in the visual field.", vibe_ht:"Ijans, pasyon, apeti. Se premye koulè je a wè — sèvi avè l san eksajere. Se tenn ki gen pi gwo longè don nan sa je a ka wè, sa ki fè l parèt tankou li pi pre nou nan sa n ap gade a.", use:"CTA, promos, alimentaire, sport, signalétique d'urgence", use_en:"CTAs, promos, food, sports, emergency signage", use_ht:"Bouton aksyon (CTA), pwomosyon, manje, espò, siyal ijans"},
+  {h:28,  name:"Orange",        name_en:"Orange",        name_ht:"Oranj",         vibe:"Chaleur, énergie accessible, créativité décomplexée. Mélange le dynamisme du rouge et la bonne humeur du jaune, sans l'agressivité du premier.", vibe_en:"Warmth, approachable energy, unselfconscious creativity. Blends the dynamism of red with the cheerfulness of yellow, without red's aggressiveness.", vibe_ht:"Chalè, enèji ki fasil pou moun apwoche, kreyativite san konplèks. Li melanje fòs wouj la ak bòn imè jòn nan, san agresivite wouj la.", use:"Startups, jeunesse, artisanat, CTA secondaires", use_en:"Startups, youth, craftsmanship, secondary CTAs", use_ht:"Antrepriz k ap kòmanse, jenès, atizana, bouton aksyon segondè"},
+  {h:52,  name:"Jaune / Ambre", name_en:"Yellow / Amber",name_ht:"Jòn / Anbre",   vibe:"Optimisme, clarté, attention immédiate. Couleur la plus réfléchissante pour l'œil humain — difficile à lire en grande surface ou en texte fin.", vibe_en:"Optimism, clarity, immediate attention. The most reflective color to the human eye — hard to read as a large area or as fine text.", vibe_ht:"Espwa, klète, atansyon touswit. Se koulè ki reflechi limyè pi plis pou je moun — pa fasil pou li si l kouvri yon gwo espas oswa si l fen anpil nan tèks.", use:"Alertes, enfance, énergie solaire, avertissements", use_en:"Alerts, children's brands, solar energy, warnings", use_ht:"Avètisman, mak pou timoun, enèji solè, siyal danje"},
+  {h:90,  name:"Vert-jaune",    name_en:"Yellow-green",  name_ht:"Vèt-jòn",       vibe:"Fraîcheur acide, nouveauté, rupture avec les codes classiques. Mal dosé, peut évoquer une sensation « toxique ».", vibe_en:"Acidic freshness, novelty, a break from classic codes. Overused, it can read as \u201ctoxic.\u201d", vibe_ht:"Frechè akid, yon bagay nouvo, yon fason ki kraze ak sa ki abitye fèt. Si w mete twòp, li ka bay yon santiman « pwazon ».", use:"Marques tech disruptives, sport, innovation", use_en:"Disruptive tech brands, sport, innovation", use_ht:"Mak teknoloji ki soti nan lòd, espò, inovasyon"},
+  {h:120, name:"Vert",          name_en:"Green",         name_ht:"Vèt",           vibe:"Croissance, équilibre, confiance calme. Associé quasi universellement au « oui », à la nature et à l'argent dans les cultures occidentales.", vibe_en:"Growth, balance, calm confidence. Almost universally associated with \u201cyes,\u201d with nature, and with money in Western cultures.", vibe_ht:"Kwasans, ekilib, konfyans ki kalm. Prèske toupatou li reprezante « wi », lanati, ak lajan nan kilti oksidantal yo.", use:"Santé, bio, environnement, finance positive", use_en:"Health, organic, environment, positive finance", use_ht:"Sante, pwodwi natirèl, anviwònman, finans ki pozitif"},
+  {h:172, name:"Sarcelle/Teal", name_en:"Teal",          name_ht:"Vèt-ble",       vibe:"Clarté professionnelle, sophistication apaisée. À mi-chemin entre le bleu (confiance) et le vert (croissance).", vibe_en:"Professional clarity, calm sophistication. Halfway between blue (trust) and green (growth).", vibe_ht:"Sereyezite pwofesyonèl, elegans ki kalm. Li chita nan mitan ble (konfyans) ak vèt (kwasans).", use:"Wellness, santé mentale, SaaS premium", use_en:"Wellness, mental health, premium SaaS", use_ht:"Byennèt, sante mantal, sèvis nimerik gwo klas"},
+  {h:190, name:"Cyan",          name_en:"Cyan",          name_ht:"Syan",          vibe:"Fraîcheur technologique, légèreté, clarté numérique. Très saturé, il devient vite « criard » en grande surface.", vibe_en:"Technological freshness, lightness, digital clarity. Highly saturated, it quickly turns \u201cloud\u201d over a large area.", vibe_ht:"Frechè teknolojik, lejèrete, netete nimerik. Si l twò vif, li vin fatige je a rapid lè l kouvri yon gwo espas.", use:"Interfaces tech, eau, accents digitaux", use_en:"Tech interfaces, water, digital accents", use_ht:"Entèfas teknoloji, dlo, aksan nimerik"},
+  {h:220, name:"Bleu",          name_en:"Blue",          name_ht:"Ble",           vibe:"Confiance, stabilité, autorité posée. Couleur la plus « sûre » du branding, et la préférée dans la majorité des enquêtes internationales.", vibe_en:"Trust, stability, calm authority. The \u201csafest\u201d color in branding, and the favorite in most international surveys.", vibe_ht:"Konfyans, estabilite, otorite ki poze. Se koulè ki pi asire nan branding, e se li menm moun pi renmen nan pifò sondaj entènasyonal.", use:"Finance, tech B2B, institutions, santé", use_en:"Finance, B2B tech, institutions, healthcare", use_ht:"Finans, teknoloji antrepriz, enstitisyon, sante"},
+  {h:245, name:"Indigo",        name_en:"Indigo",        name_ht:"Endigo",        vibe:"Profondeur, introspection, fiabilité premium. Plus sombre et mystérieux qu'un bleu classique.", vibe_en:"Depth, introspection, premium reliability. Darker and more mysterious than a classic blue.", vibe_ht:"Pwofondè, refleksyon, seryezite gwo klas. Li pi fonse e pi mistik pase yon ble òdinè.", use:"Édition, spiritualité, produits haut de gamme", use_en:"Publishing, spirituality, high-end products", use_ht:"Piblikasyon, espirityalite, pwodwi gwo klas"},
+  {h:265, name:"Violet",        name_en:"Purple",        name_ht:"Vyolèt",        vibe:"Créativité, spiritualité, luxe imaginatif. Rare dans la nature, ce qui a longtemps réservé sa version pourpre à la royauté.", vibe_en:"Creativity, spirituality, imaginative luxury. Rare in nature, which long reserved its purple shade for royalty.", vibe_ht:"Kreyativite, espirityalite, liks ki fè moun reve. Li ra nan lanati, se poutèt sa pandan lontan se te wa ak rèn ki te itilize l.", use:"Beauté, luxe, spiritualité, IA/tech créative", use_en:"Beauty, luxury, spirituality, creative AI/tech", use_ht:"Bote, liks, espirityalite, teknoloji kreyatif"},
+  {h:320, name:"Magenta / Rose",name_en:"Magenta / Pink",name_ht:"Majanta / Woz",vibe:"Audace, désinvolture premium, énergie non conventionnelle. Ni chaude ni froide sur la roue, elle « flotte » entre les deux registres.", vibe_en:"Boldness, premium nonchalance, unconventional energy. Neither warm nor cool on the wheel, it \u201cfloats\u201d between both registers.", vibe_ht:"Kouraj, dezenvolti gwo klas, yon enèji ki pa swiv règ. Li pa ni cho ni frèt sou wou a, li chita nan antre de mond yo.", use:"Mode, lifestyle, marques disruptives, Gen Z", use_en:"Fashion, lifestyle, disruptive brands, Gen Z", use_ht:"Mòd, fason moun ap viv, mak ki kraze kòd, Gen Z"}
 ];
 
 const EDU_TOPICS = [
   {
     key:'bases',
-    label:'Les bases',
-    title:'Les bases du modèle colorimétrique',
+    label:'Les bases', label_en:'The basics', label_ht:'Premye baz yo',
+    title:'Les bases du modèle colorimétrique', title_en:'The basics of the color model', title_ht:'Fondasyon modèl koulè a',
     lead:"Avant de composer une harmonie, il faut savoir lire une couleur. Trois systèmes reviennent constamment en design : HEX, RGB et HSL.",
+    lead_en:"Before composing a harmony, you need to know how to read a color. Three systems come up constantly in design: HEX, RGB and HSL.",
+    lead_ht:"Anvan w konpoze yon amoni, fòk ou konn dechifre yon koulè. Gen twa sistèm ki toujou parèt nan design : HEX, RGB ak HSL.",
     wheel:true,
     blocks:[
       {
-        h:'La roue chromatique',
+        h:'La roue chromatique', h_en:'The color wheel', h_ht:'Wou koulè a',
         def:"Les couleurs sont organisées en cercle de 0° à 360°. Rouge = 0°, jaune = 60°, vert = 120°, cyan = 180°, bleu = 240°, magenta = 300°. La position sur ce cercle s'appelle la teinte (hue) — c'est la base de toutes les harmonies.",
+        def_en:"Colors are arranged in a circle from 0° to 360°. Red = 0°, yellow = 60°, green = 120°, cyan = 180°, blue = 240°, magenta = 300°. The position on this circle is called the hue — it's the basis of every harmony.",
+        def_ht:"Yo mete koulè yo nan yon sèk ki soti 0° pou rive 360°. Wouj = 0°, jòn = 60°, vèt = 120°, syan = 180°, ble = 240°, majanta = 300°. Kote yon koulè ye sou sèk sa a rele « tenn » li — se sou sa tout amoni chita.",
         usage:"Une roue à 6 couleurs (primaires + secondaires) suffit pour raisonner ; les outils comme Chromascope l'affichent en continu sur 360°.",
-        swatches:[{h:0,label:'0° Rouge'},{h:60,label:'60° Jaune'},{h:120,label:'120° Vert'},{h:180,label:'180° Cyan'},{h:240,label:'240° Bleu'},{h:300,label:'300° Magenta'}]
+        usage_en:"A 6-color wheel (primaries + secondaries) is enough to reason with; tools like Chromascope display it continuously across 360°.",
+        usage_ht:"Yon wou ki gen 6 koulè (koulè debaz yo + koulè melanje yo) sifi pou w rezone ; zouti tankou Chromascope montre l an kontinyite sou tout 360° yo.",
+        swatches:[{h:0,label:'0° Rouge',label_en:'0° Red',label_ht:'0° Wouj'},{h:60,label:'60° Jaune',label_en:'60° Yellow',label_ht:'60° Jòn'},{h:120,label:'120° Vert',label_en:'120° Green',label_ht:'120° Vèt'},{h:180,label:'180° Cyan',label_en:'180° Cyan',label_ht:'180° Syan'},{h:240,label:'240° Bleu',label_en:'240° Blue',label_ht:'240° Ble'},{h:300,label:'300° Magenta',label_en:'300° Magenta',label_ht:'300° Majanta'}]
       },
       {
-        h:'HEX, RGB, HSL — trois façons de coder la même couleur',
+        h:'HEX, RGB, HSL — trois façons de coder la même couleur', h_en:'HEX, RGB, HSL — three ways to encode the same color', h_ht:'HEX, RGB, HSL — twa fason pou ekri menm koulè a',
         def:"HEX (#4A7FE8) encode rouge/vert/bleu en hexadécimal, format standard du web. RGB (74, 127, 232) donne les mêmes valeurs en base 10. HSL (Teinte, Saturation, Luminosité) est plus intuitif pour un designer : on choisit d'abord la teinte, puis on ajuste sa vivacité (saturation) et sa clarté (luminosité).",
+        def_en:"HEX (#4A7FE8) encodes red/green/blue in hexadecimal, the web's standard format. RGB (74, 127, 232) gives the same values in base 10. HSL (Hue, Saturation, Lightness) is more intuitive for a designer: you pick the hue first, then adjust its vividness (saturation) and brightness (lightness).",
+        def_ht:"HEX (#4A7FE8) ekri wouj/vèt/ble an ekzadesimal, fòma estanda pou entènèt. RGB (74, 127, 232) bay menm valè yo men an baz 10. HSL (Tenn, Satirasyon, Klète) pi fasil pou yon designer sèvi avè l : ou chwazi tenn lan anvan, epi ou ajiste ki jan li vif (satirasyon) ak ki jan li klè (klète).",
         usage:"En pratique : on choisit une teinte en HSL, puis on exporte en HEX pour le développement.",
-        swatches:[{h:220,s:70,l:56,label:'#4A7FE8'}]
+        usage_en:"In practice: pick a hue in HSL, then export to HEX for development.",
+        usage_ht:"An pratik : ou chwazi yon tenn an HSL, epi ou ekspòte l an HEX pou devlopè yo ka itilize l.",
+        swatches:[{h:220,s:70,l:56,label:'#4A7FE8',label_en:'#4A7FE8',label_ht:'#4A7FE8'}]
       },
       {
-        h:'Primaires, secondaires, tertiaires',
+        h:'Primaires, secondaires, tertiaires', h_en:'Primary, secondary, tertiary', h_ht:'Koulè debaz, koulè melanje, ak koulè twazyèm degre',
         def:"Primaires (rouge, jaune, bleu en pigment / rouge, vert, bleu en lumière) ne se fabriquent à partir d'aucune autre couleur. Secondaires (orange, vert, violet) naissent du mélange de deux primaires adjacentes. Tertiaires (rouge-orangé, jaune-vert…) mélangent une primaire et une secondaire voisine.",
+        def_en:"Primaries (red, yellow, blue in pigment / red, green, blue in light) can't be made from any other color. Secondaries (orange, green, purple) come from mixing two adjacent primaries. Tertiaries (red-orange, yellow-green…) mix a primary with a neighboring secondary.",
+        def_ht:"Koulè debaz yo (wouj, jòn, ble lè w ap melanje penti / wouj, vèt, ble lè se limyè) pa fèt ak okenn lòt koulè. Koulè melanje yo (oranj, vèt, vyolèt) parèt lè w mete de koulè debaz ki toupre ansanm. Koulè twazyèm degre yo (wouj-oranje, jòn-vèt…) melanje yon koulè debaz ak yon koulè melanje ki toupre.",
         usage:"Ce vocabulaire sert à nommer précisément une teinte dans un brief ou une charte graphique.",
-        swatches:[{h:0,label:'Primaire — Rouge'},{h:60,label:'Primaire — Jaune'},{h:240,label:'Primaire — Bleu'},{h:30,label:'Secondaire — Orange'},{h:120,label:'Secondaire — Vert'},{h:270,label:'Secondaire — Violet'},{h:15,label:'Tertiaire — Rouge-orangé'},{h:90,label:'Tertiaire — Jaune-vert'}]
+        usage_en:"This vocabulary is used to precisely name a hue in a brief or a brand style guide.",
+        usage_ht:"Vokabilè sa a itil pou nonmen yon tenn egzakteman lè w ap ekri yon brief oswa yon gid koulè pou yon mak.",
+        swatches:[{h:0,label:'Primaire — Rouge',label_en:'Primary — Red',label_ht:'Debaz — Wouj'},{h:60,label:'Primaire — Jaune',label_en:'Primary — Yellow',label_ht:'Debaz — Jòn'},{h:240,label:'Primaire — Bleu',label_en:'Primary — Blue',label_ht:'Debaz — Ble'},{h:30,label:'Secondaire — Orange',label_en:'Secondary — Orange',label_ht:'Melanje — Oranj'},{h:120,label:'Secondaire — Vert',label_en:'Secondary — Green',label_ht:'Melanje — Vèt'},{h:270,label:'Secondaire — Violet',label_en:'Secondary — Purple',label_ht:'Melanje — Vyolèt'},{h:15,label:'Tertiaire — Rouge-orangé',label_en:'Tertiary — Red-orange',label_ht:'3yèm degre — Wouj-oranje'},{h:90,label:'Tertiaire — Jaune-vert',label_en:'Tertiary — Yellow-green',label_ht:'3yèm degre — Jòn-vèt'}]
       },
       {
-        h:'Saturation et luminosité',
+        h:'Saturation et luminosité', h_en:'Saturation and lightness', h_ht:'Satirasyon ak klète',
         def:"La saturation mesure l'intensité d'une couleur (0% = gris, 100% = couleur pure). La luminosité mesure sa clarté (0% = noir, 100% = blanc). Deux couleurs de même teinte peuvent donc être très différentes selon ces deux réglages.",
+        def_en:"Saturation measures a color's intensity (0% = gray, 100% = pure color). Lightness measures its brightness (0% = black, 100% = white). Two colors of the same hue can therefore look very different depending on these two settings.",
+        def_ht:"Satirasyon mezire fòs yon koulè (0% = gri, 100% = koulè pi). Klète mezire ki jan li klè (0% = nwa, 100% = blan). De koulè ki gen menm tenn ka parèt trè diferan youn ak lòt selon jan w regle de bagay sa yo.",
         usage:"Baisser la saturation crée des palettes « désaturées » perçues comme plus sobres, plus premium ; l'augmenter crée du dynamisme, parfois de l'agressivité visuelle.",
-        swatches:[{h:220,s:100,l:50,label:'S100 L50'},{h:220,s:60,l:50,label:'S60 L50'},{h:220,s:20,l:50,label:'S20 L50'},{h:220,s:70,l:80,label:'S70 L80'},{h:220,s:70,l:50,label:'S70 L50'},{h:220,s:70,l:20,label:'S70 L20'}]
+        usage_en:"Lowering saturation creates \u201cdesaturated\u201d palettes perceived as more understated and premium; raising it creates energy, sometimes visual aggressiveness.",
+        usage_ht:"Lè w bese satirasyon an, ou jwenn palèt ki parèt pi sobre, pi gwo klas ; lè w monte l, ou jwenn plis dinamis, men pafwa sa fatige je a twòp.",
+        swatches:[{h:220,s:100,l:50,label:'S100 L50',label_en:'S100 L50',label_ht:'S100 L50'},{h:220,s:60,l:50,label:'S60 L50',label_en:'S60 L50',label_ht:'S60 L50'},{h:220,s:20,l:50,label:'S20 L50',label_en:'S20 L50',label_ht:'S20 L50'},{h:220,s:70,l:80,label:'S70 L80',label_en:'S70 L80',label_ht:'S70 L80'},{h:220,s:70,l:50,label:'S70 L50',label_en:'S70 L50',label_ht:'S70 L50'},{h:220,s:70,l:20,label:'S70 L20',label_en:'S70 L20',label_ht:'S70 L20'}]
       },
       {
-        h:'Couleurs chaudes et couleurs froides',
+        h:'Couleurs chaudes et couleurs froides', h_en:'Warm colors and cool colors', h_ht:'Koulè cho ak koulè frèt',
         def:"La roue se divise grossièrement en deux hémisphères : rouge-orange-jaune (chaud, associé au feu, à l'énergie, à la proximité) et vert-bleu-violet (froid, associé à l'eau, au calme, à la distance). Cette perception n'est pas qu'une métaphore : des expériences montrent que des pièces peintes dans des teintes chaudes sont perçues comme physiquement plus proches et légèrement plus chaudes qu'elles ne le sont.",
+        def_en:"The wheel splits roughly into two hemispheres: red-orange-yellow (warm, associated with fire, energy, closeness) and green-blue-purple (cool, associated with water, calm, distance). This perception isn't just a metaphor: experiments show that rooms painted in warm hues are perceived as physically closer and slightly warmer than they actually are.",
+        def_ht:"Wou a separe apeprè an de bò : wouj-oranj-jòn (cho, moun konekte l ak dife, enèji, bagay ki toupre) ak vèt-ble-vyolèt (frèt, moun konekte l ak dlo, kalm, bagay ki lwen). Se pa yon senp fason pou pale : gen etid ki montre chanm yo pentire ak tenn cho parèt pi pre nou e yon ti kras pi cho pase jan yo ye reyèlman.",
         usage:"Mélanger une dominante froide avec un accent chaud (ou l'inverse) crée un contraste de température qui fait ressortir un élément sans recourir à un contraste de teinte complet.",
-        swatches:[{h:0,label:'Chaud'},{h:30,label:'Chaud'},{h:50,label:'Chaud'},{h:160,label:'Froid'},{h:220,label:'Froid'},{h:270,label:'Froid'}]
+        usage_en:"Mixing a cool dominant with a warm accent (or vice versa) creates a temperature contrast that makes an element stand out without resorting to a full hue contrast.",
+        usage_ht:"Lè w melanje yon koulè frèt ki dominan ak yon ti touch koulè cho (oswa lekontrè), sa kreye yon kontras tanperati ki fè yon eleman parèt san w pa bezwen fè yon gwo kontras tenn.",
+        swatches:[{h:0,label:'Chaud',label_en:'Warm',label_ht:'Cho'},{h:30,label:'Chaud',label_en:'Warm',label_ht:'Cho'},{h:50,label:'Chaud',label_en:'Warm',label_ht:'Cho'},{h:160,label:'Froid',label_en:'Cool',label_ht:'Frèt'},{h:220,label:'Froid',label_en:'Cool',label_ht:'Frèt'},{h:270,label:'Froid',label_en:'Cool',label_ht:'Frèt'}]
       },
       {
-        h:'Le contraste simultané',
+        h:'Le contraste simultané', h_en:'Simultaneous contrast', h_ht:'Kontras ki fèt anmenmtan',
         def:"Une couleur n'est jamais perçue isolément : l'œil interprète chaque teinte relativement à celles qui l'entourent. Un même gris paraît plus foncé sur un fond blanc et plus clair sur un fond noir ; un orange semble plus vif à côté de son complémentaire bleu qu'à côté d'un rouge voisin. Ce phénomène s'appelle le contraste simultané.",
+        def_en:"A color is never perceived in isolation: the eye interprets every hue relative to the ones around it. The same gray looks darker on a white background and lighter on a black one; an orange looks more vivid next to its complementary blue than next to a neighboring red. This phenomenon is called simultaneous contrast.",
+        def_ht:"Je a pa janm gade yon koulè poukont li : li toujou konpare l ak koulè ki bò kote l yo. Menm gri a parèt pi fonse sou yon fon blan e pi klè sou yon fon nwa ; yon oranj parèt pi vif akote konplemantè ble li pase akote yon wouj ki toupre. Yo rele fenomèn sa a kontras ki fèt anmenmtan.",
         usage:"Ne jamais valider une couleur « dans le vide » : toujours la tester directement sur le fond et à côté des couleurs avec lesquelles elle cohabitera réellement dans l'interface ou le support imprimé.",
-        swatches:[{h:30,s:80,l:55,label:'Orange'},{h:220,s:80,l:55,label:'Bleu (complémentaire)'},{h:0,s:70,l:50,label:'Rouge (voisin)'}]
+        usage_en:"Never approve a color \u201cin a vacuum\u201d: always test it directly on the background and next to the colors it will actually sit alongside in the interface or printed piece.",
+        usage_ht:"Pa janm chwazi yon koulè poukont li san kontèks : toujou teste l dirèkteman sou fon an, akote lòt koulè li pral kanmarad avè yo tout bon nan entèfas la oswa sou papye enprime a.",
+        swatches:[{h:30,s:80,l:55,label:'Orange',label_en:'Orange',label_ht:'Oranj'},{h:220,s:80,l:55,label:'Bleu (complémentaire)',label_en:'Blue (complementary)',label_ht:'Ble (konplemantè)'},{h:0,s:70,l:50,label:'Rouge (voisin)',label_en:'Red (neighboring)',label_ht:'Wouj (toupre)'}]
       },
       {
-        h:'Espaces colorimétriques perceptuels (LAB, OKLCH)',
+        h:'Espaces colorimétriques perceptuels (LAB, OKLCH)', h_en:'Perceptual color spaces (LAB, OKLCH)', h_ht:'Sistèm koulè ki respekte jan je wè yo (LAB, OKLCH)',
         def:"HSL a un défaut : deux teintes de même luminosité déclarée (ex. jaune et bleu à L=50%) ne paraissent pas aussi lumineuses à l'œil humain, car HSL ne modélise pas la sensibilité réelle de l'œil. Des espaces plus récents comme LAB ou OKLCH corrigent cela en calculant une luminosité perceptuellement uniforme : deux couleurs de même « L » y semblent réellement aussi claires l'une que l'autre.",
+        def_en:"HSL has a flaw: two hues with the same declared lightness (e.g. yellow and blue at L=50%) don't look equally bright to the human eye, because HSL doesn't model the eye's actual sensitivity. More recent spaces like LAB or OKLCH fix this by computing a perceptually uniform lightness: two colors with the same \u201cL\u201d there really do look equally bright.",
+        def_ht:"HSL gen yon pwoblèm : de tenn ki gen menm klète (pa egzanp jòn ak ble a L=50%) pa parèt menm jan klè pou je moun, paske HSL pa pran an kont fason je nou reyèlman santi limyè. Sistèm ki pi resan tankou LAB oswa OKLCH korije sa a: yo kalkile yon klète ki menm jan pou je a toupatou — de koulè ki gen menm « L » ap parèt tout bon menm jan klè youn kou lòt.",
         usage:"Pour des dégradés ou des palettes générées automatiquement, préférer un espace comme OKLCH évite les « bosses » de luminosité perçue que HSL produit souvent, en particulier autour du jaune.",
-        swatches:[{h:60,s:90,l:50,label:'Jaune L50 (HSL)'},{h:240,s:90,l:50,label:'Bleu L50 (HSL)'}]
+        usage_en:"For gradients or automatically generated palettes, preferring a space like OKLCH avoids the perceived-lightness \u201cbumps\u201d that HSL often produces, especially around yellow.",
+        usage_ht:"Pou degrade oswa palèt ke òdinatè a kreye pou kont li, itilize yon sistèm tankou OKLCH evite ti sote klète HSL konn fè, sitou bò kote jòn nan.",
+        swatches:[{h:60,s:90,l:50,label:'Jaune L50 (HSL)',label_en:'Yellow L50 (HSL)',label_ht:'Jòn L50 (HSL)'},{h:240,s:90,l:50,label:'Bleu L50 (HSL)',label_en:'Blue L50 (HSL)',label_ht:'Ble L50 (HSL)'}]
       }
     ]
   },
   {
     key:'harmonies',
-    label:'Harmonies',
-    title:"Les six harmonies chromatiques",
+    label:'Harmonies', label_en:'Harmonies', label_ht:'Amoni yo',
+    title:"Les six harmonies chromatiques", title_en:"The six chromatic harmonies", title_ht:"Sis amoni koulè yo",
     lead:"Une harmonie est une règle géométrique appliquée à la roue chromatique pour choisir plusieurs teintes qui fonctionnent ensemble. Le principe commun à toutes : fixer l'écart angulaire entre les teintes plutôt que les teintes elles-mêmes, ce qui permet de générer une palette cohérente à partir de n'importe quelle couleur de départ.",
+    lead_en:"A harmony is a geometric rule applied to the color wheel to pick several hues that work together. The principle common to all of them: fix the angular gap between hues rather than the hues themselves, which lets you generate a coherent palette from any starting color.",
+    lead_ht:"Yon amoni se yon règ jeyometrik yo aplike sou wou koulè a pou chwazi plizyè tenn ki mache byen ansanm. Prensip ki menm pou tout se sa: fikse distans ki genyen ant tenn yo (angle) olye w konsantre sou tenn yo menm — sa fè w ka kreye yon palèt ki byen òganize apati nenpòt koulè w chwazi pou kòmanse.",
     blocks:[
       {
-        h:'Comment choisir son harmonie',
+        h:'Comment choisir son harmonie', h_en:'How to choose your harmony', h_ht:'Kijan pou w chwazi amoni w lan',
         def:"Le choix dépend du message recherché, pas seulement du goût. Plus l'écart angulaire entre les teintes est grand, plus le contraste (et donc la tension visuelle et l'énergie perçue) est fort. Une harmonie analogue ou monochromatique convient à un message apaisant et cohérent ; une harmonie complémentaire ou triadique convient à un message qui doit capter l'attention rapidement.",
-        usage:"Règle simple : si le message est « calme, digne de confiance, discret », resserrer les angles. Si le message est « dynamique, jeune, qui doit se voir de loin », les écarter."
+        def_en:"The choice depends on the intended message, not just taste. The larger the angular gap between hues, the stronger the contrast (and thus the visual tension and perceived energy). An analogous or monochromatic harmony suits a calming, coherent message; a complementary or triadic harmony suits a message that needs to grab attention quickly.",
+        def_ht:"Chwa a depann de mesaj ou vle bay la, se pa sèlman yon kesyon gou. Plis distans ant tenn yo gwo, plis kontras la (donk tansyon vizyèl ak enèji a) fò. Yon amoni analòg oswa monokwomatik bon pou yon mesaj ki kalm e ki koeran; yon amoni konplemantè oswa triyadik bon pou yon mesaj ki dwe atire atansyon vit.",
+        usage:"Règle simple : si le message est « calme, digne de confiance, discret », resserrer les angles. Si le message est « dynamique, jeune, qui doit se voir de loin », les écarter.",
+        usage_en:"Simple rule: if the message is \u201ccalm, trustworthy, discreet,\u201d tighten the angles. If the message is \u201cdynamic, young, needs to be seen from afar,\u201d widen them.",
+        usage_ht:"Yon règ senp: si mesaj la se « kalm, moun ka fè konfyans, diskrè », sere ang yo. Si mesaj la se « dinamik, jèn, dwe wè l depi lwen », ekate yo pi laj."
       },
       {
-        h:'Une teinte dominante, les autres en soutien',
+        h:'Une teinte dominante, les autres en soutien', h_en:'One dominant hue, the others as support', h_ht:'Yon tenn ki dominan, lòt yo pou ede l',
         def:"Même dans une harmonie à 3 ou 4 couleurs, il est rare qu'elles soient utilisées à parts égales. Une teinte doit rester dominante (souvent la plus désaturée ou la plus proche du neutre) tandis que les autres jouent un rôle d'accent, sans quoi la composition devient illisible et « chacune se bat pour l'attention ».",
-        usage:"Voir le bloc 60-30-10 dans l'onglet Branding pour la répartition concrète des surfaces."
+        def_en:"Even in a 3- or 4-color harmony, they're rarely used in equal parts. One hue should stay dominant (often the most desaturated or closest to neutral) while the others play an accent role, otherwise the composition becomes unreadable, with \u201ceach one fighting for attention.\u201d",
+        def_ht:"Menm nan yon amoni 3 oswa 4 koulè, ra pou yo itilize yo an pòsyon egal. Youn nan tenn yo dwe rete dominan (souvan sa ki pi dous la, oswa sa ki pi pre gri a) pandan lòt yo jwe yon wòl aksan — otreman, konpozisyon an vin difisil pou konprann, tankou chak koulè ap goumen pou atire atansyon.",
+        usage:"Voir le bloc 60-30-10 dans l'onglet Branding pour la répartition concrète des surfaces.",
+        usage_en:"See the 60-30-10 block in the Branding tab for the concrete surface breakdown.",
+        usage_ht:"Gade seksyon 60-30-10 nan onglè Branding pou wè kijan pou separe espas la konkrètman."
       }
     ],
     harmonies:[
-      {name:'Complémentaire', angles:[0,180], def:"Deux teintes opposées à 180°. Contraste maximal, forte tension visuelle — c'est l'harmonie qui produit l'écart de teinte le plus élevé possible sur la roue.", use:"Un accent qui doit sauter aux yeux sans multiplier les couleurs (CTA, logo bicolore)."},
-      {name:'Analogue', angles:[-30,0,30], def:"Trois teintes voisines (±30°). Harmonie douce, sans tension, car l'œil perçoit ces teintes comme appartenant à la même « famille ».", use:"Univers de marque unifié et apaisant (nature, bien-être, éditorial)."},
-      {name:'Triadique', angles:[0,120,240], def:"Trois teintes équidistantes (120°), correspondant historiquement aux trois couleurs primaires ou secondaires. Équilibre vif et énergique.", use:"Identités ludiques ou éducatives qui doivent rester lisibles et enjouées."},
-      {name:'Complémentaire divisée', angles:[0,150,210], def:"La base + les deux voisines de son complémentaire (±30° autour de l'opposé). Même tension que le complémentaire pur, mais plus nuancée et moins « brute ».", use:"Alternative au complémentaire pur, moins agressive à l'œil, plus facile à équilibrer."},
-      {name:'Tétradique', angles:[0,60,180,240], def:"Quatre teintes en deux paires complémentaires (aussi appelée « rectangle »). Palette riche mais exigeante à équilibrer.", use:"Nécessite une teinte dominante claire et les 3 autres en accents secondaires, sinon la composition devient chaotique."},
-      {name:'Carré', angles:[0,90,180,270], def:"Variante du tétradique avec quatre teintes parfaitement équidistantes (90°). Contraste maximal sur les quatre axes, encore plus exigeant à doser.", use:"Palettes éditoriales ou artistiques riches, rarement utilisées telles quelles en branding."},
-      {name:'Monochromatique', angles:[0,0,0,0], mono:true, def:"Une seule teinte déclinée en luminosité/saturation. Cohérence absolue, aucun risque de dissonance de teinte.", use:"Le choix le plus sûr pour un branding minimal et élégant, ou pour une interface qui doit rester discrète."}
+      {name:'Complémentaire', name_en:'Complementary', name_ht:'Konplemantè', angles:[0,180], def:"Deux teintes opposées à 180°. Contraste maximal, forte tension visuelle — c'est l'harmonie qui produit l'écart de teinte le plus élevé possible sur la roue.", def_en:"Two hues opposite at 180°. Maximum contrast, strong visual tension — the harmony that produces the largest possible hue gap on the wheel.", def_ht:"De tenn ki opoze youn ak lòt (180°). Kontras maksimòm, gwo tansyon vizyèl — se amoni sa a ki bay pi gwo diferans posib ant koulè sou wou a.", use:"Un accent qui doit sauter aux yeux sans multiplier les couleurs (CTA, logo bicolore).", use_en:"An accent that needs to jump out without multiplying colors (CTAs, two-tone logos).", use_ht:"Yon detay ki dwe atire je moun san w pa bezwen mete anpil koulè (bouton aksyon, logo de koulè)."},
+      {name:'Analogue', name_en:'Analogous', name_ht:'Analòg', angles:[-30,0,30], def:"Trois teintes voisines (±30°). Harmonie douce, sans tension, car l'œil perçoit ces teintes comme appartenant à la même « famille ».", def_en:"Three neighboring hues (±30°). Gentle, tension-free harmony, since the eye perceives these hues as belonging to the same \u201cfamily.\u201d", def_ht:"Twa tenn ki toupre youn ak lòt (±30°). Yon amoni dous, san tansyon, paske je a wè koulè sa yo tankou yo fè pati menm fanmi.", use:"Univers de marque unifié et apaisant (nature, bien-être, éditorial).", use_en:"A unified, calming brand world (nature, wellness, editorial).", use_ht:"Yon idantite mak ki inifye e ki kalm (lanati, byennèt, kontni editoryal)."},
+      {name:'Triadique', name_en:'Triadic', name_ht:'Triyadik', angles:[0,120,240], def:"Trois teintes équidistantes (120°), correspondant historiquement aux trois couleurs primaires ou secondaires. Équilibre vif et énergique.", def_en:"Three equidistant hues (120°), historically corresponding to the three primary or secondary colors. Vivid, energetic balance.", def_ht:"Twa tenn ki menm distans youn ak lòt (120°), ki korespond ak twa koulè debaz oswa melanje yo. Yon ekilib ki vif e ki gen enèji.", use:"Identités ludiques ou éducatives qui doivent rester lisibles et enjouées.", use_en:"Playful or educational identities that need to stay readable and upbeat.", use_ht:"Idantite amizan oswa edikatif ki dwe rete fasil pou konprann e ki gen dinamis."},
+      {name:'Complémentaire divisée', name_en:'Split-complementary', name_ht:'Konplemantè separe', angles:[0,150,210], def:"La base + les deux voisines de son complémentaire (±30° autour de l'opposé). Même tension que le complémentaire pur, mais plus nuancée et moins « brute ».", def_en:"The base + the two neighbors of its complement (±30° around the opposite). Same tension as pure complementary, but more nuanced and less \u201craw.\u201d", def_ht:"Koulè debaz la + de tenn ki toupre konplemantè li (±30° otou opoze a). Menm tansyon ak konplemantè pi a, men pi soubtil, mwens brital.", use:"Alternative au complémentaire pur, moins agressive à l'œil, plus facile à équilibrer.", use_en:"An alternative to pure complementary, gentler on the eye and easier to balance.", use_ht:"Yon lòt opsyon pase konplemantè pi a, li pi dous pou je a e pi fasil pou ekilibre."},
+      {name:'Tétradique', name_en:'Tetradic', name_ht:'Tetradik', angles:[0,60,180,240], def:"Quatre teintes en deux paires complémentaires (aussi appelée « rectangle »). Palette riche mais exigeante à équilibrer.", def_en:"Four hues in two complementary pairs (also called a \u201crectangle\u201d). A rich palette but demanding to balance.", def_ht:"Kat tenn ki fè de pè konplemantè (yo rele l tou « rektang »). Se yon palèt rich men ki difisil pou ekilibre byen.", use:"Nécessite une teinte dominante claire et les 3 autres en accents secondaires, sinon la composition devient chaotique.", use_en:"Needs a clear dominant hue with the other 3 as secondary accents, otherwise the composition turns chaotic.", use_ht:"Fòk gen yon tenn dominan ki klè ak lòt 3 yo sèvi sèlman kòm ti detay, otreman konpozisyon an vin an dezòd."},
+      {name:'Carré', name_en:'Square', name_ht:'Kare', angles:[0,90,180,270], def:"Variante du tétradique avec quatre teintes parfaitement équidistantes (90°). Contraste maximal sur les quatre axes, encore plus exigeant à doser.", def_en:"A variant of tetradic with four perfectly equidistant hues (90°). Maximum contrast on all four axes, even more demanding to dose.", def_ht:"Yon vèsyon tetradik ak kat tenn ki egal distans (90°) youn ak lòt. Kontras maksimòm sou tout kat direksyon yo, ankò pi difisil pou dozaj byen.", use:"Palettes éditoriales ou artistiques riches, rarement utilisées telles quelles en branding.", use_en:"Rich editorial or artistic palettes, rarely used as-is in branding.", use_ht:"Palèt rich pou piblikasyon oswa travay atistik, moun ra itilize l jan l ye a nan branding."},
+      {name:'Monochromatique', name_en:'Monochromatic', name_ht:'Monokwomatik', angles:[0,0,0,0], mono:true, def:"Une seule teinte déclinée en luminosité/saturation. Cohérence absolue, aucun risque de dissonance de teinte.", def_en:"A single hue varied in lightness/saturation. Absolute coherence, zero risk of hue dissonance.", def_ht:"Yon sèl tenn yo varye an klète ak satirasyon. Yon koerans total, pa gen okenn risk pou koulè yo pa mache ansanm.", use:"Le choix le plus sûr pour un branding minimal et élégant, ou pour une interface qui doit rester discrète.", use_en:"The safest choice for minimal, elegant branding, or for an interface that needs to stay understated.", use_ht:"Se chwa ki pi asire pou yon branding senp e elegan, oswa pou yon entèfas ki dwe rete diskrè."}
     ]
   },
   {
     key:'perception',
-    label:'Perception',
-    title:'Comment l\'œil et le cerveau construisent la couleur',
+    label:'Perception', label_en:'Perception', label_ht:'Pèsepsyon',
+    title:'Comment l\'œil et le cerveau construisent la couleur', title_en:'How the eye and brain construct color', title_ht:'Kijan je ak sèvo bati koulè',
     lead:"La couleur n'existe pas « dans » la lumière — elle est reconstruite par le cerveau à partir de signaux électriques. Comprendre ce mécanisme explique pourquoi deux personnes, ou une même personne dans deux contextes, ne voient jamais tout à fait la même chose.",
+    lead_en:"Color doesn't exist \u201cin\u201d light — it is reconstructed by the brain from electrical signals. Understanding this mechanism explains why two people, or the same person in two different contexts, never see quite the same thing.",
+    lead_ht:"Koulè pa reyèlman egziste nan limyè a — se sèvo a ki rekonstwi l apati siyal elektrik. Lè w konprann kijan sa fonksyone, ou ka wè poukisa de moun, oswa menm yon sèl moun nan de moman diferan, pa janm wè yon koulè menm jan an.",
     blocks:[
       {
-        h:'Trois types de cônes, un espace à trois dimensions',
+        h:'Trois types de cônes, un espace à trois dimensions', h_en:'Three types of cones, a three-dimensional space', h_ht:'Twa tip selil nan je a',
         def:"La rétine humaine contient trois types de cônes, sensibles respectivement aux courtes (bleu), moyennes (vert) et longues (rouge) longueurs d'onde. Toute couleur perçue est une combinaison de l'activation relative de ces trois cônes — c'est pourquoi trois nombres (RGB, ou teinte/saturation/luminosité) suffisent à décrire n'importe quelle couleur visible par un humain.",
-        usage:"C'est aussi ce qui explique le daltonisme : quand un type de cône fonctionne mal ou est absent, l'espace des couleurs distinguables se réduit fortement (voir l'onglet Accessibilité)."
+        def_en:"The human retina contains three types of cones, sensitive respectively to short (blue), medium (green) and long (red) wavelengths. Every perceived color is a combination of the relative activation of these three cones — which is why three numbers (RGB, or hue/saturation/lightness) are enough to describe any color visible to a human.",
+        def_ht:"Nan je moun genyen twa tip selil ki sansib a limyè: youn pou ble, youn pou vèt, ak youn pou wouj. Chak koulè je nou wè se yon melanj ki fèt selon ki kantite chak nan twa selil sa yo aktive — se poutèt sa twa chif sèlman (RGB, oswa tenn/satirasyon/klète) sifi pou dekri nenpòt koulè yon moun ka wè.",
+        usage:"C'est aussi ce qui explique le daltonisme : quand un type de cône fonctionne mal ou est absent, l'espace des couleurs distinguables se réduit fortement (voir l'onglet Accessibilité).",
+        usage_en:"This is also what explains color blindness: when one cone type malfunctions or is missing, the space of distinguishable colors shrinks sharply (see the Accessibility tab).",
+        usage_ht:"Se sa menm ki fè kèk moun daltonyen: lè youn nan selil sa yo pa fonksyone byen oswa li pa la, kantite koulè moun sa a ka distenge diminye anpil (gade onglè Aksesibilite a)."
       },
       {
-        h:'La théorie des processus antagonistes',
+        h:'La théorie des processus antagonistes', h_en:'Opponent-process theory', h_ht:'Teyori koulè k ap konbat youn ak lòt',
         def:"Après les cônes, le cerveau recode l'information en trois paires opposées : rouge-vert, bleu-jaune, et noir-blanc (luminosité). C'est pourquoi il n'existe pas de couleur perçue comme « rouge-verdâtre » ou « bleu-jaunâtre » : ces paires s'annulent plutôt que de se mélanger. C'est aussi ce mécanisme qui produit les images rémanentes : fixer un carré rouge puis regarder une surface blanche fait apparaître un carré cyan.",
-        usage:"Cette théorie explique pourquoi le complémentaire (opposé à 180° sur la roue) produit la tension visuelle la plus forte : les deux teintes activent les extrêmes opposés du même canal neuronal."
+        def_en:"After the cones, the brain recodes the information into three opposing pairs: red-green, blue-yellow, and black-white (lightness). This is why there's no color perceived as \u201creddish-green\u201d or \u201cbluish-yellow\u201d: these pairs cancel each other out rather than blending. This mechanism is also what produces afterimages: staring at a red square then looking at a white surface makes a cyan square appear.",
+        def_ht:"Apre selil yo, sèvo a reòganize enfòmasyon an an twa pè ki opoze: wouj-vèt, ble-jòn, ak nwa-blan (pou klète). Se poutèt sa pa gen koulè ki tankou « wouj-vèt » oswa « ble-jòn » — pè sa yo anile youn lòt olye yo melanje. Se menm bagay sa a ki fè w wè yon imaj kanmenm apre w gade yon koulè lontan: si w gade yon kare wouj epi w gade yon fon blan, w ap wè yon kare syan parèt.",
+        usage:"Cette théorie explique pourquoi le complémentaire (opposé à 180° sur la roue) produit la tension visuelle la plus forte : les deux teintes activent les extrêmes opposés du même canal neuronal.",
+        usage_en:"This theory explains why the complementary pair (opposite at 180° on the wheel) produces the strongest visual tension: the two hues activate opposite extremes of the same neural channel.",
+        usage_ht:"Teyori sa a esplike poukisa koulè konplemantè yo (ki opoze a 180° sou wou a) bay tansyon vizyèl ki pi fò a: de tenn yo aktive de bout ki opoze nan menm chemen nan sèvo a."
       },
       {
-        h:'La constance chromatique',
+        h:'La constance chromatique', h_en:'Color constancy', h_ht:'Koulè ki rete menm jan',
         def:"Le cerveau ajuste en permanence sa perception des couleurs selon l'éclairage ambiant, pour qu'un objet garde une couleur « stable » qu'il soit vu en plein soleil ou sous une lumière artificielle jaune. C'est ce mécanisme qui a rendu célèbre l'illusion de « la robe » (bleu/noir ou blanc/or selon les personnes) : le cerveau fait des hypothèses différentes sur la source de lumière.",
-        usage:"En design d'écran, ce phénomène impose de toujours vérifier une palette sous plusieurs conditions réelles (écran calibré, luminosité ambiante forte, mode sombre) plutôt que dans un seul environnement contrôlé."
+        def_en:"The brain continuously adjusts its color perception based on ambient lighting, so that an object keeps a \u201cstable\u201d color whether seen in bright sunlight or under yellow artificial light. This mechanism is what made \u201cthe dress\u201d illusion famous (blue/black or white/gold depending on the person): the brain makes different assumptions about the light source.",
+        def_ht:"Sèvo a toujou ap ajiste jan l wè koulè yo dapre limyè ki genyen alantou a, pou yon objè ka gen yon koulè ki rete menm jan kit ou wè l nan gwo solèy oswa anba yon limyè jòn atifisyèl. Se mekanis sa a ki te fè foto « rad la » sèlèb (kèk moun te wè l ble/nwa, lòt te wè l blan/lò) — se paske sèvo chak moun te fè yon sipozisyon diferan sou ki kalite limyè ki t ap klere rad la.",
+        usage:"En design d'écran, ce phénomène impose de toujours vérifier une palette sous plusieurs conditions réelles (écran calibré, luminosité ambiante forte, mode sombre) plutôt que dans un seul environnement contrôlé.",
+        usage_en:"In screen design, this phenomenon means you should always check a palette under several real conditions (calibrated screen, strong ambient light, dark mode) rather than in a single controlled environment.",
+        usage_ht:"Nan design pou ekran, sa vle di ou dwe toujou tcheke yon palèt nan plizyè kondisyon reyèl (ekran byen kalibre, gwo limyè alantou, mod fonse), pa sèlman nan yon sèl anviwònman kontwole."
       },
       {
-        h:'Adaptation et fatigue visuelle',
+        h:'Adaptation et fatigue visuelle', h_en:'Adaptation and visual fatigue', h_ht:'Je ki fatige',
         def:"Une exposition prolongée à une couleur dominante désensibilise progressivement les cônes correspondants, ce qui fausse la perception des couleurs environnantes. C'est pourquoi comparer deux couleurs presque identiques nécessite de reposer l'œil sur un gris neutre entre chaque observation.",
-        usage:"Lors du choix final d'une palette, faire une pause ou regarder un gris neutre avant de trancher entre deux nuances proches évite un biais de fatigue visuelle."
+        def_en:"Prolonged exposure to a dominant color progressively desensitizes the corresponding cones, which skews the perception of surrounding colors. This is why comparing two nearly identical colors requires resting the eye on a neutral gray between each observation.",
+        def_ht:"Si w gade yon koulè lontan, selil ki reponn a koulè sa a nan je w vin mwens sansib piti piti, sa ki fè w wè lòt koulè ki bò kote yo yon fason ki pa jis. Se poutèt sa, lè w ap konpare de koulè ki prèske menm, ou dwe repoze je w sou yon gri net ant chak fwa w gade yo.",
+        usage:"Lors du choix final d'une palette, faire une pause ou regarder un gris neutre avant de trancher entre deux nuances proches évite un biais de fatigue visuelle.",
+        usage_en:"When finalizing a palette, taking a break or looking at a neutral gray before deciding between two close shades avoids a visual-fatigue bias.",
+        usage_ht:"Lè w ap fè chwa final pou yon palèt, fè yon poz oswa gade yon gri net anvan w chwazi ant de nyans ki tou pre youn ak lòt — sa evite w fè yon chwa ki gate paske je w fatige."
       }
     ]
   },
   {
     key:'accessibilite',
-    label:'Accessibilité',
-    title:'Concevoir pour tous les types de vision',
+    label:'Accessibilité', label_en:'Accessibility', label_ht:'Aksesibilite',
+    title:'Concevoir pour tous les types de vision', title_en:'Designing for every type of vision', title_ht:'Konsevwa pou tout kalite je',
     lead:"Environ 1 homme sur 12 et 1 femme sur 200 présentent une forme de daltonisme. Une palette « harmonieuse » sur la roue chromatique peut devenir totalement illisible pour une partie du public si l'information repose uniquement sur la couleur.",
+    lead_en:"About 1 in 12 men and 1 in 200 women have some form of color blindness. A \u201charmonious\u201d palette on the color wheel can become completely unreadable to part of the audience if the information relies on color alone.",
+    lead_ht:"Anviwon 1 gason sou 12 ak 1 fanm sou 200 gen yon kalite pwoblèm pou distenge koulè. Yon palèt ki « byen amonize » sou wou a ka vin totalman difisil pou konprann pou yon pati piblik la si tout enfòmasyon an chita sèlman sou koulè.",
     blocks:[
       {
-        h:'Les trois familles de daltonisme',
+        h:'Les trois familles de daltonisme', h_en:'The three families of color blindness', h_ht:'Twa kalite moun ki pa wè koulè byen',
         def:"La protanopie et la deutéranopie (les plus fréquentes) réduisent ou suppriment la distinction entre rouge et vert — la paire de couleurs la plus utilisée dans les interfaces pour signaler « erreur » et « succès ». La tritanopie, beaucoup plus rare, affecte l'axe bleu-jaune.",
-        usage:"Ne jamais utiliser un simple duo rouge/vert comme seul signal d'état (erreur/validé) : y ajouter systématiquement une icône, un texte ou une forme distincte."
+        def_en:"Protanopia and deuteranopia (the most common) reduce or remove the distinction between red and green — the color pair most used in interfaces to signal \u201cerror\u201d and \u201csuccess.\u201d Tritanopia, much rarer, affects the blue-yellow axis.",
+        def_ht:"De kalite ki pi souvan yo diminye oswa retire kapasite pou moun fè diferans ant wouj ak vèt — se pè koulè sa a ki pi itilize nan aplikasyon pou di « erè » ak « siksè ». Genyen yon lòt kalite ki pi ra anpil ki afekte fason moun wè ble ak jòn.",
+        usage:"Ne jamais utiliser un simple duo rouge/vert comme seul signal d'état (erreur/validé) : y ajouter systématiquement une icône, un texte ou une forme distincte.",
+        usage_en:"Never use a plain red/green pair as the sole status signal (error/success): always add a distinct icon, text, or shape.",
+        usage_ht:"Pa janm itilize senpleman wouj ak vèt kòm sèl fason pou montre yon eta (erè/valide): toujou mete yon ikòn, yon tèks oswa yon fòm ki diferan tou."
       },
       {
-        h:'Le ratio de contraste WCAG',
+        h:'Le ratio de contraste WCAG', h_en:'The WCAG contrast ratio', h_ht:'Nivo kontras WCAG la',
         def:"Le standard d'accessibilité web (WCAG) définit un ratio de contraste minimal entre texte et fond : 4.5:1 pour le texte courant, 3:1 pour le texte large (≥18px gras) et les éléments d'interface. Ce ratio se calcule à partir de la luminance relative des deux couleurs, pas de leur simple différence de teinte.",
-        usage:"Deux couleurs peuvent sembler très différentes sur la roue chromatique (donc « harmonieuses ») tout en ayant une luminosité quasi identique — et donc échouer complètement le test de contraste. Toujours vérifier avec un outil dédié, jamais à l'œil seul."
+        def_en:"The web accessibility standard (WCAG) defines a minimum contrast ratio between text and background: 4.5:1 for regular text, 3:1 for large text (≥18px bold) and interface elements. This ratio is computed from the relative luminance of the two colors, not simply their hue difference.",
+        def_ht:"Estanda pou aksesibilite sou entènèt la (WCAG) mande yon nivo kontras minimòm ant tèks ak fon: 4.5:1 pou tèks nòmal, 3:1 pou gwo tèks (≥18px gra) ak lòt eleman nan yon aplikasyon. Yo kalkile nivo sa a ak konbyen limyè chak koulè bay, pa sèlman ak diferans nan tenn yo.",
+        usage:"Deux couleurs peuvent sembler très différentes sur la roue chromatique (donc « harmonieuses ») tout en ayant une luminosité quasi identique — et donc échouer complètement le test de contraste. Toujours vérifier avec un outil dédié, jamais à l'œil seul.",
+        usage_en:"Two colors can look very different on the color wheel (thus \u201charmonious\u201d) while having near-identical lightness — and so completely fail the contrast test. Always check with a dedicated tool, never by eye alone.",
+        usage_ht:"De koulè ka sanble trè diferan sou wou a (donk yo « bon ansanm ») men gen prèske menm klète — sa fè yo echwe nèt tès kontras la. Toujou verifye ak yon zouti ki fèt pou sa, pa fè l ak je w sèlman."
       },
       {
-        h:'Ne jamais coder l\'information par la couleur seule',
+        h:'Ne jamais coder l\'information par la couleur seule', h_en:'Never encode information with color alone', h_ht:'Pa janm sèvi ak koulè poukont li pou bay enfòmasyon',
         def:"Un graphique, un statut ou un bouton qui ne se distingue que par sa teinte exclut les daltoniens et devient inutilisable en niveaux de gris (impression, certains modes d'accessibilité). La couleur doit toujours être un renfort, jamais l'unique vecteur d'une information.",
-        usage:"Doubler chaque code couleur d'un second signal : forme, motif (hachures, pointillés), position, icône, ou libellé texte."
+        def_en:"A chart, status, or button distinguished only by its hue excludes color-blind users and becomes unusable in grayscale (printing, certain accessibility modes). Color should always reinforce, never be the sole carrier of information.",
+        def_ht:"Yon graf, yon eta oswa yon bouton ki depann sèlman sou tenn li ekskli moun ki pa wè koulè byen, e li vin initil an nwa-e-blan (enpresyon, sèten mod aksesibilite). Koulè dwe toujou vin ajoute, li pa dwe janm sèl fason pou bay yon enfòmasyon.",
+        usage:"Doubler chaque code couleur d'un second signal : forme, motif (hachures, pointillés), position, icône, ou libellé texte.",
+        usage_en:"Pair every color code with a second signal: shape, pattern (hatching, dots), position, icon, or text label.",
+        usage_ht:"Toujou mete yon dezyèm siyal ak chak kòd koulè: yon fòm, yon motif (liy, pwen), yon pozisyon, yon ikòn, oswa yon ti tèks."
       },
       {
-        h:'Simuler la vision daltonienne',
+        h:'Simuler la vision daltonienne', h_en:'Simulating color-blind vision', h_ht:'Teste jan yon moun daltonyen wè',
         def:"Des outils de simulation permettent de visualiser une palette telle qu'elle apparaît à une personne protanope, deutéranope ou tritanope, en reproduisant la perte de distinction entre certains canaux de couleur.",
-        usage:"Tester systématiquement une palette de marque ou d'interface finale à travers un simulateur de daltonisme avant validation, au même titre qu'un test de contraste."
+        def_en:"Simulation tools let you preview a palette as it appears to a protanopic, deuteranopic, or tritanopic person, by reproducing the loss of distinction between certain color channels.",
+        def_ht:"Gen zouti ki pèmèt ou wè yon palèt jan l ta parèt pou yon moun ki gen yon kalite pwoblèm pou wè koulè, paske yo reprodwi difikilte moun sa yo genyen pou distenge sèten koulè.",
+        usage:"Tester systématiquement une palette de marque ou d'interface finale à travers un simulateur de daltonisme avant validation, au même titre qu'un test de contraste.",
+        usage_en:"Systematically test a final brand or interface palette through a color-blindness simulator before sign-off, the same way you'd run a contrast test.",
+        usage_ht:"Toujou teste yon palèt mak oswa entèfas final ak yon zouti ki simile jan moun daltonyen wè anvan w apwouve l — fè l menm jan ou fè yon tès kontras."
       }
     ]
   },
   {
     key:'psycho',
-    label:'Psychologie',
-    title:'Psychologie et usages des couleurs',
+    label:'Psychologie', label_en:'Psychology', label_ht:'Sikoloji',
+    title:'Psychologie et usages des couleurs', title_en:'Psychology and uses of color', title_ht:'Sikoloji koulè ak kijan yo itilize l',
     lead:"Chaque famille de teinte porte des associations culturelles fortes. Elles ne sont pas universelles à 100%, mais elles orientent la perception dans la plupart des contextes occidentaux du branding.",
+    lead_en:"Every hue family carries strong cultural associations. They aren't 100% universal, but they shape perception in most Western branding contexts.",
+    lead_ht:"Chak gwoup koulè gen yon siyifikasyon kiltirèl ki fò. Yo pa 100% menm pou tout moun, men yo enfliyanse jan moun wè yo nan pifò kontèks branding oksidantal.",
     blocks:[
       {
-        h:'Associations culturelles vs. réactions biologiques',
+        h:'Associations culturelles vs. réactions biologiques', h_en:'Cultural associations vs. biological reactions', h_ht:'Sa ki soti nan kilti kont sa ki soti nan kò nou',
         def:"Certaines réactions à la couleur sont quasi universelles et biologiques : le rouge augmente la vigilance et le rythme cardiaque chez la plupart des humains, indépendamment de la culture. D'autres sont purement conventionnelles : le blanc évoque le mariage et la pureté en Occident, mais le deuil dans plusieurs cultures d'Asie de l'Est ; le rouge symbolise le danger en Occident mais la chance et la prospérité en Chine.",
-        usage:"Pour une marque internationale, toujours vérifier les connotations locales de la couleur dominante avant un déploiement global — un test qui semble anodin en France peut être un contresens ailleurs."
+        def_en:"Some reactions to color are near-universal and biological: red raises alertness and heart rate in most humans, regardless of culture. Others are purely conventional: white evokes weddings and purity in the West, but mourning in several East Asian cultures; red symbolizes danger in the West but luck and prosperity in China.",
+        def_ht:"Gen reyaksyon devan koulè ki menm pou prèske tout moun paske se konsa kò nou fèt: wouj fè pifò moun vin pi vijilan e kè yo bat pi vit, kèlkeswa kilti yo. Gen lòt ki soti nèt nan kilti: blan reprezante maryaj ak pite nan peyi Oksidan yo, men li reprezante dèy nan plizyè peyi Azi de Lès. Wouj vle di danje nan Oksidan, men li vle di chans ak richès nan Lachin.",
+        usage:"Pour une marque internationale, toujours vérifier les connotations locales de la couleur dominante avant un déploiement global — un test qui semble anodin en France peut être un contresens ailleurs.",
+        usage_en:"For an international brand, always check the local connotations of the dominant color before a global rollout — something that seems harmless in one country can send the wrong message elsewhere.",
+        usage_ht:"Pou yon mak k ap vann nan plizyè peyi, toujou tcheke sa koulè dominan an vle di lokalman anvan w lanse l toupatou — yon bagay ki parèt nòmal nan yon peyi ka voye yon move mesaj nan yon lòt."
       },
       {
-        h:'Le contexte prime sur la teinte isolée',
+        h:'Le contexte prime sur la teinte isolée', h_en:'Context outweighs an isolated hue', h_ht:'Kontèks la pi enpòtan pase koulè a poukont li',
         def:"La même couleur change de sens selon le secteur et le voisinage visuel : un vert vif signifie « validé » dans une interface, « bio » sur un emballage alimentaire, et « toxique » à côté d'un pictogramme de danger. La psychologie des couleurs s'interprète toujours en contexte, jamais en absolu.",
-        usage:"Avant de choisir une teinte pour son message symbolique seul, vérifier comment les concurrents directs du même secteur l'utilisent déjà — s'en démarquer ou s'y conformer est un choix stratégique, pas un accident."
+        def_en:"The same color changes meaning depending on the industry and visual neighborhood: a bright green means \u201cvalidated\u201d in an interface, \u201corganic\u201d on food packaging, and \u201ctoxic\u201d next to a hazard icon. Color psychology is always read in context, never in absolute terms.",
+        def_ht:"Menm koulè a chanje sans dapre domèn nan ak sa ki bò kote l: yon vèt vif vle di « valide » nan yon aplikasyon, « natirèl » sou yon anbalaj manje, epi « danjere » akote yon siy avètisman. Ou toujou dwe konprann yon koulè selon kontèks li, pa gen youn ki gen yon sans fiks pou tout tan.",
+        usage:"Avant de choisir une teinte pour son message symbolique seul, vérifier comment les concurrents directs du même secteur l'utilisent déjà — s'en démarquer ou s'y conformer est un choix stratégique, pas un accident.",
+        usage_en:"Before picking a hue purely for its symbolic message, check how direct competitors in the same sector already use it — standing out from it or conforming to it is a strategic choice, not an accident.",
+        usage_ht:"Anvan w chwazi yon koulè sèlman pou sa l senbolize, gade kijan konkiran ki nan menm domèn ou an deja itilize l — se yon desizyon estratejik pou w diferan de yo oswa pou w swiv sa yo fè, se pa yon aksidan."
       }
     ],
     vibes:true
   },
   {
     key:'branding',
-    label:'Branding',
-    title:'Appliquer la théorie à une identité de marque',
+    label:'Branding', label_en:'Branding', label_ht:'Branding',
+    title:'Appliquer la théorie à une identité de marque', title_en:'Applying theory to a brand identity', title_ht:'Aplike teyori a nan idantite yon mak',
     lead:"Connaître les harmonies ne suffit pas : il faut savoir les doser dans un système de marque cohérent.",
+    lead_en:"Knowing the harmonies isn't enough: you need to know how to dose them into a coherent brand system.",
+    lead_ht:"Konnen amoni yo pa sifi: fòk ou konn dozel yo byen pou fè yon sistèm mak ki kenbe ansanm.",
     blocks:[
       {
-        h:'La règle 60-30-10',
+        h:'La règle 60-30-10', h_en:'The 60-30-10 rule', h_ht:'Règ 60-30-10 la',
         def:"Une palette de marque fonctionne rarement à parts égales. 60% de la surface visuelle en couleur dominante (souvent neutre ou très désaturée), 30% en couleur secondaire, 10% en couleur d'accent vive pour les CTA et points d'attention.",
-        usage:"Évite les identités « criardes » où toutes les couleurs se battent pour l'attention."
+        def_en:"A brand palette rarely works in equal parts. 60% of the visual surface in a dominant color (often neutral or heavily desaturated), 30% in a secondary color, 10% in a vivid accent color for CTAs and points of focus.",
+        def_ht:"Yon palèt mak ra pou l fonksyone lè chak koulè gen menm kantite. 60% nan espas vizyèl la dwe an koulè dominan (souvan yon gri oswa yon koulè ki pa twò vif), 30% an koulè segondè, ak 10% an yon koulè vif pou bouton aksyon ak kote w vle atire atansyon.",
+        usage:"Évite les identités « criardes » où toutes les couleurs se battent pour l'attention.",
+        usage_en:"Avoids \u201cloud\u201d identities where every color fights for attention.",
+        usage_ht:"Sa evite yon idantite ki fè twòp bri, kote tout koulè ap goumen youn ak lòt pou atire je moun."
       },
       {
-        h:'Contraste et accessibilité',
+        h:'Contraste et accessibilité', h_en:'Contrast and accessibility', h_ht:'Kontras ak aksè pou tout moun',
         def:"Un texte doit avoir un contraste suffisant avec son fond pour rester lisible (norme WCAG : ratio minimum de 4.5:1 pour le texte courant). Les couleurs très saturées ou de luminosité proche l'une de l'autre échouent souvent ce test, même si elles semblent \"harmonieuses\" sur la roue.",
-        usage:"Toujours vérifier le contraste texte/fond avant de valider une palette, indépendamment de l'harmonie choisie."
+        def_en:"Text needs sufficient contrast with its background to stay readable (WCAG standard: minimum ratio of 4.5:1 for regular text). Highly saturated colors, or colors with similar lightness, often fail this test even if they look \u201charmonious\u201d on the wheel.",
+        def_ht:"Yon tèks dwe kontraste ase ak fon li pou moun ka li l fasil (estanda WCAG mande yon nivo 4.5:1 pou tèks nòmal). Koulè ki twò vif, oswa koulè ki gen prèske menm klète, souvan pa reyisi tès sa a, menm si yo sanble \"bon ansanm\" sou wou a.",
+        usage:"Toujours vérifier le contraste texte/fond avant de valider une palette, indépendamment de l'harmonie choisie.",
+        usage_en:"Always check text/background contrast before signing off on a palette, regardless of the harmony chosen.",
+        usage_ht:"Toujou verifye kontras ant tèks ak fon anvan w apwouve yon palèt, kèlkeswa amoni ou te chwazi a."
       },
       {
-        h:'Cohérence multi-support',
+        h:'Cohérence multi-support', h_en:'Cross-medium consistency', h_ht:'Kenbe menm koulè sou tout fòma',
         def:"Une couleur définie en HSL ou HEX peut rendre différemment à l'écran (RGB, lumière additive) et en impression (CMJN, pigment soustractif). Toujours prévoir une conversion CMJN et tester un tirage physique avant validation finale d'une charte.",
-        usage:"Erreur fréquente : un bleu vif à l'écran devient terne ou violacé en impression offset."
+        def_en:"A color defined in HSL or HEX can render differently on screen (RGB, additive light) than in print (CMYK, subtractive pigment). Always plan a CMYK conversion and test a physical proof before finalizing a style guide.",
+        def_ht:"Yon koulè ou defini an HSL oswa HEX ka parèt yon lòt jan sou ekran pase lè w enprime l sou papye, paske se pa menm fason koulè yo fèt (limyè pou ekran, lank pou papye). Toujou prepare yon vèsyon pou enpresyon e teste yon egzanplè fizik anvan w fini ak yon chart koulè.",
+        usage:"Erreur fréquente : un bleu vif à l'écran devient terne ou violacé en impression offset.",
+        usage_en:"Common mistake: a vivid on-screen blue turns dull or purplish in offset printing.",
+        usage_ht:"Erè moun konn fè souvan: yon ble vif sou ekran vin tris oswa vin gen yon ti tèt vyolèt lè yo enprime l."
       },
       {
-        h:'Limiter la palette',
+        h:'Limiter la palette', h_en:'Limiting the palette', h_ht:'Pa mete twòp koulè',
         def:"Une charte graphique solide tient généralement en 1 couleur dominante, 1-2 couleurs secondaires, 1 couleur d'accent, et une gamme de neutres (blancs, gris, noir). Trop de couleurs diluent la reconnaissance de marque.",
-        usage:"Si une palette dépasse 5-6 couleurs actives, c'est souvent le signe qu'il faut arbitrer plutôt qu'additionner."
+        def_en:"A solid style guide generally fits into 1 dominant color, 1-2 secondary colors, 1 accent color, and a range of neutrals (whites, grays, black). Too many colors dilute brand recognition.",
+        def_ht:"Yon bon chart koulè jeneralman gen 1 koulè dominan, 1-2 koulè segondè, 1 koulè aksan, ak kèk koulè net (blan, gri, nwa). Si w mete twòp koulè, moun ap gen plis difikilte pou rekonèt mak ou a.",
+        usage:"Si une palette dépasse 5-6 couleurs actives, c'est souvent le signe qu'il faut arbitrer plutôt qu'additionner.",
+        usage_en:"If a palette exceeds 5-6 active colors, that's often a sign you need to make trade-offs rather than keep adding.",
+        usage_ht:"Si yon palèt gen plis pase 5-6 koulè k ap sèvi, sa souvan vle di li lè pou w retire olye w ap kontinye ajoute."
       },
       {
-        h:'Concevoir pour le mode clair et le mode sombre',
+        h:'Concevoir pour le mode clair et le mode sombre', h_en:'Designing for light mode and dark mode', h_ht:'Kreye pou mod klè ak mod fonse',
         def:"Une couleur d'accent qui fonctionne sur fond blanc peut perdre tout son impact — ou échouer le contraste — sur fond noir. Le mode sombre n'est pas une simple inversion : les couleurs saturées doivent généralement être légèrement désaturées et éclaircies pour rester confortables sur un fond sombre, sous peine de « vibrer » désagréablement à l'œil.",
-        usage:"Prévoir dès la conception deux variantes de chaque couleur de la charte (une pour fond clair, une pour fond sombre) plutôt que d'improviser une conversion automatique tardive."
+        def_en:"An accent color that works on a white background can lose all its impact — or fail contrast — on a black one. Dark mode isn't a simple inversion: saturated colors generally need to be slightly desaturated and lightened to stay comfortable on a dark background, or they'll \u201cvibrate\u201d unpleasantly to the eye.",
+        def_ht:"Yon koulè aksan ki byen sou yon fon blan ka pèdi tout enpak li — oswa pèdi kontras la — sou yon fon nwa. Mod fonse a se pa jis mete koulè yo lanvè: koulè ki twò vif yo jeneralman bezwen vin yon ti kras mwens vif e yon ti kras pi klè pou je a santi l alèz sou yon fon nwa, otreman yo ap « boulvèse » je a.",
+        usage:"Prévoir dès la conception deux variantes de chaque couleur de la charte (une pour fond clair, une pour fond sombre) plutôt que d'improviser une conversion automatique tardive.",
+        usage_en:"Plan two variants of every style-guide color from the start (one for light backgrounds, one for dark) rather than improvising a last-minute automatic conversion.",
+        usage_ht:"Depi nan kòmansman, prepare de vèsyon pou chak koulè nan chart ou a (youn pou fon klè, youn pou fon fonse) olye w ta tann dènye minit pou fè yon konvèsyon rapid."
       },
       {
-        h:'Tester en conditions réelles',
+        h:'Tester en conditions réelles', h_en:'Testing under real conditions', h_ht:'Teste an kondisyon reyèl',
         def:"Une palette validée sur un écran calibré, en plein contrôle de la luminosité ambiante, peut se révéler illisible en plein soleil sur un smartphone, ou différente sur des écrans mal calibrés. De même, une couleur d'écran (RGB, lumière additive) ne rend jamais exactement la même chose imprimée (CMJN, pigment soustractif).",
-        usage:"Toujours valider une palette finale sur plusieurs supports et conditions réels avant impression ou déploiement en production, jamais uniquement sur la maquette d'origine."
+        def_en:"A palette validated on a calibrated screen, with full control over ambient light, can turn out unreadable in bright sunlight on a phone, or look different on poorly calibrated screens. Likewise, an on-screen color (RGB, additive light) never renders exactly the same printed (CMYK, subtractive pigment).",
+        def_ht:"Yon palèt ki valide sou yon ekran kalibre, ak kontwòl total limnyozite anbyan, ka vin ilizib nan gwo solèy sou yon smartphone, oswa parèt diferan sou ekran mal kalibre. Menm jan an, yon koulè ekran (RGB, limyè aditif) pa janm rann egzakteman menm bagay lè li enprime (CMJN, pigman soustraktif).",
+        usage:"Toujours valider une palette finale sur plusieurs supports et conditions réels avant impression ou déploiement en production, jamais uniquement sur la maquette d'origine.",
+        usage_en:"Always validate a final palette across several real devices and conditions before printing or shipping to production, never only on the original mockup.",
+        usage_ht:"Toujou valide yon palèt final sou plizyè sipò ak kondisyon reyèl anvan enpresyon oswa deplwaman an pwodiksyon, jamè sèlman sou maket orijinal la."
       },
       {
-        h:'Itérer plutôt que figer',
+        h:'Itérer plutôt que figer', h_en:'Iterate rather than freeze', h_ht:'Iterasyon olye figaj',
         def:"Une identité de couleur n'est jamais figée définitivement : elle s'affine avec les retours d'usage réel (tests utilisateurs, taux de clic sur un CTA, retours d'accessibilité). Les grandes marques révisent régulièrement leur palette de quelques pourcents sans changer leur identité perçue.",
-        usage:"Documenter chaque décision de palette (pourquoi cette teinte, cette harmonie) permet de savoir quoi ajuster précisément plutôt que de tout reconstruire à chaque itération."
+        def_en:"A color identity is never set in stone: it gets refined through real-world usage feedback (user testing, CTA click-through rates, accessibility feedback). Major brands regularly tweak their palette by a few percentage points without changing their perceived identity.",
+        def_ht:"Yon idantite koulè pa janm fikse definitivman : li rafine ak retou itilizasyon reyèl (tès itilizatè, to klik sou yon CTA, retou aksesibilite). Gwo mak yo revize regilyèman palèt yo pou kèk pousantaj san yo pa chanje idantite pèsi yo.",
+        usage:"Documenter chaque décision de palette (pourquoi cette teinte, cette harmonie) permet de savoir quoi ajuster précisément plutôt que de tout reconstruire à chaque itération.",
+        usage_en:"Documenting every palette decision (why this hue, this harmony) makes it possible to adjust precisely rather than rebuilding everything with each iteration.",
+        usage_ht:"Dokimante chak desizyon palèt (poukisa tenn sa a, amoni sa a) pèmèt w konnen sa pou w ajiste presizeman olye pou w rekonstwi tout bagay chak iterasyon."
       }
     ]
   }
@@ -962,10 +1227,10 @@ const EDU_TOPICS = [
 function eduHsl(h,s,l){ return hslToHex(h,s,l); }
 
 const WHEEL_LANDMARKS = [
-  {deg:0,label:'Rouge'},{deg:30,label:'Orangé'},{deg:60,label:'Jaune'},
-  {deg:90,label:'Vert-jaune'},{deg:120,label:'Vert'},{deg:150,label:'Vert-sarcelle'},
-  {deg:180,label:'Cyan'},{deg:210,label:'Azur'},{deg:240,label:'Bleu'},
-  {deg:270,label:'Violet'},{deg:300,label:'Magenta'},{deg:330,label:'Rose'}
+  {deg:0,label:'Rouge',label_en:'Red',label_ht:'Wouj'},{deg:30,label:'Orangé',label_en:'Orange',label_ht:'Oranje'},{deg:60,label:'Jaune',label_en:'Yellow',label_ht:'Jòn'},
+  {deg:90,label:'Vert-jaune',label_en:'Yellow-green',label_ht:'Vèt-jòn'},{deg:120,label:'Vert',label_en:'Green',label_ht:'Vèt'},{deg:150,label:'Vert-sarcelle',label_en:'Teal-green',label_ht:'Vèt-teal'},
+  {deg:180,label:'Cyan',label_en:'Cyan',label_ht:'Syan'},{deg:210,label:'Azur',label_en:'Azure',label_ht:'Azi'},{deg:240,label:'Bleu',label_en:'Blue',label_ht:'Ble'},
+  {deg:270,label:'Violet',label_en:'Violet',label_ht:'Vyolèt'},{deg:300,label:'Magenta',label_en:'Magenta',label_ht:'Majanta'},{deg:330,label:'Rose',label_en:'Pink',label_ht:'Woz'}
 ];
 function nearestWheelName(deg){
   let best = WHEEL_LANDMARKS[0], bestDiff = 999;
@@ -974,13 +1239,13 @@ function nearestWheelName(deg){
     if(diff > 180) diff = 360 - diff;
     if(diff < bestDiff){ bestDiff = diff; best = lm; }
   });
-  return best.label;
+  return T3(best.label_en, best.label, best.label_ht);
 }
 
 function renderEduTabs(){
   const wrap = document.getElementById('eduTabs');
   wrap.innerHTML = EDU_TOPICS.map((t,i)=>
-    `<button class="edu-tab${i===0?' active':''}" data-key="${t.key}">${t.label}</button>`
+    `<button class="edu-tab${i===0?' active':''}" data-key="${t.key}">${T3(t.label_en, t.label, t.label_ht)}</button>`
   ).join('');
   wrap.querySelectorAll('.edu-tab').forEach(btn=>{
     btn.addEventListener('click', ()=>{
@@ -1019,14 +1284,14 @@ function buildColorWheelSVG(size){
   });
   const viewSize = size + 56;
   const off = 28;
-  return `<svg class="wheel-svg" id="colorWheelSvg" width="${viewSize}" height="${viewSize}" viewBox="0 0 ${viewSize} ${viewSize}" data-cx="${off+cx}" data-cy="${off+cy}" data-outer="${outerR}" data-inner="${innerR}" role="slider" aria-label="Roue chromatique interactive" tabindex="0">
+  return `<svg class="wheel-svg" id="colorWheelSvg" width="${viewSize}" height="${viewSize}" viewBox="0 0 ${viewSize} ${viewSize}" data-cx="${off+cx}" data-cy="${off+cy}" data-outer="${outerR}" data-inner="${innerR}" role="slider" aria-label="${T3('Interactive color wheel', 'Roue chromatique interactive', 'Wou koulè entèraktif')}" tabindex="0">
     <g transform="translate(${off},${off})">
       <g id="wheelWedges">${wedges}</g>
       <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="var(--panel)" stroke="#2b2b2b" stroke-width="1"/>
       <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="#2b2b2b" stroke-width="1"/>
       ${ticks}
       ${labels}
-      <text id="wheelCenterLabel" x="${cx}" y="${cy-6}" fill="#ffffff" font-family="Archivo Expanded, sans-serif" font-size="10.5" text-anchor="middle" dominant-baseline="middle">TEINTE</text>
+      <text id="wheelCenterLabel" x="${cx}" y="${cy-6}" fill="#ffffff" font-family="Archivo Expanded, sans-serif" font-size="10.5" text-anchor="middle" dominant-baseline="middle">${T3('HUE','TEINTE','TENN')}</text>
       <text id="wheelCenterDeg" x="${cx}" y="${cy+9}" fill="#8a8a8a" font-family="JetBrains Mono, monospace" font-size="10.5" text-anchor="middle" dominant-baseline="middle"></text>
       <g id="wheelPointer" style="pointer-events:none;">
         <circle id="wheelPointerDot" cx="${cx+outerR}" cy="${cy}" r="7" fill="#ffffff" stroke="#0a0a0a" stroke-width="2"/>
@@ -1036,7 +1301,13 @@ function buildColorWheelSVG(size){
 }
 
 function renderColorWheelBlock(){
-  const legendItems = [
+  const legendItems = LANG==='en' ? [
+    {deg:0,name:'Red'},{deg:60,name:'Yellow'},{deg:120,name:'Green'},
+    {deg:180,name:'Cyan'},{deg:240,name:'Blue'},{deg:300,name:'Magenta'}
+  ] : LANG==='ht' ? [
+    {deg:0,name:'Wouj'},{deg:60,name:'Jòn'},{deg:120,name:'Vèt'},
+    {deg:180,name:'Syan'},{deg:240,name:'Ble'},{deg:300,name:'Majanta'}
+  ] : [
     {deg:0,name:'Rouge'},{deg:60,name:'Jaune'},{deg:120,name:'Vert'},
     {deg:180,name:'Cyan'},{deg:240,name:'Bleu'},{deg:300,name:'Magenta'}
   ];
@@ -1050,31 +1321,31 @@ function renderColorWheelBlock(){
   <div class="edu-wheel-wrap">
     ${buildColorWheelSVG(190)}
     <div class="edu-wheel-legend">
-      <div style="color:var(--ink);font-weight:600;margin-bottom:4px;">Repères sur 360°</div>
+      <div style="color:var(--ink);font-weight:600;margin-bottom:4px;">${T3('Landmarks across 360°', 'Repères sur 360°', 'Repè sou 360°')}</div>
       ${legend}
-      <div class="edu-wheel-note">Clique ou fais glisser sur la roue pour choisir une teinte — ses harmonies se calculent en direct ci-dessous.</div>
+      <div class="edu-wheel-note">${T3('Click or drag on the wheel to pick a hue — its harmonies are computed live below.', 'Clique ou fais glisser sur la roue pour choisir une teinte — ses harmonies se calculent en direct ci-dessous.', 'Klike oswa fè glise sou wou a pou chwazi yon tenn — amoni li yo kalkile an dirèk anba a.')}</div>
     </div>
     <div class="wheel-select-panel" id="wheelSelectPanel">
       <div class="wsp-main">
         <div class="wsp-swatch" id="wspSwatch"></div>
         <div>
-          <div class="wsp-name" id="wspName">Rouge</div>
+          <div class="wsp-name" id="wspName">${T3('Red', 'Rouge', 'Wouj')}</div>
           <div class="wsp-hex" id="wspHex">#000000</div>
           <div class="wsp-deg" id="wspDeg">0°</div>
         </div>
       </div>
       <div class="wsp-rel">
         <div class="wsp-rel-item">
-          <span class="wsp-rel-label">Complémentaire</span>
+          <span class="wsp-rel-label">${T3('Complementary', 'Complémentaire', 'Konplemantè')}</span>
           <span class="wsp-rel-sw" id="wspComp"></span>
         </div>
         <div class="wsp-rel-item">
-          <span class="wsp-rel-label">Analogues</span>
+          <span class="wsp-rel-label">${T3('Analogous', 'Analogues', 'Analòg')}</span>
           <span class="wsp-rel-sw" id="wspAnaA"></span>
           <span class="wsp-rel-sw" id="wspAnaB"></span>
         </div>
         <div class="wsp-rel-item">
-          <span class="wsp-rel-label">Triadique</span>
+          <span class="wsp-rel-label">${T3('Triadic', 'Triadique', 'Triyadik')}</span>
           <span class="wsp-rel-sw" id="wspTriA"></span>
           <span class="wsp-rel-sw" id="wspTriB"></span>
         </div>
@@ -1086,7 +1357,7 @@ function renderColorWheelBlock(){
 function renderEduPanel(key){
   const topic = EDU_TOPICS.find(t=>t.key===key);
   const panel = document.getElementById('eduPanel');
-  let html = `<h2>${topic.title}</h2><p class="lead">${topic.lead}</p>`;
+  let html = `<h2>${T3(topic.title_en, topic.title, topic.title_ht)}</h2><p class="lead">${T3(topic.lead_en, topic.lead, topic.lead_ht)}</p>`;
 
   if(topic.wheel){
     html += renderColorWheelBlock();
@@ -1095,10 +1366,10 @@ function renderEduPanel(key){
   if(topic.blocks){
     html += topic.blocks.map(b=>`
       <div class="edu-block">
-        <h3>${b.h}</h3>
-        ${b.swatches ? `<div class="edu-swatches">${b.swatches.map(sw=>`<div class="sw" style="background:${eduHsl(sw.h,sw.s!=null?sw.s:70,sw.l!=null?sw.l:50)}" title="${sw.label||''}"></div>`).join('')}</div>` : ''}
-        <p class="def">${b.def}</p>
-        <div class="edu-usage"><b>En pratique —</b> ${b.usage}</div>
+        <h3>${T3(b.h_en, b.h, b.h_ht)}</h3>
+        ${b.swatches ? `<div class="edu-swatches">${b.swatches.map(sw=>`<div class="sw" style="background:${eduHsl(sw.h,sw.s!=null?sw.s:70,sw.l!=null?sw.l:50)}" title="${T3(sw.label_en, sw.label, sw.label_ht)||''}"></div>`).join('')}</div>` : ''}
+        <p class="def">${T3(b.def_en, b.def, b.def_ht)}</p>
+        <div class="edu-usage"><b>${T3('In practice —', 'En pratique —', 'An pratik —')}</b> ${T3(b.usage_en, b.usage, b.usage_ht)}</div>
       </div>`).join('');
   }
 
@@ -1110,10 +1381,10 @@ function renderEduPanel(key){
         : h.angles.map(a=>`<div class="sw" style="background:${eduHsl(baseHue+a,68,50)}"></div>`).join('');
       return `
       <div class="edu-block">
-        <h3>${h.name}</h3>
+        <h3>${T3(h.name_en, h.name, h.name_ht)}</h3>
         <div class="edu-swatches">${swatches}</div>
-        <p class="def">${h.def}</p>
-        <div class="edu-usage"><b>En pratique —</b> ${h.use}</div>
+        <p class="def">${T3(h.def_en, h.def, h.def_ht)}</p>
+        <div class="edu-usage"><b>${T3('In practice —', 'En pratique —', 'An pratik —')}</b> ${T3(h.use_en, h.use, h.use_ht)}</div>
       </div>`;
     }).join('');
   }
@@ -1123,9 +1394,9 @@ function renderEduPanel(key){
       <div class="edu-vibe-item">
         <span class="dot" style="background:${eduHsl(v.h,68,50)}"></span>
         <div>
-          <h4>${v.name}</h4>
-          <p>${v.vibe}</p>
-          <p class="use">Usage : ${v.use}</p>
+          <h4>${T3(v.name_en, v.name, v.name_ht)}</h4>
+          <p>${T3(v.vibe_en, v.vibe, v.vibe_ht)}</p>
+          <p class="use">${T3('Use', 'Usage', 'Itilizasyon')} : ${T3(v.use_en, v.use, v.use_ht)}</p>
         </div>
       </div>`).join('')}</div>`;
   }
@@ -1336,7 +1607,11 @@ function genSchemeQuestion(){
     triadique:(h)=>[h,h+120,h+240],
     monochrome:(h)=>[h,h,h]
   };
-  const names = {complementaire:'Complémentaire', analogue:'Analogue', triadique:'Triadique', monochrome:'Monochromatique'};
+  const names = LANG==='en'
+    ? {complementaire:'Complementary', analogue:'Analogous', triadique:'Triadic', monochrome:'Monochromatic'}
+    : LANG==='ht'
+    ? {complementaire:'Konplemantè', analogue:'Analòg', triadique:'Triyadik', monochrome:'Monokwomatik'}
+    : {complementaire:'Complémentaire', analogue:'Analogue', triadique:'Triadique', monochrome:'Monochromatique'};
   const keys = Object.keys(schemeDefs);
   const answer = pick(keys);
   const base = pickVariedHue();
@@ -1352,7 +1627,29 @@ function genHexQuestion(){
   return {type:'hexguess', hex};
 }
 function genFamilyQuestion(){
-  const usageBank = [
+  const usageBank = LANG==='en' ? [
+    {usage:"Finance, B2B tech, institutions", range:[210,250]},
+    {usage:"Health, organic, environment", range:[100,150]},
+    {usage:"CTAs, promos, food brands", range:[0,10]},
+    {usage:"Startups, youth, craftsmanship", range:[20,35]},
+    {usage:"Beauty, luxury, spirituality", range:[270,290]},
+    {usage:"Wellness, mental health, premium SaaS", range:[165,180]},
+    {usage:"Alerts, mobility, solar energy", range:[45,58]},
+    {usage:"Fashion, entertainment, disruptive brands", range:[310,325]},
+    {usage:"Education, legal, AI, discreet luxury", range:[255,272]},
+    {usage:"Tech, cloud, communication, data", range:[190,208]}
+  ] : LANG==='ht' ? [
+    {usage:"Finans, tech B2B, enstitisyon", range:[210,250]},
+    {usage:"Sante, bio, anviwònman", range:[100,150]},
+    {usage:"CTA, pwomosyon, mak manje", range:[0,10]},
+    {usage:"Startup, jenès, atizana", range:[20,35]},
+    {usage:"Bote, liks, espirityalite", range:[270,290]},
+    {usage:"Wellness, sante mantal, SaaS gwo klas", range:[165,180]},
+    {usage:"Alèt, mobilite, enèji solè", range:[45,58]},
+    {usage:"Mòd, divètisman, mak disriptif", range:[310,325]},
+    {usage:"Edikasyon, jiridik, IA, liks diskrè", range:[255,272]},
+    {usage:"Tech, cloud, kominikasyon, done", range:[190,208]}
+  ] : [
     {usage:"Finance, tech B2B, institutions", range:[210,250]},
     {usage:"Santé, bio, environnement", range:[100,150]},
     {usage:"CTA, promos, marques alimentaires", range:[0,10]},
@@ -1418,7 +1715,8 @@ async function loadLeaderboard(){
           .from('leaderboard')
           .select('player_name, level_key, level_title, score, accuracy, max_streak, created_at')
           .order('score', { ascending:false })
-          .limit(15),
+          .order('created_at', { ascending:true })
+          .limit(200),
         6000, TIMEOUT
       );
       if(result === TIMEOUT) throw new Error('timeout');
@@ -1434,6 +1732,20 @@ async function loadLeaderboard(){
     }
   }
   return loadLocalLeaderboard();
+}
+/* Filtre un classement brut sur un mode donné, en ne gardant que le
+   meilleur score de chaque joueur (le pseudo n'est pas garanti unique
+   côté serveur, donc on déduplique ici pour l'affichage). */
+function filterLeaderboardByMode(list, levelKey){
+  const byPlayer = new Map();
+  list.filter(e=>e.level===levelKey).forEach(e=>{
+    const key = (e.playerName||'').trim().toLowerCase() || Math.random();
+    const existing = byPlayer.get(key);
+    if(!existing || e.score>existing.score || (e.score===existing.score && new Date(e.date||0) < new Date(existing.date||0))){
+      byPlayer.set(key, e);
+    }
+  });
+  return [...byPlayer.values()].sort((a,b)=> b.score-a.score || new Date(a.date||0)-new Date(b.date||0));
 }
 const SUBMIT_SCORE_URL = SUPABASE_URL + '/functions/v1/submit-score';
 async function submitScoreSecure(entry){
@@ -1459,7 +1771,7 @@ async function submitScoreSecure(entry){
     clearTimeout(timer);
   }
   const data = await res.json().catch(()=>({}));
-  if(!res.ok || data.error) throw new Error(data.error || 'échec de validation du score');
+  if(!res.ok || data.error) throw new Error(data.error || T3('score validation failed', 'échec de validation du score', 'validasyon eskò echwe'));
   return data;
 }
 async function saveLeaderboardEntry(entry){
@@ -1475,26 +1787,53 @@ async function saveLeaderboardEntry(entry){
   }
   await saveLocalLeaderboardEntry(entry);
 }
-async function renderLeaderboard(){
+let lbFilterKey = null; // mode currently shown in the leaderboard, set on first render
+let lbFullCache = null; // last fetched raw list, reused when only the mode filter changes
+
+async function renderLeaderboard(forceRefetch){
   const wrap = document.getElementById('lbWrap');
-  wrap.innerHTML = '<div class="lb-empty">CHARGEMENT DU CLASSEMENT…</div>';
-  const list = await withTimeout(loadLeaderboard(), 6000, []);
-  if(!list || list.length===0){
-    wrap.innerHTML = '<div class="lb-empty">Aucune partie enregistrée. Joue une première manche pour apparaître ici.</div>';
+  const filterWrap = document.getElementById('lbFilterWrap');
+  if(lbFilterKey===null) lbFilterKey = LEVELS[0].key;
+
+  if(filterWrap){
+    filterWrap.innerHTML = LEVELS.map(lvl=>
+      `<button class="lb-filter-btn${lvl.key===lbFilterKey?' active':''}" data-level="${lvl.key}">${lvlTitle(lvl)}</button>`
+    ).join('');
+    filterWrap.querySelectorAll('.lb-filter-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(btn.dataset.level===lbFilterKey) return;
+        lbFilterKey = btn.dataset.level;
+        renderLeaderboard(false);
+      });
+    });
+  }
+
+  if(!lbFullCache || forceRefetch){
+    wrap.innerHTML = `<div class="lb-empty">${T3('LOADING LEADERBOARD…', 'CHARGEMENT DU CLASSEMENT…', 'AP CHAJE KLASMAN AN…')}</div>`;
+    lbFullCache = await loadLeaderboard();
+  }
+
+  const filtered = filterLeaderboardByMode(lbFullCache||[], lbFilterKey);
+  if(filtered.length===0){
+    wrap.innerHTML = `<div class="lb-empty">${T3('No games recorded yet in this mode. Play a first round to appear here.', 'Aucune partie enregistrée dans ce mode. Joue une première manche pour apparaître ici.', 'Poko gen okenn pati anrejistre nan mod sa a. Jwe yon premye manch pou parèt isit la.')}</div>`;
     return;
   }
-  const top = list.slice(0,8);
-  let rows = top.map((e,i)=>`
-    <tr>
+  const top = filtered.slice(0,8);
+  const myName = (profile.name||'').trim().toLowerCase();
+  let rows = top.map((e,i)=>{
+    const isMe = myName && (e.playerName||'').trim().toLowerCase()===myName;
+    return `
+    <tr class="${isMe?'lb-me':''}">
       <td class="rank${i===0?' gold':''}">${i+1}</td>
-      <td>${escapeHtml(e.playerName||profile.name||'—')} · ${escapeHtml(e.levelTitle||'—')}</td>
+      <td>${escapeHtml(e.playerName||'—')}</td>
       <td class="score">${e.score}</td>
       <td>${e.accuracy!==undefined?e.accuracy+'%':'—'}</td>
       <td>${e.maxStreak!==undefined?e.maxStreak:'—'}</td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
   wrap.innerHTML = `
     <div class="lb-scroll"><table class="lb">
-      <thead><tr><th>#</th><th>Joueur · Mode</th><th>Score</th><th>Précision</th><th>Série max</th></tr></thead>
+      <thead><tr><th>#</th><th>${T3('Player', 'Joueur', 'Jwè')}</th><th>Score</th><th>${T3('Accuracy', 'Précision', 'Presizyon')}</th><th>${T3('Best streak', 'Série max', 'Pi bon seri')}</th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div>`;
 }
@@ -1508,7 +1847,7 @@ function renderXpPanel(){
   const xp = profile.xp||0;
   const next = xpForNextLevel(xp);
   const unlockedList = ACHIEVEMENTS.filter(a=>xp>=a.threshold);
-  const currentTitle = unlockedList.length ? unlockedList[unlockedList.length-1].label : 'Débutant curieux';
+  const currentTitle = unlockedList.length ? achLabel(unlockedList[unlockedList.length-1]) : t('beginnerTitle');
   document.getElementById('xpLevelName').textContent = currentTitle;
   document.getElementById('xpCount').textContent = xp+' XP';
   const prevThreshold = unlockedList.length ? unlockedList[unlockedList.length-1].threshold : 0;
@@ -1516,12 +1855,12 @@ function renderXpPanel(){
   const pct = next ? Math.min(100, Math.round(((xp-prevThreshold)/(nextThreshold-prevThreshold))*100)) : 100;
   document.getElementById('xpFill').style.width = pct+'%';
   document.getElementById('xpNextText').textContent = next
-    ? `${next.threshold - xp} XP avant « ${next.label} »`
-    : 'Tous les paliers sont débloqués.';
+    ? T3(`${next.threshold - xp} XP before “${achLabel(next)}”`, `${next.threshold - xp} XP avant « ${achLabel(next)} »`, `${next.threshold - xp} XP anvan « ${achLabel(next)} »`)
+    : T3('All tiers unlocked.', 'Tous les paliers sont débloqués.', 'Tout nivo yo debloke.');
   const achWrap = document.getElementById('achList');
   achWrap.innerHTML = ACHIEVEMENTS.map(a=>{
     const unlocked = xp>=a.threshold;
-    return `<span class="badge${unlocked?' unlocked':''}"><span class="ic">${a.icon}</span>${a.label}</span>`;
+    return `<span class="badge${unlocked?' unlocked':''}"><span class="ic">${a.icon}</span>${achLabel(a)}</span>`;
   }).join('');
 }
 
@@ -1596,13 +1935,13 @@ async function liveCheckName(val){
   const token = ++nameCheckToken;
   const lower = val.toLowerCase();
   if(nameCache){
-    setNameStatus(nameCache.has(lower) ? 'taken' : 'ok', nameCache.has(lower) ? 'Ce nom est déjà pris.' : 'Disponible.');
+    setNameStatus(nameCache.has(lower) ? 'taken' : 'ok', nameCache.has(lower) ? T3('This name is already taken.','Ce nom est déjà pris.','Non sa a deja pran.') : T3('Available.','Disponible.','Disponib.'));
     return;
   }
-  setNameStatus('checking', 'Vérification…');
+  setNameStatus('checking', T3('Checking…','Vérification…','Verifikasyon…'));
   const cache = await withTimeout(warmNameCache(), 4000, new Set());
   if(token !== nameCheckToken) return; // input changed since — drop stale result
-  setNameStatus(cache.has(lower) ? 'taken' : 'ok', cache.has(lower) ? 'Ce nom est déjà pris.' : 'Disponible.');
+  setNameStatus(cache.has(lower) ? 'taken' : 'ok', cache.has(lower) ? T3('This name is already taken.','Ce nom est déjà pris.','Non sa a deja pran.') : T3('Available.','Disponible.','Disponib.'));
 }
 
 nameInput.addEventListener('input', ()=>{
@@ -1622,12 +1961,12 @@ async function confirmName(){
   let cache = nameCache;
   if(!cache){
     nameSubmit.disabled = true;
-    setNameStatus('checking', 'Vérification…');
+    setNameStatus('checking', T3('Checking…','Vérification…','Verifikasyon…'));
     cache = await withTimeout(warmNameCache(), 4000, new Set());
     nameSubmit.disabled = false;
   }
   if(cache.has(lower)){
-    setNameStatus('taken', 'Ce nom est déjà pris — choisis-en un autre.');
+    setNameStatus('taken', T3('This name is already taken — choose another one.','Ce nom est déjà pris — choisis-en un autre.','Non sa a deja pran — chwazi yon lòt.'));
     return;
   }
   profile.name = val.slice(0,20);
@@ -1668,7 +2007,7 @@ document.getElementById('statsBtn').addEventListener('click', ()=>{
   document.getElementById('startScreen').classList.add('hidden');
   document.getElementById('statsScreen').classList.remove('hidden');
   renderXpPanel();
-  renderLeaderboard();
+  renderLeaderboard(true);
 });
 document.getElementById('statsHomeBtn').addEventListener('click', ()=>{
   document.getElementById('statsScreen').classList.add('hidden');
@@ -1687,19 +2026,19 @@ async function verifyUploadedTicket(){
   sfxClick();
   const file = fileInput.files && fileInput.files[0];
   if(!file){
-    resultWrap.innerHTML = `<div class="verify-status fail">✗ Choisis d'abord un fichier PNG de ticket.</div>`;
+    resultWrap.innerHTML = `<div class="verify-status fail">${T3("✗ First choose a ticket PNG file.", "✗ Choisis d'abord un fichier PNG de ticket.", "✗ Dabò chwazi yon fichye PNG tikè.")}</div>`;
     return;
   }
   let raw = null;
   try{ raw = await readTicketMetadataFromPng(file); }catch(err){ raw = null; }
   if(!raw){
-    resultWrap.innerHTML = `<div class="verify-status fail">✗ Aucune donnée de ticket trouvée dans ce PNG — le fichier a peut-être été recompressé, retouché, ou n'est pas un ticket KROMATIME.</div>`;
+    resultWrap.innerHTML = `<div class="verify-status fail">${T3("✗ No ticket data found in this PNG — the file may have been recompressed, edited, or isn't a KROMATIME ticket.", "✗ Aucune donnée de ticket trouvée dans ce PNG — le fichier a peut-être été recompressé, retouché, ou n'est pas un ticket KROMATIME.", "✗ Pa gen done tikè jwenn nan PNG sa a — fichye a ka rekonprese, modifye, oswa se pa yon tikè KROMATIME.")}</div>`;
     return;
   }
   let payload = null;
   try{ payload = JSON.parse(raw); }catch(err){ payload = null; }
   if(!payload){
-    resultWrap.innerHTML = `<div class="verify-status fail">✗ Données de ticket illisibles dans ce fichier.</div>`;
+    resultWrap.innerHTML = `<div class="verify-status fail">${T3("✗ Ticket data in this file is unreadable.", "✗ Données de ticket illisibles dans ce fichier.", "✗ Done tikè nan fichye sa a pa lizib.")}</div>`;
     return;
   }
   const parsed = {
@@ -1710,17 +2049,17 @@ async function verifyUploadedTicket(){
   const expectedCode = await computeTicketCode(parsed);
   const match = expectedCode === parsed.code;
   resultWrap.innerHTML = `
-    <div class="verify-status ${match?'ok':'fail'}">${match ? '✓ TICKET AUTHENTIQUE — le code correspond aux données.' : '✗ NE CORRESPOND PAS — ces données ne correspondent pas au code fourni.'}</div>
+    <div class="verify-status ${match?'ok':'fail'}">${match ? T3('✓ AUTHENTIC TICKET — the code matches the data.', '✓ TICKET AUTHENTIQUE — le code correspond aux données.', '✓ TIKÈ OTANTIK — kòd la koresponn ak done yo.') : T3("✗ MISMATCH — this data does not match the provided code.", '✗ NE CORRESPOND PAS — ces données ne correspondent pas au code fourni.', '✗ PA KORESPONN — done sa yo pa koresponn ak kòd la bay la.')}</div>
     <div class="verify-fields">
-      <div><span>Joueur</span><span>${escapeHtml(parsed.playerName||'—')}</span></div>
-      <div><span>Mode</span><span>${escapeHtml(parsed.levelTitle||'—')}</span></div>
+      <div><span>${T3('Player','Joueur','Jwè')}</span><span>${escapeHtml(parsed.playerName||'—')}</span></div>
+      <div><span>${T3('Mode','Mode','Mod')}</span><span>${escapeHtml(parsed.levelTitle||'—')}</span></div>
       <div><span>Date</span><span>${escapeHtml(parsed.dateStr||'—')}</span></div>
-      <div><span>Score final</span><span>${parsed.finalScore} pts</span></div>
-      <div><span>Précision</span><span>${parsed.pct}%</span></div>
-      <div><span>Meilleure série</span><span>${parsed.maxStreak}</span></div>
-      <div><span>XP gagné</span><span>+${parsed.xpGained}</span></div>
-      <div><span>Code fourni</span><span>${parsed.code}</span></div>
-      <div><span>Code recalculé</span><span>${expectedCode}</span></div>
+      <div><span>${T3('Final score','Score final','Eskò final')}</span><span>${parsed.finalScore} pts</span></div>
+      <div><span>${T3('Accuracy','Précision','Presizyon')}</span><span>${parsed.pct}%</span></div>
+      <div><span>${T3('Best streak','Meilleure série','Pi bon seri')}</span><span>${parsed.maxStreak}</span></div>
+      <div><span>${T3('XP earned','XP gagné','XP genyen')}</span><span>+${parsed.xpGained}</span></div>
+      <div><span>${T3('Provided code','Code fourni','Kòd bay la')}</span><span>${parsed.code}</span></div>
+      <div><span>${T3('Recomputed code','Code recalculé','Kòd rekalkile')}</span><span>${expectedCode}</span></div>
     </div>`;
 }
 
@@ -1779,9 +2118,9 @@ function updateHud(){
   document.getElementById('hudScore').textContent = session ? session.score : 0;
   document.getElementById('hudStreak').textContent = session ? session.streak : 0;
   if(session && session.mode==='endless'){
-    document.getElementById('hudQCard').innerHTML = '<div class="label">Vies</div><div class="value">'+'●'.repeat(session.lives)+'○'.repeat(3-session.lives)+'</div>';
+    document.getElementById('hudQCard').innerHTML = '<div class="label">'+t('lives')+'</div><div class="value">'+'●'.repeat(session.lives)+'○'.repeat(3-session.lives)+'</div>';
   } else if(session){
-    document.getElementById('hudQCard').innerHTML = '<div class="label">Question</div><div class="value" id="hudQ">'+Math.min(session.idx+1,session.rounds.length)+'/'+session.rounds.length+'</div>';
+    document.getElementById('hudQCard').innerHTML = '<div class="label">'+t('question')+'</div><div class="value" id="hudQ">'+Math.min(session.idx+1,session.rounds.length)+'/'+session.rounds.length+'</div>';
   }
   const card = document.getElementById('streakCard');
   card.classList.toggle('hot', !!(session && session.streak>=3));
@@ -1794,8 +2133,8 @@ function renderLevelSelect(){
     const card=document.createElement('div');
     card.className='level-card'+(i===currentLevelIdx?' active':'');
     const best = bestScores[lvl.key];
-    const meta = lvl.endless ? '3 VIES' : `${lvl.time}/QUESTION`;
-    card.innerHTML=`${best!==undefined?`<span class="best">MEILLEUR ${best}</span>`:''}<div class="num">MODE ${i+1} · ${meta}</div><h3>${lvl.title}</h3><p>${lvl.desc}</p>`;
+    const meta = lvl.endless ? `3 ${t('lives')}` : `${lvl.time}${t('perQuestion')}`;
+    card.innerHTML=`${best!==undefined?`<span class="best">${t('best')} ${best}</span>`:''}<div class="num">${t('mode')} ${i+1} · ${meta}</div><h3>${lvlTitle(lvl)}</h3><p>${lvlDesc(lvl)}</p>`;
     card.addEventListener('click',()=>{ sfxClick(); enterPlayScreen(); startLevel(i); });
     wrap.appendChild(card);
   });
@@ -1864,13 +2203,13 @@ function onTimeout(){
       compare.innerHTML = `
         <div class="hc-item">
           <div class="chip" style="border-style:dashed;"></div>
-          <div class="hc-label">Ta réponse</div>
-          <div class="hc-code">${raw ? raw.toUpperCase() : '— (temps écoulé)'}</div>
+          <div class="hc-label">${T3('Your answer','Ta réponse','Repons ou')}</div>
+          <div class="hc-code">${raw ? raw.toUpperCase() : T3('— (time up)','— (temps écoulé)','— (tan fini)')}</div>
         </div>
         <div class="hc-arrow">→</div>
         <div class="hc-item">
           <div class="chip" style="background:${q.hex}"></div>
-          <div class="hc-label">Couleur exacte</div>
+          <div class="hc-label">${T3('Exact color','Couleur exacte','Koulè egzat')}</div>
           <div class="hc-code">${q.hex.toUpperCase()}</div>
         </div>`;
       compare.classList.add('show');
@@ -1879,7 +2218,7 @@ function onTimeout(){
   const fb = document.getElementById('feedback');
   if(fb){
     fb.classList.add('show','bad');
-    fb.innerHTML = `Temps écoulé. Bonne réponse : <b>${q.hex ? q.hex.toUpperCase() : ((q.type==='complement'||q.type==='triadic')? Math.round(q.correct)+'°' : q.correct)}</b>`;
+    fb.innerHTML = `${t('timeUp')} <b>${q.hex ? q.hex.toUpperCase() : ((q.type==='complement'||q.type==='triadic')? Math.round(q.correct)+'°' : q.correct)}</b>`;
   }
   document.getElementById('nextBtn').style.display='inline-block';
 }
@@ -1907,7 +2246,7 @@ function renderQuestion(){
     const baseHex = hslToHex(q.base,qs,ql);
     trackPaletteHexes([baseHex, hslToHex(q.correct,qs,ql)]);
     body = `
-      <div class="question">Quelle couleur est la <span>complémentaire</span> de celle-ci ?</div>
+      <div class="question" data-i18n-key="qComplement">${t('qComplement')}</div>
       <div class="swatch-display"><div class="chip" style="background:${baseHex}"></div></div>
       <div class="options" id="optWrap">
         ${q.options.map(h=>`<button class="opt-btn" data-val="${h}"><span class="opt-swatch" style="background:${hslToHex(h,qs,ql)}"></span>${Math.round(h)}°</button>`).join('')}
@@ -1917,7 +2256,7 @@ function renderQuestion(){
     const baseHex = hslToHex(q.base,qs,ql), secondHex = hslToHex(q.second,qs,ql);
     trackPaletteHexes([baseHex, secondHex, hslToHex(q.correct,qs,ql)]);
     body = `
-      <div class="question">Quelle couleur complète ce <span>trio triadique</span> (120° entre chaque teinte) ?</div>
+      <div class="question" data-i18n-key="qTriadic">${t('qTriadic')}</div>
       <div class="swatch-display">
         <div class="chip" style="background:${baseHex}"></div>
         <div class="chip" style="background:${secondHex}"></div>
@@ -1928,7 +2267,7 @@ function renderQuestion(){
   } else if(q.type==='scheme'){
     trackPaletteHexes(q.colors);
     body = `
-      <div class="question">Quel type d'<span>harmonie chromatique</span> ces couleurs forment-elles ?</div>
+      <div class="question" data-i18n-key="qScheme">${t('qScheme')}</div>
       <div class="swatch-display">${q.colors.map(c=>`<div class="chip" style="background:${c}"></div>`).join('')}</div>
       <div class="options" id="optWrap">
         ${q.options.map(o=>`<button class="opt-btn" data-val="${o}">${o}</button>`).join('')}
@@ -1936,37 +2275,37 @@ function renderQuestion(){
   } else if(q.type==='hexguess'){
     trackPaletteHexes([q.hex]);
     body = `
-      <div class="question">Estime le code <span>HEX</span> de cette couleur (tolérance ±20 par canal RGB)</div>
+      <div class="question" data-i18n-key="qHexguess">${t('qHexguess')}</div>
       <div class="swatch-display"><div class="chip" style="background:${q.hex}"></div></div>
       <div class="hexguess">
         <input type="text" id="hexInput" class="allow-select" maxlength="7" placeholder="#RRGGBB" autocomplete="off">
-        <button class="submit-btn" id="hexSubmit">VALIDER</button>
+        <button class="submit-btn" id="hexSubmit" data-i18n-key="validate">${t('validate')}</button>
       </div>
       <div class="hex-compare" id="hexCompare"></div>`;
   } else if(q.type==='family'){
     trackPaletteHexes([q.hex]);
     body = `
-      <div class="question">Pour quel <span>usage branding</span> cette couleur est-elle la plus adaptée ?</div>
+      <div class="question" data-i18n-key="qFamily">${t('qFamily')}</div>
       <div class="swatch-display"><div class="chip" style="background:${q.hex}"></div></div>
       <div class="options" id="optWrap" style="grid-template-columns:1fr;">
         ${q.options.map(o=>`<button class="opt-btn" data-val="${o.replace(/"/g,'&quot;')}">${o}</button>`).join('')}
       </div>`;
   }
 
-  const rightLabel = session.mode==='endless' ? `MANCHE ${session.idx+1}` : `Q${session.idx+1} / ${session.rounds.length}`;
+  const rightLabel = session.mode==='endless' ? `${t('round')} ${session.idx+1}` : `Q${session.idx+1} / ${session.rounds.length}`;
   const bottomLeft = session.mode==='endless'
     ? `<div class="lives-row">${'●'.repeat(session.lives)}${'○'.repeat(3-session.lives)}</div>`
     : `<div class="progress-bar"><div class="progress-bar-fill" style="width:${pctDone}%"></div></div>`;
 
   panel.innerHTML = `
-    <div class="panel-top"><span>${lvl.title}</span><span>${rightLabel}</span></div>
+    <div class="panel-top"><span>${lvlTitle(lvl)}</span><span>${rightLabel}</span></div>
     <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
     <div class="panel-body">
       ${body}
       <div class="feedback" id="feedback"></div>
       <div class="next-row">
         ${bottomLeft}
-        <button class="next-btn" id="nextBtn" style="display:none;">SUIVANT →</button>
+        <button class="next-btn" id="nextBtn" style="display:none;" data-i18n-key="next">${t('next')}</button>
       </div>
     </div>
   `;
@@ -2030,7 +2369,7 @@ function submitOption(btn, q){
   });
   const fb = document.getElementById('feedback');
   fb.classList.add('show', correct?'good':'bad');
-  fb.innerHTML = correct ? 'Exact.' : `La bonne réponse était : <b>${correctVal}${(q.type==='complement'||q.type==='triadic')?'°':''}</b>`;
+  fb.innerHTML = correct ? t('exact') : `${t('correctAnswerWas')} <b>${correctVal}${(q.type==='complement'||q.type==='triadic')?'°':''}</b>`;
   markAnswer(correct);
 }
 
@@ -2046,30 +2385,32 @@ function submitHex(q){
     const actual = hexToRgb(q.hex);
     const diff = Math.abs(guess[0]-actual[0])+Math.abs(guess[1]-actual[1])+Math.abs(guess[2]-actual[2]);
     correct = diff <= 60;
-    diffText = ` (écart RGB total : ${diff})`;
+    diffText = T3(` (total RGB gap: ${diff})`, ` (écart RGB total : ${diff})`, ` (ekar RGB total : ${diff})`);
   }
   document.getElementById('hexInput').disabled=true;
   document.getElementById('hexSubmit').disabled=true;
   const fb = document.getElementById('feedback');
   fb.classList.add('show', correct?'good':'bad');
-  fb.innerHTML = correct
-    ? `Bien vu.${diffText} Code exact : <b>${q.hex.toUpperCase()}</b>`
-    : `Trop loin.${diffText} Code exact : <b>${q.hex.toUpperCase()}</b>`;
+  fb.innerHTML = T3(
+    correct ? `Good eye.${diffText} Exact code: <b>${q.hex.toUpperCase()}</b>` : `Too far off.${diffText} Exact code: <b>${q.hex.toUpperCase()}</b>`,
+    correct ? `Bien vu.${diffText} Code exact : <b>${q.hex.toUpperCase()}</b>` : `Trop loin.${diffText} Code exact : <b>${q.hex.toUpperCase()}</b>`,
+    correct ? `Bon je.${diffText} Kòd egzat : <b>${q.hex.toUpperCase()}</b>` : `Twò lwen.${diffText} Kòd egzat : <b>${q.hex.toUpperCase()}</b>`
+  );
 
   const compare = document.getElementById('hexCompare');
   if(compare){
     const shownGuessColor = validFormat ? val : '#000000';
-    const guessLabel = validFormat ? val.toUpperCase() : (raw ? raw.toUpperCase()+' (invalide)' : '—');
+    const guessLabel = validFormat ? val.toUpperCase() : (raw ? raw.toUpperCase()+T3(' (invalid)',' (invalide)',' (envalid)') : '—');
     compare.innerHTML = `
       <div class="hc-item">
         <div class="chip" style="background:${shownGuessColor}${validFormat?'':';border-style:dashed;'}"></div>
-        <div class="hc-label">Ta réponse</div>
+        <div class="hc-label">${T3('Your answer','Ta réponse','Repons ou')}</div>
         <div class="hc-code">${guessLabel}</div>
       </div>
       <div class="hc-arrow">→</div>
       <div class="hc-item">
         <div class="chip" style="background:${q.hex}"></div>
-        <div class="hc-label">Couleur exacte</div>
+        <div class="hc-label">${T3('Exact color','Couleur exacte','Koulè egzat')}</div>
         <div class="hc-code">${q.hex.toUpperCase()}</div>
       </div>`;
     compare.classList.add('show');
@@ -2099,10 +2440,10 @@ async function renderResult(){
   const isNewBest = bestScores[lvl.key]===undefined || finalScore>bestScores[lvl.key];
   if(isNewBest) bestScores[lvl.key]=finalScore;
 
-  let msg = "Continue à t'entraîner.";
-  if(pct>=90) msg = "Œil de coloriste confirmé.";
-  else if(pct>=70) msg = "Très solide, presque expert.";
-  else if(pct>=50) msg = "Bonne base, encore un peu de pratique.";
+  let msg = T3("Keep practicing.", "Continue à t'entraîner.", "Kontinye pratike.");
+  if(pct>=90) msg = T3("Confirmed colorist's eye.", "Œil de coloriste confirmé.", "Je koloris konfime.");
+  else if(pct>=70) msg = T3("Very solid, nearly expert.", "Très solide, presque expert.", "Trè solid, prèske ekspè.");
+  else if(pct>=50) msg = T3("Good foundation, a bit more practice.", "Bonne base, encore un peu de pratique.", "Bon baz, yon ti kras plis pratik ankò.");
 
   const xpGained = Math.round(finalScore * (0.6 + (pct/100)*0.4));
   const prevXp = profile.xp||0;
@@ -2112,33 +2453,33 @@ async function renderResult(){
   saveProfile(); // en arrière-plan — ne doit jamais retarder l'affichage du résultat
   if(newlyUnlocked.length){ sfxUnlock(); vibrate([30,50,30,50,60]); }
 
-  const endlessLabel = session.mode==='endless' ? '<div>MANCHES<b>'+session.idx+'</b></div>' : `<div>BONNES RÉP.<b>${session.correctCount}/${total}</b></div>`;
+  const endlessLabel = session.mode==='endless' ? '<div>'+t('roundsLabel')+'<b>'+session.idx+'</b></div>' : `<div>${t('correctAns')}<b>${session.correctCount}/${total}</b></div>`;
 
   panel.innerHTML = `
-    <div class="panel-top"><span>${lvl.title}</span><span>TERMINÉ</span></div>
+    <div class="panel-top"><span>${lvlTitle(lvl)}</span><span>${t('finished')}</span></div>
     <div class="result-screen">
-      <div class="eyebrow">Résultat de session</div>
+      <div class="eyebrow">${t('sessionResult')}</div>
       <div class="big-score">${finalScore} pts</div>
       <div class="stat-row">
         ${endlessLabel}
-        <div>MEILLEURE SÉRIE<b>${session.maxStreak}</b></div>
-        <div>PRÉCISION<b>${pct}%</b></div>
+        <div>${t('bestStreak')}<b>${session.maxStreak}</b></div>
+        <div>${t('accuracy')}<b>${pct}%</b></div>
       </div>
       <p class="msg">${msg}</p>
       <p class="xpgain">+${xpGained} XP → total ${newXp} XP</p>
-      ${isNewBest ? '<p class="newbest">Nouveau record personnel pour ce mode</p>' : ''}
-      ${newlyUnlocked.map(a=>`<div class="unlock-toast">${a.icon} Réussite débloquée — ${a.label}</div>`).join('')}
+      ${isNewBest ? `<p class="newbest">${t('newBest')}</p>` : ''}
+      ${newlyUnlocked.map(a=>`<div class="unlock-toast">${a.icon} ${t('achUnlocked')} ${achLabel(a)}</div>`).join('')}
 
       <div class="result-actions">
-        <button class="retry-btn" id="retryBtn">REJOUER</button>
-        <button class="home-btn" id="homeBtn2">CHANGER DE MODE</button>
+        <button class="retry-btn" id="retryBtn">${t('replay')}</button>
+        <button class="home-btn" id="homeBtn2">${t('changeMode')}</button>
       </div>
 
       <div class="result-exports">
-        <div class="result-exports-title">Conserver cette session</div>
+        <div class="result-exports-title">${t('keepSession')}</div>
         <div class="result-exports-row">
-          <button class="ticket-trigger" id="shareTicketBtn">PARTAGER LE TICKET</button>
-          <button class="palette-trigger" id="downloadPaletteBtn" ${session.paletteHexes.length?'':'disabled'}>TÉLÉCHARGER LA PALETTE (${session.paletteHexes.length})</button>
+          <button class="ticket-trigger" id="shareTicketBtn">${t('shareTicket')}</button>
+          <button class="palette-trigger" id="downloadPaletteBtn" ${session.paletteHexes.length?'':'disabled'}>${t('downloadPalette')} (${session.paletteHexes.length})</button>
         </div>
       </div>
     </div>`;
@@ -2147,20 +2488,20 @@ async function renderResult(){
   document.getElementById('downloadPaletteBtn').addEventListener('click', (e)=>{
     const now = new Date();
     downloadPaletteImage(session.paletteHexes, {
-      playerName: profile.name, levelTitle: lvl.title, levelKey: lvl.key, date: now,
-      dateStr: now.toLocaleDateString('fr-FR') + ' ' + now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})
+      playerName: profile.name, levelTitle: lvlTitle(lvl), levelKey: lvl.key, date: now,
+      dateStr: now.toLocaleDateString(LANG==='en'?'en-GB':LANG==='ht'?'ht-HT':'fr-FR') + ' ' + now.toLocaleTimeString(LANG==='en'?'en-GB':LANG==='ht'?'ht-HT':'fr-FR',{hour:'2-digit',minute:'2-digit'})
     }, e.currentTarget);
   });
   document.getElementById('shareTicketBtn').addEventListener('click', async ()=>{
     const now = new Date();
     const d = {
       playerName: profile.name,
-      levelTitle: lvl.title,
+      levelTitle: lvlTitle(lvl),
       total, correctCount: session.correctCount, pct,
       maxStreak: session.maxStreak, finalScore, xpGained,
       mode: session.mode, date: now,
       ref: now.getTime().toString(36).toUpperCase(),
-      dateStr: now.toLocaleDateString('fr-FR') + ' ' + now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})
+      dateStr: now.toLocaleDateString(LANG==='en'?'en-GB':LANG==='ht'?'ht-HT':'fr-FR') + ' ' + now.toLocaleTimeString(LANG==='en'?'en-GB':LANG==='ht'?'ht-HT':'fr-FR',{hour:'2-digit',minute:'2-digit'})
     };
     d.code = await computeTicketCode(d);
     showTicket(d);
@@ -2170,7 +2511,7 @@ async function renderResult(){
   saveLeaderboardEntry({
     playerName: profile.name,
     level: lvl.key,
-    levelTitle: lvl.title,
+    levelTitle: lvlTitle(lvl),
     mode: session.mode,
     log: session.log.map(e=>e.result),
     score: finalScore,
@@ -2291,7 +2632,7 @@ async function buildPaletteCanvas(hexes, meta){
   ctx.fillText('KROMATIME — PALETTE', padX, 30);
   ctx.font = '400 10px "JetBrains Mono", monospace';
   ctx.fillStyle = '#555555';
-  ctx.fillText(`${meta.levelTitle.toUpperCase()} · ${meta.playerName||'JOUEUR'} · ${meta.dateStr}`, padX, 48);
+  ctx.fillText(`${meta.levelTitle.toUpperCase()} · ${meta.playerName||T3('PLAYER','JOUEUR','JWÈ')} · ${meta.dateStr}`, padX, 48);
   ctx.strokeStyle = '#cfcac0';
   ctx.beginPath(); ctx.moveTo(padX, 58); ctx.lineTo(W-padX, 58); ctx.stroke();
 
@@ -2311,14 +2652,14 @@ async function buildPaletteCanvas(hexes, meta){
   ctx.textAlign = 'center';
   ctx.fillStyle = '#555555';
   ctx.font = '400 9px "JetBrains Mono", monospace';
-  ctx.fillText('KROMATIME — PAR XIAN005', W/2, H-16);
+  ctx.fillText(`KROMATIME — ${T3('BY','PAR','PA')} XIAN005`, W/2, H-16);
 
   return canvas;
 }
 async function downloadPaletteImage(hexes, meta, btn){
   if(!hexes || !hexes.length) return;
   const orig = btn.textContent;
-  btn.textContent = 'GÉNÉRATION…';
+  btn.textContent = t('generating');
   btn.disabled = true;
   try{
     const canvas = await buildPaletteCanvas(hexes, meta);
@@ -2333,11 +2674,11 @@ async function downloadPaletteImage(hexes, meta, btn){
       a.click();
       document.body.removeChild(a);
       setTimeout(()=>URL.revokeObjectURL(url), 2000);
-      btn.textContent = 'TÉLÉCHARGÉ ✓';
+      btn.textContent = t('downloaded');
       setTimeout(()=>{ btn.textContent = orig; btn.disabled = false; }, 1400);
     }, 'image/png');
   }catch(err){
-    btn.textContent = 'ÉCHEC — RÉESSAIE';
+    btn.textContent = t('failRetry');
     setTimeout(()=>{ btn.textContent = orig; btn.disabled = false; }, 1600);
   }
 }
@@ -2380,28 +2721,28 @@ async function buildTicketCanvas(d){
   y += 16;
   ctx.font = '400 9px "JetBrains Mono", monospace';
   ctx.fillStyle = '#555555';
-  ctx.fillText('TICKET DE PARTIE', W/2, y);
+  ctx.fillText(T3('GAME TICKET', 'TICKET DE PARTIE', 'TIKÈ PATI'), W/2, y);
   y += 14;
   drawDashedLine(ctx, x1, y, x2); y += 22;
 
-  drawRow(ctx, x1, x2, y, 'JOUEUR', (d.playerName||'—').toUpperCase()); y+=rowH;
+  drawRow(ctx, x1, x2, y, T3('PLAYER','JOUEUR','JWÈ'), (d.playerName||'—').toUpperCase()); y+=rowH;
   drawRow(ctx, x1, x2, y, 'MODE', d.levelTitle.toUpperCase()); y+=rowH;
   drawRow(ctx, x1, x2, y, 'DATE', d.dateStr); y+=rowH;
   drawRow(ctx, x1, x2, y, 'REF', d.ref); y+=14;
   drawDashedLine(ctx, x1, y, x2); y += 22;
 
-  if(d.mode==='endless'){ drawRow(ctx, x1, x2, y, 'MANCHES', String(d.total)); }
-  else{ drawRow(ctx, x1, x2, y, 'BONNES REP.', `${d.correctCount}/${d.total}`); }
+  if(d.mode==='endless'){ drawRow(ctx, x1, x2, y, T3('ROUNDS','MANCHES','MANCH'), String(d.total)); }
+  else{ drawRow(ctx, x1, x2, y, T3('CORRECT ANS.','BONNES REP.','BON REP.'), `${d.correctCount}/${d.total}`); }
   y+=rowH;
-  drawRow(ctx, x1, x2, y, 'PRECISION', d.pct+'%'); y+=rowH;
-  drawRow(ctx, x1, x2, y, 'MEILLEURE SERIE', String(d.maxStreak)); y+=14;
+  drawRow(ctx, x1, x2, y, T3('ACCURACY','PRECISION','PRESIZYON'), d.pct+'%'); y+=rowH;
+  drawRow(ctx, x1, x2, y, T3('BEST STREAK','MEILLEURE SERIE','PI BON SERI'), String(d.maxStreak)); y+=14;
   drawDashedLine(ctx, x1, y, x2); y += 24;
 
-  drawRow(ctx, x1, x2, y, 'SCORE FINAL', d.finalScore+' PTS', true); y+=rowH;
-  drawRow(ctx, x1, x2, y, 'XP GAGNE', '+'+d.xpGained); y+=18;
+  drawRow(ctx, x1, x2, y, T3('FINAL SCORE','SCORE FINAL','ESKÒ FINAL'), d.finalScore+' PTS', true); y+=rowH;
+  drawRow(ctx, x1, x2, y, T3('XP EARNED','XP GAGNE','XP GENYEN'), '+'+d.xpGained); y+=18;
   drawDashedLine(ctx, x1, y, x2); y += 22;
 
-  // code-barres — dérivé du contenu réel du ticket (mêmes données que le PNG embarqué)
+  // barcode — derived from the ticket's actual content (same data as the embedded PNG)
   const barY = y, barH = 32;
   const barData = ticketPayloadString(d);
   const bars = computeBarcodeBars(barData, x2 - x1);
@@ -2412,8 +2753,8 @@ async function buildTicketCanvas(d){
   ctx.textAlign = 'center';
   ctx.fillStyle = '#555555';
   ctx.font = '400 9px "JetBrains Mono", monospace';
-  ctx.fillText("MERCI D'AVOIR JOUÉ", W/2, y); y += 12;
-  ctx.fillText('KROMATIME — PAR XIAN005', W/2, y);
+  ctx.fillText(T3('THANKS FOR PLAYING', "MERCI D'AVOIR JOUÉ", 'MÈSI DESKE W JWE'), W/2, y); y += 12;
+  ctx.fillText('KROMATIME — BY XIAN005', W/2, y);
 
   return canvas;
 }
@@ -2508,7 +2849,7 @@ async function readTicketMetadataFromPng(file){
 
 async function downloadTicketImage(d, btn){
   const orig = btn.textContent;
-  btn.textContent = 'GÉNÉRATION…';
+  btn.textContent = t('generating');
   btn.disabled = true;
   try{
     const canvas = await buildTicketCanvas(d);
@@ -2524,15 +2865,15 @@ async function downloadTicketImage(d, btn){
         a.click();
         document.body.removeChild(a);
         setTimeout(()=>URL.revokeObjectURL(url), 2000);
-        btn.textContent = 'TÉLÉCHARGÉ ✓';
+        btn.textContent = t('downloaded');
         setTimeout(()=>{ btn.textContent = orig; btn.disabled = false; }, 1400);
       }catch(err){
-        btn.textContent = 'ÉCHEC — RÉESSAIE';
+        btn.textContent = t('failRetry');
         setTimeout(()=>{ btn.textContent = orig; btn.disabled = false; }, 1600);
       }
     }, 'image/png');
   }catch(err){
-    btn.textContent = 'ÉCHEC — RÉESSAIE';
+    btn.textContent = t('failRetry');
     setTimeout(()=>{ btn.textContent = orig; btn.disabled = false; }, 1600);
   }
 }
@@ -2542,23 +2883,23 @@ function showTicket(d){
   paper.innerHTML = `
     <div class="t-center">
       <div class="t-brand">KROMATIME</div>
-      <div class="t-sub">TICKET DE PARTIE</div>
+      <div class="t-sub">${T3('GAME TICKET', 'TICKET DE PARTIE', 'TIKÈ PATI')}</div>
     </div>
     <hr>
-    ${padRow('JOUEUR', (d.playerName||'—').toUpperCase())}
+    ${padRow(T3('PLAYER', 'JOUEUR', 'JWÈ'), (d.playerName||'—').toUpperCase())}
     ${padRow('MODE', d.levelTitle.toUpperCase())}
     ${padRow('DATE', d.dateStr)}
     ${padRow('REF', d.ref)}
     <hr>
-    ${d.mode==='endless' ? padRow('MANCHES', d.total) : padRow('BONNES REP.', d.correctCount+'/'+d.total)}
-    ${padRow('PRECISION', d.pct+'%')}
-    ${padRow('MEILLEURE SERIE', d.maxStreak)}
+    ${d.mode==='endless' ? padRow(T3('ROUNDS', 'MANCHES', 'MANCH'), d.total) : padRow(T3('CORRECT ANS.', 'BONNES REP.', 'BON REP.'), d.correctCount+'/'+d.total)}
+    ${padRow(T3('ACCURACY', 'PRECISION', 'PRESIZYON'), d.pct+'%')}
+    ${padRow(T3('BEST STREAK', 'MEILLEURE SERIE', 'PI BON SERI'), d.maxStreak)}
     <hr>
-    <div class="t-row big"><span>SCORE FINAL</span><span>${d.finalScore} PTS</span></div>
-    ${padRow('XP GAGNE', '+'+d.xpGained)}
+    <div class="t-row big"><span>${T3('FINAL SCORE', 'SCORE FINAL', 'ESKÒ FINAL')}</span><span>${d.finalScore} PTS</span></div>
+    ${padRow(T3('XP EARNED', 'XP GAGNE', 'XP GENYEN'), '+'+d.xpGained)}
     <hr>
     <div class="t-barcode">${buildBarcodeSVG(ticketPayloadString(d), 240, 34)}</div>
-    <div class="t-center t-footer">MERCI D'AVOIR JOUÉ<br>KROMATIME — PAR XIAN005</div>
+    <div class="t-center t-footer">${T3('THANKS FOR PLAYING', "MERCI D'AVOIR JOUÉ", 'MÈSI DESKE W JWE')}<br>KROMATIME — ${T3('BY','PAR','PA')} XIAN005</div>
   `;
   document.getElementById('ticketOverlay').classList.add('show');
   document.getElementById('ticketDownloadBtn').onclick = (e)=> downloadTicketImage(d, e.currentTarget);
