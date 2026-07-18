@@ -59,6 +59,7 @@ autorisation écrite préalable.
     border-bottom:1px solid var(--line); padding-bottom:18px;margin-bottom:26px;
     flex-wrap:wrap;gap:16px;
   }
+  .hdr-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
   .brand-mark{display:flex;align-items:center;gap:12px;cursor:pointer;}
   .brand-mark .logo-slot{width:34px;height:34px;display:block;flex-shrink:0;}
   .brand-mark .logo-slot svg{width:100%;height:100%;display:block;}
@@ -86,6 +87,52 @@ autorisation écrite préalable.
   }
   .sound-btn:hover{border-color:var(--ink-faint);}
   .sound-btn.muted{opacity:0.5;}
+  .sound-btn.active-mode{border-color:var(--ink);color:var(--ink);}
+
+  /* HEADER DROPDOWNS (langue, simulation daltonisme) */
+  .hdr-dd{position:relative;}
+  .dropdown-menu{
+    display:none;position:absolute;top:calc(100% + 6px);right:0;z-index:40;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);
+    min-width:168px;padding:4px;box-shadow:0 8px 24px rgba(0,0,0,0.4);
+    animation:popIn .12s ease-out;
+  }
+  .dropdown-menu.show{display:block;}
+  .dropdown-item{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
+    background:transparent;border:none;color:var(--ink-dim);text-align:left;cursor:pointer;
+    font-family:'JetBrains Mono',monospace;font-size:12px;padding:9px 10px;border-radius:2px;
+    transition:background .1s,color .1s;
+  }
+  .dropdown-item:hover{background:var(--panel-3);color:var(--ink);}
+  .dropdown-item.active{color:var(--ink);}
+  .dropdown-item .chk{opacity:0;font-size:11px;}
+  .dropdown-item.active .chk{opacity:1;}
+  .dropdown-caption{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-faint);
+    text-transform:uppercase;padding:7px 10px 3px;
+  }
+  .dropdown-divider{height:1px;background:var(--line);margin:4px 2px;}
+
+  /* SIMULATION DALTONISME (appliquée sur tout le document) */
+  body.cvd-protanopia{filter:url(#cvd-protanopia);}
+  body.cvd-deuteranopia{filter:url(#cvd-deuteranopia);}
+  body.cvd-tritanopia{filter:url(#cvd-tritanopia);}
+  .cvd-note{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-dim);
+    border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-top:10px;
+    line-height:1.6;
+  }
+  .cvd-note b{color:var(--ink);}
+  .contrast-table{width:100%;border-collapse:collapse;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:12.5px;}
+  .contrast-table th,.contrast-table td{padding:8px 10px;border-bottom:1px solid var(--line-soft);text-align:left;}
+  .contrast-table th{color:var(--ink-faint);font-size:11px;letter-spacing:.05em;text-transform:uppercase;}
+  .contrast-swatch{display:inline-flex;align-items:center;gap:8px;}
+  .contrast-swatch .demo{
+    display:inline-block;padding:2px 8px;border-radius:2px;font-size:11.5px;font-weight:600;
+  }
+  .contrast-pass{color:var(--ink);}
+  .contrast-fail{color:var(--ink-dim);text-decoration:underline;text-decoration-style:dashed;}
 
   /* HERO / NAME GATE */
   .hero{
@@ -497,10 +544,15 @@ autorisation écrite préalable.
   /* RESPONSIVE — petits écrans / mobile */
   @media (max-width:640px){
     header{gap:12px;padding-bottom:14px;margin-bottom:20px;}
-    header > div[style]{width:100%;justify-content:space-between;}
-    .hud{width:100%;justify-content:flex-start;}
+    .hdr-actions{width:100%;justify-content:flex-end;}
+    .hud{width:100%;justify-content:space-between;order:10;}
     .hud-card{min-width:0;padding:7px 10px;}
     .menu-btn{padding:9px 11px;}
+    .dropdown-menu{min-width:150px;font-size:11px;}
+    .dropdown-item{padding:10px 9px;font-size:11.5px;}
+    .contrast-table{font-size:11px;}
+    .contrast-table th,.contrast-table td{padding:7px 6px;}
+    .contrast-swatch{flex-wrap:wrap;gap:6px;}
     .result-exports-row{flex-direction:column;align-items:stretch;}
     .ticket-trigger,.palette-trigger{width:100%;}
     .result-actions{flex-direction:column;align-items:stretch;}
@@ -509,6 +561,8 @@ autorisation écrite préalable.
     .edu-tabs{gap:6px;}
     .edu-tab{padding:8px 12px;font-size:11px;}
     .options{grid-template-columns:1fr;}
+    .levels{grid-template-columns:1fr;}
+    .level-card .num{white-space:normal;}
     .hex-compare{gap:14px;}
     .next-row{flex-direction:column;align-items:stretch;gap:12px;}
     .progress-bar{max-width:none;margin-right:0;}
@@ -523,10 +577,21 @@ autorisation écrite préalable.
     .hud-card .value{font-size:16px;}
     .hud-card .label{font-size:10px;}
     .result-screen .stat-row{gap:14px 20px;}
+    .hdr-actions{gap:7px;}
+    .sound-btn{width:32px;height:32px;font-size:15px;}
+    #langBtn{font-size:10px;}
+    .dropdown-menu{min-width:0;width:min(220px,calc(100vw - 24px));right:-4px;}
   }
 </style>
 </head>
 <body oncontextmenu="return false;">
+<svg width="0" height="0" style="position:absolute;overflow:hidden;" aria-hidden="true">
+  <defs>
+    <filter id="cvd-protanopia"><feColorMatrix type="matrix" values="0.567,0.433,0,0,0  0.558,0.442,0,0,0  0,0.242,0.758,0,0  0,0,0,1,0"/></filter>
+    <filter id="cvd-deuteranopia"><feColorMatrix type="matrix" values="0.625,0.375,0,0,0  0.7,0.3,0,0,0  0,0.3,0.7,0,0  0,0,0,1,0"/></filter>
+    <filter id="cvd-tritanopia"><feColorMatrix type="matrix" values="0.95,0.05,0,0,0  0,0.433,0.567,0,0  0,0.475,0.525,0,0  0,0,0,1,0"/></filter>
+  </defs>
+</svg>
 
 <div class="pause-note" id="pauseNote">
   <div class="box">
@@ -552,9 +617,26 @@ autorisation écrite préalable.
       <span class="logo-slot" data-logo></span>
       <h1>Kromatime</h1>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <button class="sound-btn" id="soundBtn" title="Activer/couper le son"></button>
-      <button class="sound-btn" id="langBtn" title="Français / English / Kreyòl Ayisyen" style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;">FR</button>
+    <div class="hdr-actions">
+      <button class="sound-btn" id="soundBtn" title="Toggle sound" data-i18n-title="soundTitle"></button>
+      <div class="hdr-dd" id="cvdWrap">
+        <button class="sound-btn" id="cvdBtn" title="Colorblind simulation" data-i18n-title="cvdTitle" aria-haspopup="true" aria-expanded="false">◐</button>
+        <div class="dropdown-menu" id="cvdMenu" role="menu">
+          <div class="dropdown-caption" data-i18n="cvdCaption">VISION</div>
+          <button class="dropdown-item active" data-cvd="off" role="menuitem"><span data-i18n="cvdOff">Normale</span><span class="chk">✓</span></button>
+          <button class="dropdown-item" data-cvd="protanopia" role="menuitem"><span data-i18n="cvdProt">Protanopie</span><span class="chk">✓</span></button>
+          <button class="dropdown-item" data-cvd="deuteranopia" role="menuitem"><span data-i18n="cvdDeut">Deutéranopie</span><span class="chk">✓</span></button>
+          <button class="dropdown-item" data-cvd="tritanopia" role="menuitem"><span data-i18n="cvdTrit">Tritanopie</span><span class="chk">✓</span></button>
+        </div>
+      </div>
+      <div class="hdr-dd" id="langWrap">
+        <button class="sound-btn" id="langBtn" title="Change language" data-i18n-title="langTitle" aria-haspopup="true" aria-expanded="false" style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;">EN</button>
+        <div class="dropdown-menu" id="langMenu" role="menu">
+          <button class="dropdown-item" data-lang="en" role="menuitem"><span>English</span><span class="chk">✓</span></button>
+          <button class="dropdown-item" data-lang="fr" role="menuitem"><span>Français</span><span class="chk">✓</span></button>
+          <button class="dropdown-item" data-lang="ht" role="menuitem"><span>Kreyòl Ayisyen</span><span class="chk">✓</span></button>
+        </div>
+      </div>
       <div class="hud hidden" id="hudBar">
         <div class="hud-card score"><div class="label" data-i18n="score">Score</div><div class="value" id="hudScore">0</div></div>
         <div class="hud-card streak" id="streakCard"><div class="label" data-i18n="streak">Série</div><div class="value" id="hudStreak">0</div></div>
@@ -724,7 +806,13 @@ const I18N = {
     sessionResult:"Résultat de session", bestStreak:"MEILLEURE SÉRIE", accuracy:"PRÉCISION",
     newBest:"Nouveau record personnel pour ce mode", keepSession:"Conserver cette session",
     replay:"REJOUER", changeMode:"CHANGER DE MODE", shareTicket:"PARTAGER LE TICKET",
-    downloadPalette:"TÉLÉCHARGER LA PALETTE"
+    downloadPalette:"TÉLÉCHARGER LA PALETTE",
+    cvdCaption:"VISION", cvdOff:"Normale", cvdProt:"Protanopie", cvdDeut:"Deutéranopie", cvdTrit:"Tritanopie",
+    cvdNote:"<b>Simulation active —</b> l'interface entière (couleurs de jeu comprises) est filtrée pour approximer ce que perçoit une personne avec ce type de daltonisme. Utile pour tester la lisibilité de tes propres paires de couleurs. Désactive-la (« Normale ») pour rejouer normalement.",
+    contrastTitle:"Vérificateur de contraste WCAG", contrastLead:"Ratio de contraste réel entre les paires texte/fond utilisées dans l'interface de Kromatime, calculé en direct selon la formule WCAG 2.1. Seuils : 4.5:1 pour le texte courant, 3:1 pour le texte large ou les éléments d'UI.",
+    contrastPair:"Paire", contrastRatio:"Ratio", contrastResult:"Résultat", contrastPass:"CONFORME", contrastFail:"INSUFFISANT",
+    soundTitle:"Activer/couper le son", cvdTitle:"Simulation de daltonisme", langTitle:"Changer de langue",
+    pageTitle:"KROMATIME — Entraînement chronométré aux couleurs"
   },
   ht:{
     pauseTitle:"Manch kanpe", pauseMsg:"Nou pa t kapab valide kesyon sa a. Kontinye lè w pare.",
@@ -756,7 +844,13 @@ const I18N = {
     sessionResult:"Rezilta sesyon an", bestStreak:"PI BON SERI", accuracy:"PRESIZYON",
     newBest:"Se pi bon eskò w janm fè nan mod sa a", keepSession:"Konsève sesyon sa a",
     replay:"REJWE", changeMode:"CHANJE MOD", shareTicket:"PATAJE TIKÈ A",
-    downloadPalette:"TELECHAJE PALÈT LA"
+    downloadPalette:"TELECHAJE PALÈT LA",
+    cvdCaption:"VIZYON", cvdOff:"Nòmal", cvdProt:"Protanopi", cvdDeut:"Dèteranopi", cvdTrit:"Tritanopi",
+    cvdNote:"<b>Similasyon aktif —</b> tout entèfas la (koulè jwèt yo tou) filtre pou apwoksime sa yon moun ki gen kalite daltonism sa a wè. Sa itil pou teste si koulè w chwazi yo fasil pou li. Chwazi « Nòmal » pou jwe nòmalman ankò.",
+    contrastTitle:"Verifikatè kontras WCAG", contrastLead:"Nivo kontras reyèl ant pè tèks/fon aplikasyon Kromatime lan itilize, kalkile an dirèk selon fòmil WCAG 2.1. Sèy: 4.5:1 pou tèks nòmal, 3:1 pou gwo tèks oswa eleman entèfas.",
+    contrastPair:"Pè", contrastRatio:"Nivo", contrastResult:"Rezilta", contrastPass:"KONFÒM", contrastFail:"PA SIFI",
+    soundTitle:"Aktive/koupe son", cvdTitle:"Similasyon daltonism", langTitle:"Chanje lang",
+    pageTitle:"KROMATIME — Antrenman kwonometre pou koulè"
   },
   en:{
     pauseTitle:"Round interrupted", pauseMsg:"This question couldn't be validated. Resume whenever you're ready.",
@@ -788,14 +882,22 @@ const I18N = {
     sessionResult:"Session result", bestStreak:"BEST STREAK", accuracy:"ACCURACY",
     newBest:"New personal best for this mode", keepSession:"Keep this session",
     replay:"REPLAY", changeMode:"CHANGE MODE", shareTicket:"SHARE TICKET",
-    downloadPalette:"DOWNLOAD PALETTE"
+    downloadPalette:"DOWNLOAD PALETTE",
+    cvdCaption:"VISION", cvdOff:"Normal", cvdProt:"Protanopia", cvdDeut:"Deuteranopia", cvdTrit:"Tritanopia",
+    cvdNote:"<b>Simulation active —</b> the whole interface (including in-game colors) is filtered to approximate what someone with this type of color blindness perceives. Useful for testing the readability of your own color pairs. Switch back to \"Normal\" to play normally.",
+    contrastTitle:"WCAG contrast checker", contrastLead:"Real contrast ratio between the text/background pairs used across the Kromatime interface, computed live using the WCAG 2.1 formula. Thresholds: 4.5:1 for regular text, 3:1 for large text or UI elements.",
+    contrastPair:"Pair", contrastRatio:"Ratio", contrastResult:"Result", contrastPass:"PASS", contrastFail:"FAIL",
+    soundTitle:"Toggle sound", cvdTitle:"Colorblind simulation", langTitle:"Change language",
+    pageTitle:"KROMATIME — Timed Color Training"
   }
 };
 function t(key){ return (I18N[LANG] && I18N[LANG][key]) || I18N.fr[key] || key; }
 function applyStaticI18n(){
   document.documentElement.lang = LANG;
+  document.title = t('pageTitle');
   document.querySelectorAll('[data-i18n]').forEach(el=>{ el.innerHTML = t(el.getAttribute('data-i18n')); });
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder = t(el.getAttribute('data-i18n-ph')); });
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{ el.title = t(el.getAttribute('data-i18n-title')); });
   const lb = document.getElementById('langBtn'); if(lb) lb.textContent = LANG==='fr' ? 'FR' : LANG==='ht' ? 'HT' : 'EN';
 }
 document.addEventListener('DOMContentLoaded', applyStaticI18n);
@@ -821,9 +923,24 @@ document.getElementById('pauseOk').addEventListener('click', ()=>{
   document.getElementById('pauseNote').classList.remove('show');
 });
 
-document.getElementById('langBtn').addEventListener('click', ()=>{
-  LANG = LANG==='fr' ? 'en' : LANG==='en' ? 'ht' : 'fr';
-  try{ localStorage.setItem('kt_lang', LANG); }catch(e){}
+/* ---------- menus déroulants d'en-tête (langue, simulation daltonisme) ---------- */
+function closeAllHeaderMenus(){
+  document.querySelectorAll('.dropdown-menu.show').forEach(m=>m.classList.remove('show'));
+  document.querySelectorAll('.hdr-dd button[aria-expanded]').forEach(b=>b.setAttribute('aria-expanded','false'));
+}
+function toggleHeaderMenu(menuId, btnId){
+  const menu = document.getElementById(menuId);
+  const btn = document.getElementById(btnId);
+  const willOpen = !menu.classList.contains('show');
+  closeAllHeaderMenus();
+  if(willOpen){ menu.classList.add('show'); btn.setAttribute('aria-expanded','true'); }
+}
+document.getElementById('langBtn').addEventListener('click', (e)=>{ e.stopPropagation(); sfxClick(); toggleHeaderMenu('langMenu','langBtn'); });
+document.getElementById('cvdBtn').addEventListener('click', (e)=>{ e.stopPropagation(); sfxClick(); toggleHeaderMenu('cvdMenu','cvdBtn'); });
+document.addEventListener('click', (e)=>{ if(!e.target.closest('.hdr-dd')) closeAllHeaderMenus(); });
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeAllHeaderMenus(); });
+
+function refreshLangDependentUI(){
   applyStaticI18n();
   if(typeof renderLevelSelect==='function' && !document.getElementById('modeSelectScreen').classList.contains('hidden')) renderLevelSelect();
   if(typeof renderXpPanel==='function' && !document.getElementById('statsScreen').classList.contains('hidden')) renderXpPanel();
@@ -839,7 +956,43 @@ document.getElementById('langBtn').addEventListener('click', ()=>{
   if(!document.getElementById('gameScreen').classList.contains('hidden')){
     document.querySelectorAll('#gamePanel [data-i18n-key]').forEach(el=>{ el.innerHTML = t(el.getAttribute('data-i18n-key')); });
   }
+}
+function updateLangMenuUI(){
+  const lb = document.getElementById('langBtn'); if(lb) lb.textContent = LANG==='fr' ? 'FR' : LANG==='ht' ? 'HT' : 'EN';
+  document.querySelectorAll('#langMenu .dropdown-item').forEach(btn=>{ btn.classList.toggle('active', btn.dataset.lang===LANG); });
+}
+document.querySelectorAll('#langMenu .dropdown-item').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    if(btn.dataset.lang === LANG){ closeAllHeaderMenus(); return; }
+    LANG = btn.dataset.lang;
+    try{ localStorage.setItem('kt_lang', LANG); }catch(e){}
+    updateLangMenuUI();
+    refreshLangDependentUI();
+    closeAllHeaderMenus();
+  });
 });
+updateLangMenuUI();
+
+/* ---------- simulation de daltonisme (filtre CSS/SVG global) ---------- */
+let CVD = 'off';
+try{ const savedCvd = localStorage.getItem('kt_cvd'); if(['off','protanopia','deuteranopia','tritanopia'].includes(savedCvd)) CVD = savedCvd; }catch(e){}
+function applyCvd(){
+  document.body.classList.remove('cvd-protanopia','cvd-deuteranopia','cvd-tritanopia');
+  if(CVD !== 'off') document.body.classList.add('cvd-'+CVD);
+  document.querySelectorAll('#cvdMenu .dropdown-item').forEach(btn=>{ btn.classList.toggle('active', btn.dataset.cvd===CVD); });
+  const cvdBtn = document.getElementById('cvdBtn');
+  if(cvdBtn) cvdBtn.classList.toggle('active-mode', CVD!=='off');
+}
+document.querySelectorAll('#cvdMenu .dropdown-item').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    CVD = btn.dataset.cvd;
+    try{ localStorage.setItem('kt_cvd', CVD); }catch(e){}
+    applyCvd();
+    closeAllHeaderMenus();
+    sfxClick();
+  });
+});
+applyCvd();
 
 function hslToHex(h,s,l){
   h=((h%360)+360)%360; s/=100; l/=100;
@@ -1389,6 +1542,20 @@ function renderEduPanel(key){
     }).join('');
   }
 
+  if(topic.key === 'accessibilite'){
+    html += `
+      <div class="edu-block">
+        <h3>${T3('Try it — colorblind simulation', 'Essaie — simulation de daltonisme', 'Eseye — similasyon daltonism')}</h3>
+        <p class="def">${T3('The eye icon in the top header (◐) lets you filter the whole app in real time to approximate protanopia, deuteranopia or tritanopia — including this color wheel and every question color. Try switching it on now.', "L'icône en haut de l'en-tête (◐) permet de filtrer toute l'application en temps réel pour approcher une protanopie, une deutéranopie ou une tritanopie — y compris cette roue et toutes les couleurs de jeu. Essaie de l'activer maintenant.", 'Ikòn ki anlè nan tèt paj la (◐) pèmèt ou filtre tout aplikasyon an an tan reyèl pou apwoksime yon protanopi, yon dèteranopi oswa yon tritanopi — ansanm ak wou sa a ak tout koulè nan jwèt la. Eseye aktive l kounye a.')}</p>
+        <div class="cvd-note">${t('cvdNote')}</div>
+      </div>
+      <div class="edu-block">
+        <h3>${t('contrastTitle')}</h3>
+        <p class="def">${t('contrastLead')}</p>
+        <div id="contrastCheckerWrap"></div>
+      </div>`;
+  }
+
   if(topic.vibes){
     html += `<div class="edu-grid">${EDU_VIBES.map(v=>`
       <div class="edu-vibe-item">
@@ -1404,6 +1571,46 @@ function renderEduPanel(key){
   panel.innerHTML = html;
 
   if(topic.wheel){ initColorWheel(); }
+  if(topic.key === 'accessibilite'){ renderContrastChecker(); }
+}
+
+/* ---------- vérificateur de contraste WCAG (calculé en direct sur la vraie palette du jeu) ---------- */
+function srgbToLinear(c){
+  c = c/255;
+  return c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4);
+}
+function relLuminance(hex){
+  const [r,g,b] = hexToRgb(hex);
+  return 0.2126*srgbToLinear(r) + 0.7152*srgbToLinear(g) + 0.0722*srgbToLinear(b);
+}
+function contrastRatio(hexA, hexB){
+  const L1 = relLuminance(hexA), L2 = relLuminance(hexB);
+  const lighter = Math.max(L1,L2), darker = Math.min(L1,L2);
+  return (lighter+0.05)/(darker+0.05);
+}
+const CONTRAST_PAIRS = [
+  {fg:'#ffffff', bg:'#0a0a0a', label:'ink / bg',       label_en:'Primary text on background',        label_fr:'Texte principal sur le fond',              label_ht:'Tèks prensipal sou fon an',              min:4.5},
+  {fg:'#bdbdbd', bg:'#121212', label:'ink-dim / panel',label_en:'Secondary text on panel',            label_fr:'Texte secondaire sur panneau',             label_ht:'Tèks segondè sou panno',                 min:4.5},
+  {fg:'#8a8a8a', bg:'#161616', label:'ink-faint / panel-2', label_en:'Faint label on panel', label_fr:'Libellé discret sur panneau', label_ht:'Etikèt diskrè sou panno', min:3},
+  {fg:'#000000', bg:'#ffffff', label:'black / play-btn', label_en:'Button text (Play)', label_fr:'Texte de bouton (Jouer)', label_ht:'Tèks bouton (Jwe)', min:4.5}
+];
+function renderContrastChecker(){
+  const wrap = document.getElementById('contrastCheckerWrap');
+  if(!wrap) return;
+  const rows = CONTRAST_PAIRS.map(p=>{
+    const ratio = contrastRatio(p.fg, p.bg);
+    const pass = ratio >= p.min;
+    const label = T3(p.label_en, p.label_fr, p.label_ht);
+    return `<tr>
+      <td><div class="contrast-swatch"><span class="demo" style="background:${p.bg};color:${p.fg};border:1px solid var(--line);">Aa</span>${label}</div></td>
+      <td>${ratio.toFixed(2)}:1 <span style="color:var(--ink-faint);">(min ${p.min}:1)</span></td>
+      <td class="${pass?'contrast-pass':'contrast-fail'}">${pass ? '✓ '+t('contrastPass') : '✕ '+t('contrastFail')}</td>
+    </tr>`;
+  }).join('');
+  wrap.innerHTML = `<table class="contrast-table">
+    <thead><tr><th>${t('contrastPair')}</th><th>${t('contrastRatio')}</th><th>${t('contrastResult')}</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
 }
 
 let wheelSelectedDeg = 0;
