@@ -124,6 +124,43 @@ autorisation écrite préalable.
   }
   .dropdown-divider{height:1px;background:var(--line);margin:4px 2px;}
 
+  /* SOUND MENU */
+  .sound-menu{min-width:220px;padding:6px;}
+  .sound-toggle-row{width:100%;}
+  .sound-toggle-row.hidden{display:none;}
+  .mini-switch{
+    width:30px;height:17px;border-radius:999px;background:var(--panel-3);border:1px solid var(--line);
+    position:relative;flex-shrink:0;transition:background .15s,border-color .15s;
+  }
+  .mini-switch-knob{
+    position:absolute;top:1px;left:1px;width:13px;height:13px;border-radius:50%;
+    background:var(--ink-faint);transition:transform .16s cubic-bezier(.3,.7,.3,1.3),background .15s;
+  }
+  .dropdown-item.active .mini-switch{background:var(--panel-3);border-color:var(--ink);}
+  .dropdown-item.active .mini-switch-knob{transform:translateX(13px);background:var(--ink);}
+  .volume-row{padding:8px 10px 6px;}
+  .volume-row-top{
+    display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;color:var(--ink-dim);margin-bottom:8px;letter-spacing:.03em;
+  }
+  .volume-row-top span:last-child{color:var(--ink);font-weight:600;min-width:32px;text-align:right;}
+  #volumeSlider{
+    -webkit-appearance:none;appearance:none;width:100%;height:3px;background:var(--line-soft);
+    border-radius:2px;outline:none;cursor:pointer;margin:0;
+  }
+  #volumeSlider::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;
+    background:var(--ink);cursor:pointer;transition:transform .1s;border:2px solid var(--bg);
+    box-shadow:0 0 0 1px var(--line);
+  }
+  #volumeSlider::-webkit-slider-thumb:hover{transform:scale(1.15);}
+  #volumeSlider::-moz-range-thumb{
+    width:14px;height:14px;border-radius:50%;background:var(--ink);cursor:pointer;border:2px solid var(--bg);
+    box-shadow:0 0 0 1px var(--line);
+  }
+  #volumeSlider::-moz-range-track{background:var(--line-soft);height:3px;border-radius:2px;}
+  #volumeSlider:disabled{opacity:.35;cursor:not-allowed;}
+
   /* SIMULATION DALTONISME (appliquée sur tout le document) */
   body.cvd-protanopia{filter:url(#cvd-protanopia);}
   body.cvd-deuteranopia{filter:url(#cvd-deuteranopia);}
@@ -653,7 +690,28 @@ autorisation écrite préalable.
       <h1>Kromatime</h1>
     </div>
     <div class="hdr-actions">
-      <button class="sound-btn" id="soundBtn" title="Toggle sound" data-i18n-title="soundTitle"></button>
+      <div class="hdr-dd" id="soundWrap">
+        <button class="sound-btn" id="soundBtn" title="Toggle sound" data-i18n-title="soundTitle" aria-haspopup="true" aria-expanded="false"></button>
+        <div class="dropdown-menu sound-menu" id="soundMenu" role="menu">
+          <div class="dropdown-caption" data-i18n="soundCaption">SON</div>
+          <button class="dropdown-item sound-toggle-row" id="sfxToggleBtn" role="menuitemcheckbox" aria-checked="true">
+            <span data-i18n="sfxLabel">Effets sonores</span>
+            <span class="mini-switch" aria-hidden="true"><span class="mini-switch-knob"></span></span>
+          </button>
+          <button class="dropdown-item sound-toggle-row hidden" id="hapticsToggleBtn" role="menuitemcheckbox" aria-checked="true">
+            <span data-i18n="hapticsLabel">Vibrations</span>
+            <span class="mini-switch" aria-hidden="true"><span class="mini-switch-knob"></span></span>
+          </button>
+          <div class="dropdown-divider"></div>
+          <div class="volume-row">
+            <div class="volume-row-top">
+              <span data-i18n="volumeLabel">Volume</span>
+              <span id="volumeLabel">70%</span>
+            </div>
+            <input type="range" id="volumeSlider" min="0" max="100" value="70" aria-label="Volume">
+          </div>
+        </div>
+      </div>
       <div class="hdr-dd" id="cvdWrap">
         <button class="sound-btn" id="cvdBtn" title="Colorblind simulation" data-i18n-title="cvdTitle" aria-haspopup="true" aria-expanded="false">◐</button>
         <div class="dropdown-menu" id="cvdMenu" role="menu">
@@ -849,6 +907,8 @@ const I18N = {
     contrastTitle:"Vérificateur de contraste WCAG", contrastLead:"Ratio de contraste réel entre les paires texte/fond utilisées dans l'interface de Kromatime, calculé en direct selon la formule WCAG 2.1. Seuils : 4.5:1 pour le texte courant, 3:1 pour le texte large ou les éléments d'UI.",
     contrastPair:"Paire", contrastRatio:"Ratio", contrastResult:"Résultat", contrastPass:"CONFORME", contrastFail:"INSUFFISANT",
     soundTitle:"Activer/couper le son", cvdTitle:"Simulation de daltonisme", langTitle:"Changer de langue",
+    soundCaption:"SON", sfxLabel:"Effets sonores", hapticsLabel:"Vibrations", volumeLabel:"Volume",
+    soundOffNote:"Aucun son ni vibration ne sera joué.",
     pageTitle:"KROMATIME — Entraînement chronométré aux couleurs"
   },
   ht:{
@@ -887,6 +947,8 @@ const I18N = {
     contrastTitle:"Verifikatè kontras WCAG", contrastLead:"Nivo kontras reyèl ant pè tèks/fon aplikasyon Kromatime lan itilize, kalkile an dirèk selon fòmil WCAG 2.1. Sèy: 4.5:1 pou tèks nòmal, 3:1 pou gwo tèks oswa eleman entèfas.",
     contrastPair:"Pè", contrastRatio:"Nivo", contrastResult:"Rezilta", contrastPass:"KONFÒM", contrastFail:"PA SIFI",
     soundTitle:"Aktive/koupe son", cvdTitle:"Similasyon daltonism", langTitle:"Chanje lang",
+    soundCaption:"SON", sfxLabel:"Efè sonò", hapticsLabel:"Vibrasyon", volumeLabel:"Volim",
+    soundOffNote:"Pa gen okenn son ni vibrasyon k ap jwe.",
     pageTitle:"KROMATIME — Antrenman kwonometre pou koulè"
   },
   en:{
@@ -925,6 +987,8 @@ const I18N = {
     contrastTitle:"WCAG contrast checker", contrastLead:"Real contrast ratio between the text/background pairs used across the Kromatime interface, computed live using the WCAG 2.1 formula. Thresholds: 4.5:1 for regular text, 3:1 for large text or UI elements.",
     contrastPair:"Pair", contrastRatio:"Ratio", contrastResult:"Result", contrastPass:"PASS", contrastFail:"FAIL",
     soundTitle:"Toggle sound", cvdTitle:"Colorblind simulation", langTitle:"Change language",
+    soundCaption:"SOUND", sfxLabel:"Sound effects", hapticsLabel:"Vibration", volumeLabel:"Volume",
+    soundOffNote:"No sound or vibration will play.",
     pageTitle:"KROMATIME — Timed Color Training"
   }
 };
@@ -1744,8 +1808,14 @@ try{
 }catch(err){ supabaseClient = null; }
 
 /* ---------- son & vibration ---------- */
-let soundOn = true;
+let soundOn = true;        // legacy flag, kept only for backward pref migration (no longer gates playback)
+let sfxOn = true;          // effets sonores
+let hapticsOn = true;      // vibration
+let masterVolume = 0.7;    // 0..1, appliqué en multiplicateur sur chaque son
 let audioCtx = null;
+let audioUnlocked = false;
+const lastPlayedAt = {};   // throttle par type de son
+
 function getAudioCtx(){
   if(!audioCtx){
     try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(err){ return null; }
@@ -1753,32 +1823,68 @@ function getAudioCtx(){
   if(audioCtx.state === 'suspended') audioCtx.resume();
   return audioCtx;
 }
+// Déverrouillage audio mobile/Safari : le premier geste utilisateur "réveille" le contexte
+function unlockAudioOnce(){
+  if(audioUnlocked) return;
+  audioUnlocked = true;
+  const ctx = getAudioCtx();
+  if(ctx && ctx.state === 'suspended') ctx.resume();
+}
+['pointerdown','keydown','touchstart'].forEach(ev=>{
+  window.addEventListener(ev, unlockAudioOnce, {once:true, passive:true});
+});
+
+// throttle simple pour éviter le spam sonore (ex: clics très rapprochés)
+function canPlay(key, minGapMs){
+  const now = performance.now();
+  if(lastPlayedAt[key] !== undefined && now - lastPlayedAt[key] < minGapMs) return false;
+  lastPlayedAt[key] = now;
+  return true;
+}
+
 function beep(freq, duration, type, vol, delay){
-  if(!soundOn) return;
+  if(!sfxOn || masterVolume<=0) return;
   const ctx = getAudioCtx();
   if(!ctx) return;
   const t0 = ctx.currentTime + (delay||0);
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
+  const shaper = ctx.createBiquadFilter(); // adoucit le timbre, moins "buzzer"
+  shaper.type = 'lowpass';
+  shaper.frequency.setValueAtTime(Math.max(freq*3, 900), t0);
+  shaper.Q.value = 0.6;
   osc.type = type || 'sine';
   osc.frequency.setValueAtTime(freq, t0);
+  const peak = (vol!==undefined?vol:0.12) * masterVolume;
   gain.gain.setValueAtTime(0, t0);
-  gain.gain.linearRampToValueAtTime(vol!==undefined?vol:0.12, t0 + 0.01);
+  gain.gain.linearRampToValueAtTime(peak, t0 + 0.01);
   gain.gain.exponentialRampToValueAtTime(0.001, t0 + duration);
-  osc.connect(gain);
+  osc.connect(shaper);
+  shaper.connect(gain);
   gain.connect(ctx.destination);
   osc.start(t0);
   osc.stop(t0 + duration + 0.02);
 }
-function sfxCorrect(){ beep(660,0.09,'sine',0.12); beep(880,0.12,'sine',0.1,0.07); }
-function sfxWrong(){ beep(180,0.22,'sawtooth',0.09); }
-function sfxTick(){ beep(1200,0.04,'square',0.05); }
-function sfxUnlock(){ beep(523,0.1,'sine',0.1); beep(659,0.1,'sine',0.1,0.09); beep(784,0.16,'sine',0.11,0.18); }
-function sfxClick(){ beep(400,0.04,'sine',0.06); }
+function sfxCorrect(){ if(!canPlay('correct',80)) return; beep(660,0.09,'sine',0.12); beep(880,0.12,'sine',0.1,0.07); }
+function sfxWrong(){ if(!canPlay('wrong',150)) return; beep(180,0.22,'sawtooth',0.08); }
+function sfxTick(){ if(!canPlay('tick',300)) return; beep(1200,0.04,'square',0.045); }
+function sfxUnlock(){ if(!canPlay('unlock',200)) return; beep(523,0.1,'sine',0.1); beep(659,0.1,'sine',0.1,0.09); beep(784,0.16,'sine',0.11,0.18); }
+function sfxClick(){ if(!canPlay('click',60)) return; beep(400,0.04,'sine',0.05); }
+// nouveaux sons contextuels
+function sfxStreak(streak){
+  // petit arpège ascendant qui grandit avec la série (plafonné pour ne pas devenir criard)
+  if(!canPlay('streak',250)) return;
+  const n = Math.min(4, Math.max(2, Math.floor(streak/3)));
+  const base = 440;
+  for(let i=0;i<n;i++){ beep(base * Math.pow(1.2, i), 0.08, 'sine', 0.08, i*0.05); }
+}
+function sfxCountdownFinal(){ if(!canPlay('countdown',900)) return; beep(880,0.07,'square',0.09); }
+function sfxLevelComplete(){ if(!canPlay('levelcomplete',400)) return; beep(392,0.1,'sine',0.09); beep(523,0.1,'sine',0.09,0.1); beep(659,0.14,'sine',0.1,0.2); }
+function sfxNewBest(){ if(!canPlay('newbest',400)) return; beep(587,0.1,'triangle',0.1); beep(784,0.16,'triangle',0.11,0.1); }
 
 
 function vibrate(pattern){
-  if(!soundOn) return; // même interrupteur : "retours sensoriels" on/off
+  if(!hapticsOn) return;
   if(navigator.vibrate){ try{ navigator.vibrate(pattern); }catch(err){} }
 }
 
@@ -1786,25 +1892,82 @@ async function loadSoundPref(){
   try{
     const res = await localGet('kromatime:sound');
     if(res && res.value!==undefined) soundOn = res.value === 'on';
+    const sfxRes = await localGet('kromatime:sfx');
+    if(sfxRes && sfxRes.value!==undefined) sfxOn = sfxRes.value === 'on';
+    const hapRes = await localGet('kromatime:haptics');
+    if(hapRes && hapRes.value!==undefined) hapticsOn = hapRes.value === 'on';
+    const volRes = await localGet('kromatime:volume');
+    if(volRes && volRes.value!==undefined){
+      const v = parseFloat(volRes.value);
+      if(!isNaN(v)) masterVolume = Math.min(1, Math.max(0, v));
+    }
   }catch(err){}
   updateSoundBtn();
+  syncSoundMenuUI();
 }
 async function saveSoundPref(){
   try{ await localSet('kromatime:sound', soundOn ? 'on' : 'off'); }catch(err){}
 }
+async function saveSfxPref(){
+  try{ await localSet('kromatime:sfx', sfxOn ? 'on' : 'off'); }catch(err){}
+}
+async function saveHapticsPref(){
+  try{ await localSet('kromatime:haptics', hapticsOn ? 'on' : 'off'); }catch(err){}
+}
+async function saveVolumePref(){
+  try{ await localSet('kromatime:volume', String(masterVolume)); }catch(err){}
+}
 const ICON_SOUND_ON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,9 8,9 13,4 13,20 8,15 4,15" fill="currentColor" stroke="none"/><path d="M17 8a5 5 0 0 1 0 8"/><path d="M19.5 5.5a9 9 0 0 1 0 13"/></svg>';
 const ICON_SOUND_OFF = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,9 8,9 13,4 13,20 8,15 4,15" fill="currentColor" stroke="none"/><path d="M17 9l5 6"/><path d="M22 9l-5 6"/></svg>';
+const ICON_SOUND_LOW = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,9 8,9 13,4 13,20 8,15 4,15" fill="currentColor" stroke="none"/><path d="M17 8a5 5 0 0 1 0 8"/></svg>';
 function updateSoundBtn(){
   const btn = document.getElementById('soundBtn');
   if(!btn) return;
-  btn.innerHTML = soundOn ? ICON_SOUND_ON : ICON_SOUND_OFF;
-  btn.classList.toggle('muted', !soundOn);
+  const effectiveOff = (!sfxOn && !hapticsOn) || masterVolume===0;
+  const low = sfxOn && masterVolume>0 && masterVolume<0.4;
+  btn.innerHTML = effectiveOff ? ICON_SOUND_OFF : (low ? ICON_SOUND_LOW : ICON_SOUND_ON);
+  btn.classList.toggle('muted', effectiveOff);
+  btn.setAttribute('aria-expanded', document.getElementById('soundMenu')?.classList.contains('show') ? 'true' : 'false');
 }
-document.getElementById('soundBtn').addEventListener('click', ()=>{
-  soundOn = !soundOn;
+function syncSoundMenuUI(){
+  const sfxToggle = document.getElementById('sfxToggleBtn');
+  const hapToggle = document.getElementById('hapticsToggleBtn');
+  const volSlider = document.getElementById('volumeSlider');
+  const volLabel = document.getElementById('volumeLabel');
+  if(sfxToggle){ sfxToggle.classList.toggle('active', sfxOn); sfxToggle.setAttribute('aria-checked', sfxOn?'true':'false'); }
+  if(hapToggle){ hapToggle.classList.toggle('active', hapticsOn); hapToggle.setAttribute('aria-checked', hapticsOn?'true':'false'); }
+  if(volSlider){ volSlider.value = Math.round(masterVolume*100); volSlider.disabled = !sfxOn; }
+  if(volLabel) volLabel.textContent = Math.round(masterVolume*100)+'%';
+  const hapSupported = !!navigator.vibrate;
+  const hapRow = document.getElementById('hapticsToggleBtn');
+  if(hapRow) hapRow.classList.toggle('hidden', !hapSupported);
+}
+document.getElementById('soundBtn').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  toggleHeaderMenu('soundMenu','soundBtn');
+  syncSoundMenuUI();
   updateSoundBtn();
-  saveSoundPref();
-  if(soundOn) sfxClick();
+});
+document.getElementById('sfxToggleBtn').addEventListener('click', ()=>{
+  sfxOn = !sfxOn;
+  saveSfxPref();
+  syncSoundMenuUI(); updateSoundBtn();
+  if(sfxOn) sfxClick();
+});
+document.getElementById('hapticsToggleBtn').addEventListener('click', ()=>{
+  hapticsOn = !hapticsOn;
+  saveHapticsPref();
+  syncSoundMenuUI(); updateSoundBtn();
+  if(hapticsOn) vibrate([20]);
+});
+document.getElementById('volumeSlider').addEventListener('input', (e)=>{
+  masterVolume = Math.min(1, Math.max(0, parseInt(e.target.value,10)/100));
+  document.getElementById('volumeLabel').textContent = Math.round(masterVolume*100)+'%';
+  updateSoundBtn();
+});
+document.getElementById('volumeSlider').addEventListener('change', ()=>{
+  saveVolumePref();
+  if(masterVolume>0) sfxClick();
 });
 const PROFILE_KEY = 'kromatime:profile';
 
