@@ -39,8 +39,10 @@ autorisation écrite préalable.
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   html{-webkit-text-size-adjust:100%;}
-  :focus-visible{outline:1px solid var(--ink);outline-offset:2px;}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:1px;}
   button,.level-card,.edu-tab,.opt-btn,.about-link{-webkit-tap-highlight-color:transparent;}
+  button:focus-visible,.level-card:focus-visible,.opt-btn:focus-visible{outline-offset:2px;box-shadow:0 0 0 4px rgba(255,255,255,0.08);}
+  ::selection{background:var(--ink);color:var(--black);}
   @keyframes pulseHot{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,0.08);}50%{box-shadow:0 0 0 3px rgba(255,255,255,0.05);}}
   @keyframes popIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
   body{
@@ -85,9 +87,16 @@ autorisation écrite préalable.
     width:36px;height:36px;border-radius:var(--radius);cursor:pointer;font-size:17px;
     display:flex;align-items:center;justify-content:center;transition:border-color .12s;
   }
-  .sound-btn:hover{border-color:var(--ink-faint);}
+  .sound-btn{transition:border-color .12s,transform .12s;}
+  .sound-btn:hover{border-color:var(--ink-faint);transform:translateY(-1px);}
+  .sound-btn:active{transform:translateY(0);}
   .sound-btn.muted{opacity:0.5;}
   .sound-btn.active-mode{border-color:var(--ink);color:var(--ink);}
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;border:2px solid var(--bg);}
+  ::-webkit-scrollbar-thumb:hover{background:var(--ink-faint);}
+  *{scrollbar-color:var(--line) var(--bg);scrollbar-width:thin;}
 
   /* HEADER DROPDOWNS (langue, simulation daltonisme) */
   .hdr-dd{position:relative;}
@@ -104,8 +113,9 @@ autorisation écrite préalable.
     font-family:'JetBrains Mono',monospace;font-size:12px;padding:9px 10px;border-radius:2px;
     transition:background .1s,color .1s;
   }
-  .dropdown-item:hover{background:var(--panel-3);color:var(--ink);}
-  .dropdown-item.active{color:var(--ink);}
+  .dropdown-item{border-left:2px solid transparent;}
+  .dropdown-item:hover{background:var(--panel-3);color:var(--ink);border-left-color:var(--ink-faint);}
+  .dropdown-item.active{color:var(--ink);border-left-color:var(--ink);}
   .dropdown-item .chk{opacity:0;font-size:11px;}
   .dropdown-item.active .chk{opacity:1;}
   .dropdown-caption{
@@ -173,8 +183,10 @@ autorisation écrite préalable.
     padding:14px 42px;cursor:pointer;border-radius:var(--radius);text-transform:uppercase;
     transition:opacity .12s;width:100%;max-width:280px;
   }
-  .play-btn:hover{opacity:0.85;}
-  .play-btn:disabled{opacity:0.25;cursor:not-allowed;}
+  .play-btn{transition:opacity .12s,transform .14s cubic-bezier(.2,.8,.3,1.2),box-shadow .14s;}
+  .play-btn:hover{opacity:0.92;transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,255,255,0.08);}
+  .play-btn:active{transform:translateY(0);box-shadow:none;}
+  .play-btn:disabled{opacity:0.25;cursor:not-allowed;transform:none;box-shadow:none;}
   .hero-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%;}
   .edu-btn{
     font-family:'Archivo Expanded',sans-serif;font-size:16px;letter-spacing:0.06em;font-weight:700;
@@ -244,6 +256,12 @@ autorisation écrite préalable.
   table.lb td.rank.gold{color:var(--ink);font-weight:700;}
   table.lb td.score{font-family:'Archivo Expanded',sans-serif;color:var(--ink);font-weight:700;}
   .lb-empty{padding:20px 0;text-align:center;color:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .sync-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#e8a33d;margin-left:6px;vertical-align:middle;box-shadow:0 0 0 2px rgba(232,163,61,.25);}
+  .sync-dot.hidden{display:none;}
+  .lb-offline-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#e8a33d;border:1px solid #e8a33d;border-radius:4px;padding:2px 6px;margin-bottom:8px;}
+  .lb-me-outside{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line,#3a3a3a);}
+  .lb-showmore{display:block;margin:10px auto 0;font-family:'JetBrains Mono',monospace;font-size:11.5px;background:none;border:1px solid var(--line,#3a3a3a);color:var(--ink,#eee);padding:6px 14px;border-radius:6px;cursor:pointer;}
+  .lb-showmore:hover{opacity:.8;}
 
   /* LEVEL SELECT */
   .screen-title{
@@ -255,13 +273,15 @@ autorisation écrite préalable.
     background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
     padding:14px;cursor:pointer;transition:border-color .12s,transform .12s,background .12s;
   }
-  .level-card:hover{border-color:var(--ink-faint);transform:translateY(-1px);}
-  .level-card:active{transform:translateY(0);}
-  .level-card.active{border-color:var(--ink);background:var(--panel-3);}
+  .level-card:hover{border-color:var(--ink-faint);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.35);}
+  .level-card:active{transform:translateY(0);box-shadow:none;}
+  .level-card.active{border-color:var(--ink);background:var(--panel-3);box-shadow:0 0 0 1px var(--ink);}
   .level-card .num{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);letter-spacing:0.08em;}
   .level-card h3{font-size:14.5px;margin:5px 0 4px;font-weight:700;}
   .level-card p{font-size:11.5px;color:var(--ink-dim);margin:0;line-height:1.35;}
   .level-card .best{float:right;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-dim);}
+  .level-card .best.has-score{color:var(--ink);}
+  .level-card .best.has-score::before{content:'✓ ';}
 
   /* GAME PANEL */
   .game-panel{
@@ -275,9 +295,10 @@ autorisation écrite préalable.
     color:var(--ink-dim);text-transform:uppercase;background:var(--panel-2);
   }
   .timer-track{height:2px;width:100%;background:var(--line-soft);position:relative;overflow:hidden;}
-  .timer-fill{height:100%;background:var(--ink);width:100%;transition:width .1s linear;}
+  .timer-fill{height:100%;background:var(--ink);width:100%;transition:width .1s linear,background .3s ease;}
   .timer-fill.warn{background:var(--ink-dim);}
-  .timer-fill.danger{background:var(--ink-faint);}
+  .timer-fill.danger{background:var(--ink-faint);animation:timerPulse 0.6s ease-in-out infinite;}
+  @keyframes timerPulse{0%,100%{opacity:1;}50%{opacity:0.55;}}
 
   .panel-body{padding:clamp(16px,4vw,26px) clamp(14px,4vw,24px) 22px;}
   .question{font-size:clamp(15.5px,4vw,18px);font-weight:600;margin-bottom:20px;line-height:1.45;letter-spacing:-0.01em;}
@@ -295,13 +316,16 @@ autorisation écrite préalable.
     padding:13px 12px;cursor:pointer;border-radius:var(--radius);transition:border-color .12s;
     display:flex;align-items:center;gap:10px;text-align:left;
   }
-  .opt-btn:hover:not(:disabled){border-color:var(--ink-faint);transform:translateY(-1px);}
-  .opt-btn:active:not(:disabled){transform:translateY(0);}
+  .opt-btn{transition:border-color .12s,transform .1s,background .12s,box-shadow .12s;}
+  .opt-btn:hover:not(:disabled){border-color:var(--ink-faint);transform:translateY(-1px);background:var(--panel-2);}
+  .opt-btn:active:not(:disabled){transform:translateY(0) scale(.98);background:var(--panel);}
+  .opt-btn.selected-pending{border-color:var(--ink);background:var(--panel-3);box-shadow:0 0 0 3px rgba(255,255,255,0.06);}
   .opt-swatch{width:20px;height:20px;border-radius:3px;flex-shrink:0;border:1px solid var(--line);}
-  .opt-btn.correct{border-color:var(--ink);color:var(--ink);animation:popIn .18s ease-out;}
+  .opt-btn.correct{border-color:var(--ink);color:var(--ink);background:var(--panel-3);animation:popIn .18s ease-out;box-shadow:0 0 0 3px rgba(255,255,255,0.07);}
   .opt-btn.correct::after{content:' ✓';}
-  .opt-btn.wrong{border-color:var(--ink-faint);color:var(--ink-faint);text-decoration:line-through;}
-  .opt-btn:disabled{cursor:default;}
+  .opt-btn.wrong{border-color:var(--ink-faint);color:var(--ink-faint);text-decoration:line-through;opacity:.7;}
+  .opt-btn:disabled{cursor:default;transform:none;}
+  .opt-btn:disabled:not(.correct):not(.wrong){opacity:.45;}
 
   .hexguess{display:flex;flex-direction:column;align-items:center;gap:14px;}
   .hexguess input{
@@ -371,8 +395,8 @@ autorisation écrite préalable.
     background:var(--ink);border:1px solid var(--ink);color:var(--black);
     padding:13px 26px;cursor:pointer;border-radius:var(--radius);transition:opacity .12s,transform .12s;
   }
-  .retry-btn:hover{opacity:0.85;transform:translateY(-1px);}
-  .retry-btn:active{transform:translateY(0);}
+  .retry-btn:hover{opacity:0.92;transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,255,255,0.08);}
+  .retry-btn:active{transform:translateY(0);box-shadow:none;}
   .home-btn{
     font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.06em;font-weight:600;
     background:var(--panel-3);border:1px solid var(--line);color:var(--ink-dim);
@@ -394,7 +418,8 @@ autorisation écrite préalable.
     padding:13px 24px;cursor:pointer;border-radius:var(--radius);text-transform:uppercase;
     transition:opacity .12s,transform .12s;
   }
-  .ticket-trigger:hover{opacity:0.85;transform:translateY(-1px);}
+  .ticket-trigger:hover{opacity:0.92;transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,255,255,0.08);}
+  .ticket-trigger:active{transform:translateY(0);box-shadow:none;}
   .palette-trigger{
     font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.05em;font-weight:600;
     background:var(--panel-3);border:1px solid var(--line);color:var(--ink-dim);
@@ -454,6 +479,16 @@ autorisation écrite préalable.
 
   footer{margin-top:28px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);letter-spacing:0.08em;}
   .hidden{display:none !important;}
+  @keyframes screenIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  #startScreen:not(.hidden),#modeSelectScreen:not(.hidden),#gameScreen:not(.hidden),
+  #eduScreen:not(.hidden),#statsScreen:not(.hidden),#verifyScreen:not(.hidden){
+    animation:screenIn .28s cubic-bezier(.2,.7,.3,1) both;
+  }
+  @media (prefers-reduced-motion:reduce){
+    #startScreen:not(.hidden),#modeSelectScreen:not(.hidden),#gameScreen:not(.hidden),
+    #eduScreen:not(.hidden),#statsScreen:not(.hidden),#verifyScreen:not(.hidden){animation:none;}
+    *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+  }
 
   .about-section{
     margin-top:32px;padding-top:20px;border-top:1px solid var(--line-soft);
@@ -671,7 +706,7 @@ autorisation écrite préalable.
       <div class="hero-actions">
         <button class="play-btn" id="playBtn" data-i18n="play">▶ Jouer</button>
         <button class="edu-btn" id="eduBtn" data-i18n="learnTheory">Apprendre la théorie</button>
-        <button class="edu-btn" id="statsBtn" data-i18n="xpBoard">XP & classement</button>
+        <button class="edu-btn" id="statsBtn" data-i18n="xpBoard">XP & classement<span class="sync-dot hidden" id="syncDot" title="Scores en attente de synchronisation"></span></button>
       </div>
     </div>
   </div>
@@ -680,6 +715,7 @@ autorisation écrite préalable.
   <div id="statsScreen" class="hidden">
     <div class="edu-header">
       <div class="screen-title" style="margin:0;" data-i18n="xpBoard">XP & classement</div>
+      <button class="menu-btn" id="changeNameBtn">CHANGER DE PSEUDO</button>
       <button class="menu-btn" id="statsHomeBtn" data-i18n="home">← ACCUEIL</button>
     </div>
 
@@ -693,6 +729,7 @@ autorisation écrite préalable.
     <div class="leaderboard" id="leaderboardWrap">
       <h3 data-i18n="bestScores">Meilleures performances</h3>
       <div class="sub" data-i18n="scoresSub">Scores enregistrés sur cet appareil, par mode</div>
+      <div class="lb-total-players" id="lbTotalPlayers" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faint);margin-bottom:10px;"></div>
       <div class="lb-filter-wrap" id="lbFilterWrap"></div>
       <div id="lbWrap"><div class="lb-empty">CHARGEMENT DU CLASSEMENT…</div></div>
     </div>
@@ -1683,6 +1720,7 @@ let timerHandle = null;
 let profile = {name:'', xp:0};
 
 const LB_KEY = 'kromatime:leaderboard';
+const PENDING_KEY = 'kromatime:pending-scores';
 
 /* ---------- stockage local navigateur (persiste hors de l'environnement Claude) ---------- */
 async function localGet(key){
@@ -1913,6 +1951,7 @@ async function saveLocalLeaderboardEntry(entry){
     await localSet(LB_KEY, JSON.stringify(list.slice(0,15)));
   }catch(err){}
 }
+let lastLeaderboardWasLocal = false; // true when the most recent loadLeaderboard() fell back to the on-device list
 async function loadLeaderboard(){
   if(supabaseClient){
     try{
@@ -1923,21 +1962,24 @@ async function loadLeaderboard(){
           .select('player_name, level_key, level_title, score, accuracy, max_streak, created_at')
           .order('score', { ascending:false })
           .order('created_at', { ascending:true })
-          .limit(200),
+          .limit(1000), // était 200 : au-delà, les entrées existaient en base mais restaient invisibles (classement ET vérif de pseudo)
         6000, TIMEOUT
       );
       if(result === TIMEOUT) throw new Error('timeout');
       const { data, error } = result;
       if(error) throw error;
+      lastLeaderboardWasLocal = false;
       return (data||[]).map(r=>({
         playerName:r.player_name, level:r.level_key, levelTitle:r.level_title,
         score:r.score, accuracy:r.accuracy, maxStreak:r.max_streak, date:r.created_at
       }));
     }catch(err){
       // hors-ligne / erreur réseau / délai dépassé : on retombe sur le classement local de l'appareil
+      lastLeaderboardWasLocal = true;
       return loadLocalLeaderboard();
     }
   }
+  lastLeaderboardWasLocal = true;
   return loadLocalLeaderboard();
 }
 /* Filtre un classement brut sur un mode donné, en ne gardant que le
@@ -1981,14 +2023,65 @@ async function submitScoreSecure(entry){
   if(!res.ok || data.error) throw new Error(data.error || T3('score validation failed', 'échec de validation du score', 'validasyon eskò echwe'));
   return data;
 }
+/* ---------- file d'attente de synchronisation ----------
+   Un score qui échoue à l'envoi (hors-ligne, timeout) n'est plus perdu :
+   il est mis en attente et automatiquement renvoyé dès que la connexion revient. */
+async function loadPendingScores(){
+  try{
+    const res = await localGet(PENDING_KEY);
+    return res && res.value ? JSON.parse(res.value) : [];
+  }catch(err){ return []; }
+}
+async function savePendingScores(list){
+  try{ await localSet(PENDING_KEY, JSON.stringify(list)); }catch(err){}
+}
+async function enqueuePendingScore(entry){
+  const list = await loadPendingScores();
+  list.push({...entry, _pendingId: (Date.now().toString(36) + Math.random().toString(36).slice(2))});
+  await savePendingScores(list);
+  updateSyncDot(list.length);
+}
+function updateSyncDot(count){
+  const dot = document.getElementById('syncDot');
+  if(!dot) return;
+  dot.classList.toggle('hidden', !count);
+}
+let flushingPending = false;
+async function flushPendingScores(){
+  if(flushingPending || !supabaseClient) return;
+  flushingPending = true;
+  try{
+    let list = await loadPendingScores();
+    if(!list.length){ updateSyncDot(0); return; }
+    const stillPending = [];
+    for(const entry of list){
+      try{
+        await submitScoreSecure(entry);
+      }catch(err){
+        stillPending.push(entry); // toujours hors-ligne / échec : on la garde pour la prochaine tentative
+      }
+    }
+    await savePendingScores(stillPending);
+    updateSyncDot(stillPending.length);
+    if(stillPending.length < list.length && lbFullCache){
+      lbFullCache = null; // le classement global a bougé : on force un rechargement au prochain affichage
+    }
+  }finally{
+    flushingPending = false;
+  }
+}
+window.addEventListener('online', flushPendingScores);
+
 async function saveLeaderboardEntry(entry){
   if(supabaseClient){
     try{
       await submitScoreSecure(entry);
       return;
     }catch(err){
-      // hors-ligne / erreur réseau / score rejeté : on garde quand même la partie localement
+      // hors-ligne / erreur réseau / score rejeté : on garde la partie localement ET on la met en
+      // attente de synchronisation, pour ne pas la perdre définitivement une fois reconnecté
       await saveLocalLeaderboardEntry(entry);
+      await enqueuePendingScore(entry);
       return;
     }
   }
@@ -1996,6 +2089,7 @@ async function saveLeaderboardEntry(entry){
 }
 let lbFilterKey = null; // mode currently shown in the leaderboard, set on first render
 let lbFullCache = null; // last fetched raw list, reused when only the mode filter changes
+let lbVisibleCount = 15; // pagination : nombre de lignes affichées, augmente avec "voir plus"
 
 async function renderLeaderboard(forceRefetch){
   const wrap = document.getElementById('lbWrap');
@@ -2010,6 +2104,7 @@ async function renderLeaderboard(forceRefetch){
       btn.addEventListener('click', ()=>{
         if(btn.dataset.level===lbFilterKey) return;
         lbFilterKey = btn.dataset.level;
+        lbVisibleCount = 15;
         renderLeaderboard(false);
       });
     });
@@ -2020,13 +2115,27 @@ async function renderLeaderboard(forceRefetch){
     lbFullCache = await loadLeaderboard();
   }
 
+  const totalPlayersEl = document.getElementById('lbTotalPlayers');
+  if(totalPlayersEl){
+    const uniquePlayers = new Set((lbFullCache||[]).map(e=>(e.playerName||'').trim().toLowerCase()).filter(Boolean));
+    const n = uniquePlayers.size;
+    const offlineBadge = lastLeaderboardWasLocal
+      ? `<span class="lb-offline-badge">${T3('OFFLINE — LOCAL RANKING ONLY', 'HORS LIGNE — CLASSEMENT LOCAL UNIQUEMENT', 'DEKONEKTE — KLASMAN LOKAL SÈLMAN')}</span><br>`
+      : '';
+    totalPlayersEl.innerHTML = offlineBadge + T3(
+      `${n} player${n===1?'':'s'} total, all modes`,
+      `${n} joueur${n===1?'':'s'} au total, tous modes confondus`,
+      `${n} jwè an total, tout mod konbine`
+    );
+  }
+
   const filtered = filterLeaderboardByMode(lbFullCache||[], lbFilterKey);
   if(filtered.length===0){
     wrap.innerHTML = `<div class="lb-empty">${T3('No games recorded yet in this mode. Play a first round to appear here.', 'Aucune partie enregistrée dans ce mode. Joue une première manche pour apparaître ici.', 'Poko gen okenn pati anrejistre nan mod sa a. Jwe yon premye manch pou parèt isit la.')}</div>`;
     return;
   }
-  const top = filtered.slice(0,8);
   const myName = (profile.name||'').trim().toLowerCase();
+  const top = filtered.slice(0, lbVisibleCount);
   let rows = top.map((e,i)=>{
     const isMe = myName && (e.playerName||'').trim().toLowerCase()===myName;
     return `
@@ -2038,11 +2147,37 @@ async function renderLeaderboard(forceRefetch){
       <td>${e.maxStreak!==undefined?e.maxStreak:'—'}</td>
     </tr>`;
   }).join('');
+
+  const showMoreBtn = filtered.length > lbVisibleCount
+    ? `<button class="lb-showmore" id="lbShowMoreBtn">${T3('Show more', 'Voir plus', 'Wè plis')}</button>`
+    : '';
+
+  // Si le joueur n'est pas dans la portion affichée, on lui montre quand même sa position exacte.
+  let myRankLine = '';
+  if(myName){
+    const myIdx = filtered.findIndex(e => (e.playerName||'').trim().toLowerCase()===myName);
+    if(myIdx >= lbVisibleCount){
+      myRankLine = `<div class="lb-me-outside">${T3(
+        `You're #${myIdx+1} of ${filtered.length}`,
+        `Tu es ${myIdx+1}ᵉ sur ${filtered.length}`,
+        `Ou se #${myIdx+1} sou ${filtered.length}`
+      )}</div>`;
+    }
+  }
+
   wrap.innerHTML = `
     <div class="lb-scroll"><table class="lb">
       <thead><tr><th>#</th><th>${T3('Player', 'Joueur', 'Jwè')}</th><th>Score</th><th>${T3('Accuracy', 'Précision', 'Presizyon')}</th><th>${T3('Best streak', 'Série max', 'Pi bon seri')}</th></tr></thead>
       <tbody>${rows}</tbody>
-    </table></div>`;
+    </table></div>
+    ${showMoreBtn}
+    ${myRankLine}`;
+
+  const moreBtn = document.getElementById('lbShowMoreBtn');
+  if(moreBtn) moreBtn.addEventListener('click', ()=>{
+    lbVisibleCount += 15;
+    renderLeaderboard(false);
+  });
 }
 
 function xpForNextLevel(xp){
@@ -2185,7 +2320,7 @@ async function confirmName(){
 function showMainHero(){
   document.getElementById('nameGate').classList.add('hidden');
   document.getElementById('mainHero').classList.remove('hidden');
-  document.getElementById('greetingText').textContent = `Bon retour, ${profile.name}`;
+  document.getElementById('greetingText').textContent = T3(`Welcome back, ${profile.name}`, `Bon retour, ${profile.name}`, `Byenveni ankò, ${profile.name}`);
 }
 
 document.getElementById('playBtn').addEventListener('click', ()=>{
@@ -2219,6 +2354,27 @@ document.getElementById('statsBtn').addEventListener('click', ()=>{
 document.getElementById('statsHomeBtn').addEventListener('click', ()=>{
   document.getElementById('statsScreen').classList.add('hidden');
   document.getElementById('startScreen').classList.remove('hidden');
+});
+document.getElementById('changeNameBtn').addEventListener('click', async ()=>{
+  const ok = window.confirm(T3(
+    'Change your name? Your old scores stay under the previous one — only the name used going forward changes.',
+    'Changer de pseudo ? Tes anciens scores restent sous l\'ancien nom — seul le nom utilisé à partir de maintenant change.',
+    'Chanje non ou? Ansyen eskò ou yo ap rete anba ansyen non an — se sèlman non ou pral itilize kounye a k ap chanje.'
+  ));
+  if(!ok) return;
+  profile.name = '';
+  await saveProfile();
+  nameCache = null;
+  nameCachePromise = null;
+  warmNameCache();
+  document.getElementById('statsScreen').classList.add('hidden');
+  document.getElementById('mainHero').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('hidden');
+  document.getElementById('nameGate').classList.remove('hidden');
+  document.getElementById('nameInput').value = '';
+  document.getElementById('nameSubmit').disabled = true;
+  hideNameError();
+  document.getElementById('nameInput').focus();
 });
 
 document.getElementById('verifyHomeBtn').addEventListener('click', ()=>{
@@ -2341,7 +2497,7 @@ function renderLevelSelect(){
     card.className='level-card'+(i===currentLevelIdx?' active':'');
     const best = bestScores[lvl.key];
     const meta = lvl.endless ? `3 ${t('lives')}` : `${lvl.time}${t('perQuestion')}`;
-    card.innerHTML=`${best!==undefined?`<span class="best">${t('best')} ${best}</span>`:''}<div class="num">${t('mode')} ${i+1} · ${meta}</div><h3>${lvlTitle(lvl)}</h3><p>${lvlDesc(lvl)}</p>`;
+    card.innerHTML=`${best!==undefined?`<span class="best has-score">${t('best')} ${best}</span>`:''}<div class="num">${t('mode')} ${i+1} · ${meta}</div><h3>${lvlTitle(lvl)}</h3><p>${lvlDesc(lvl)}</p>`;
     card.addEventListener('click',()=>{ sfxClick(); enterPlayScreen(); startLevel(i); });
     wrap.appendChild(card);
   });
@@ -3127,6 +3283,9 @@ document.getElementById('ticketOverlay').addEventListener('click', (e)=>{
     profile = p;
     showMainHero();
   }
+  const pending = await loadPendingScores();
+  updateSyncDot(pending.length);
+  flushPendingScores(); // au cas où la connexion est déjà là au chargement
 })();
 })();
 </script>
